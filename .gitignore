@@ -2,6 +2,14 @@
 **/build/
 !src/**/build/
 
+# IDE files
+.idea
+/.idea/*
+
+# Ignore local settings
+local.properties
+*/local.properties
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
