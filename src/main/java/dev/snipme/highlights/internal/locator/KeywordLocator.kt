@@ -14,7 +14,7 @@ internal object KeywordLocator {
         foundKeywords.forEach { keyword ->
             val indices = code
                 .indicesOf(keyword)
-                .filter { isIndexOnlyKeyword(code, it) }
+                .filter { isProperKeywordAtIndex(code, it, keyword) }
 
             indices.forEach { index ->
                 locations.add(PhraseLocation(index, index + keyword.length))
@@ -37,11 +37,17 @@ internal object KeywordLocator {
 
     // Sometimes keyword can be found in the middle of word.
     // This returns information if index points only to the keyword
-    private fun isIndexOnlyKeyword(code: String, index: Int): Boolean {
+    private fun isProperKeywordAtIndex(
+        code: String,
+        index: Int,
+        keyword: String
+    ): Boolean {
         if (index == START_INDEX) return true
         if (index == code.lastIndex) return true
 
-        val charBefore = code[index - 1].toString()
-        return charBefore in TOKEN_DELIMITERS || charBefore.first().isLetter().not()
+        val charBefore = code[maxOf(index - 1, START_INDEX)]
+        val charAfter = code[minOf(index + keyword.length, code.lastIndex)]
+
+        return charBefore.isLetter().not() && charAfter.isDigit().not()
     }
 }
