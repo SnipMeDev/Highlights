@@ -84,4 +84,16 @@ internal class KeywordLocatorTest {
         assertEquals(PhraseLocation(14, 21), result[2])
         assertEquals(PhraseLocation(35, 41), result[3])
     }
+
+    @Test
+    fun `Not returns location of keyword inside phrase`() {
+        val testCode = """
+            aclassa
+        """.trimIndent()
+        val keywords = listOf("static", "class", "extends")
+
+        val result = KeywordLocator.locate(testCode, keywords)
+
+        assertEquals(0, result.size)
+    }
 }

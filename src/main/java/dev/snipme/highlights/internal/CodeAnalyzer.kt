@@ -21,7 +21,7 @@ import dev.snipme.highlights.internal.SyntaxTokens.SH_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.SWIFT_KEYWORDS
 import dev.snipme.highlights.internal.locator.CommentLocator
 import dev.snipme.highlights.internal.locator.KeywordLocator
-import dev.snipme.highlights.internal.locator.LiteralLocator
+import dev.snipme.highlights.internal.locator.NumericLiteralLocator
 import dev.snipme.highlights.internal.locator.MarkLocator
 import dev.snipme.highlights.internal.locator.MultilineCommentLocator
 import dev.snipme.highlights.internal.locator.PunctuationLocator
@@ -56,7 +56,7 @@ internal object CodeAnalyzer {
             punctuations = PunctuationLocator.locate(code),
             keywords = KeywordLocator.locate(code, keywords),
             strings = StringLocator.locate(code),
-            literals = LiteralLocator.locate(code),
+            literals = NumericLiteralLocator.locate(code),
             comments = CommentLocator.locate(code),
             multilineComments = MultilineCommentLocator.locate(code),
             annotations = AnnotationLocator.locate(code),
