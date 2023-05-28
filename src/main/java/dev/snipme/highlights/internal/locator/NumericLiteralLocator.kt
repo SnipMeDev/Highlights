@@ -57,7 +57,7 @@ internal object NumericLiteralLocator {
 
     private fun String.isFullNumber(number: String, startIndex: Int): Boolean {
         val numberEndingIndex = startIndex + number.length
-        if(numberEndingIndex >= lastIndex) return true
+        if (numberEndingIndex >= lastIndex) return true
         val numberEnding = getOrNull(numberEndingIndex) ?: return false
 
         return TOKEN_DELIMITERS.contains(numberEnding.toString())
@@ -66,9 +66,10 @@ internal object NumericLiteralLocator {
     private fun calculateNumberLength(number: String): Int {
         val letters = number.filter { it.isLetter() }
 
+        // TODO Extract the same mechanism
         if (number.startsWith("0x")) {
             var hexSequenceLength = 2
-            run loop@ {
+            run loop@{
                 number.substring(startIndex = hexSequenceLength).forEach {
                     if (it.isDigit() || HEX_NUMBER_CHARACTERS.contains(it)) {
                         hexSequenceLength++
@@ -81,8 +82,19 @@ internal object NumericLiteralLocator {
             return hexSequenceLength
         }
 
-        if (letters.contains("0b")) {
-            // TODO
+        if (number.contains("0b")) {
+            var hexSequenceLength = 2
+            run loop@{
+                number.substring(startIndex = hexSequenceLength).forEach {
+                    if (it == '0' || it == '1') {
+                        hexSequenceLength++
+                    } else {
+                        return@loop
+                    }
+                }
+            }
+
+            return hexSequenceLength
         }
 
         if (NUMBER_TYPE_CHARACTERS.any { letters.contains(it) }) {

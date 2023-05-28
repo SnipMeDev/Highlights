@@ -113,5 +113,23 @@ internal class NumericLiteralLocatorTest {
         assertEquals(PhraseLocation(37, 41), result[5])
     }
 
-//    0b1101
+    @Test
+    fun `Returns location of binary number`() {
+        val testCode = """
+            0b
+            0b0
+            0b1
+            0b001
+            0b9001
+        """.trimIndent()
+
+        val result = NumericLiteralLocator.locate(testCode)
+
+        assertEquals(5, result.size)
+        assertEquals(PhraseLocation(0, 2), result[0])
+        assertEquals(PhraseLocation(3, 6), result[1])
+        assertEquals(PhraseLocation(7, 10), result[2])
+        assertEquals(PhraseLocation(11, 16), result[3])
+        assertEquals(PhraseLocation(17, 19), result[4])
+    }
 }
