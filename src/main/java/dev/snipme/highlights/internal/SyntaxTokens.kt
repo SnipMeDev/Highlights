@@ -120,7 +120,8 @@ internal object SyntaxTokens {
     val TOKEN_DELIMITERS = listOf(" ", ",", ".", ":", ";", "(", ")", "=", "{", "}", "<", ">", "\r", "\n")
     val STRING_DELIMITERS = listOf("\"", "\'", "\"\"\"")
     val COMMENT_DELIMITERS = listOf("//", "#")
-    val MULTILINE_COMMENT_DELIMITERS = listOf(Pair("/*", "*/"), Pair("\'\'\'", "\'\'\'"))
+    // TODO Add support for other other languages like Dart or Python
+    val MULTILINE_COMMENT_DELIMITERS = listOf(Pair("/\\*", "\\*/"))
     val PUNCTUATION_CHARACTERS = listOf(",", ".", ":", ";")
     val MARK_CHARACTERS = listOf("(", ")", "=", "{", "}", "<", ">", "-", "+", "[", "]", "|", "&")
 }
