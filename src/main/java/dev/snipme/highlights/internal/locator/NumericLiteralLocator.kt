@@ -66,35 +66,16 @@ internal object NumericLiteralLocator {
     private fun calculateNumberLength(number: String): Int {
         val letters = number.filter { it.isLetter() }
 
-        // TODO Extract the same mechanism
         if (number.startsWith("0x")) {
-            var hexSequenceLength = 2
-            run loop@{
-                number.substring(startIndex = hexSequenceLength).forEach {
-                    if (it.isDigit() || HEX_NUMBER_CHARACTERS.contains(it)) {
-                        hexSequenceLength++
-                    } else {
-                        return@loop
-                    }
-                }
+            return getLengthOfSubstringFor(number) {
+                it.isDigit() || HEX_NUMBER_CHARACTERS.contains(it)
             }
-
-            return hexSequenceLength
         }
 
         if (number.contains("0b")) {
-            var hexSequenceLength = 2
-            run loop@{
-                number.substring(startIndex = hexSequenceLength).forEach {
-                    if (it == '0' || it == '1') {
-                        hexSequenceLength++
-                    } else {
-                        return@loop
-                    }
-                }
+            return getLengthOfSubstringFor(number) {
+                it == '0' || it == '1'
             }
-
-            return hexSequenceLength
         }
 
         if (NUMBER_TYPE_CHARACTERS.any { letters.contains(it) }) {
@@ -104,5 +85,20 @@ internal object NumericLiteralLocator {
         }
 
         return number.length
+    }
+
+    private fun getLengthOfSubstringFor(number: String, condition: (Char) -> Boolean): Int {
+        var hexSequenceLength = 2
+        run loop@{
+            number.substring(startIndex = hexSequenceLength).forEach {
+                if (condition(it)) {
+                    hexSequenceLength++
+                } else {
+                    return@loop
+                }
+            }
+        }
+
+        return hexSequenceLength
     }
 }
