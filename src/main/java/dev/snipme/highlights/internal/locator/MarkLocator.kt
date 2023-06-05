@@ -1,9 +1,8 @@
 package dev.snipme.highlights.internal.locator
 
-import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.internal.SyntaxTokens.MARK_CHARACTERS
 import dev.snipme.highlights.internal.indicesOf
-import java.util.regex.Pattern.LITERAL
+import dev.snipme.highlights.model.PhraseLocation
 
 internal object MarkLocator {
     fun locate(code: String): List<PhraseLocation> {
