@@ -1,24 +1,28 @@
 package dev.snipme.highlights.internal.locator
 
 import dev.snipme.highlights.model.PhraseLocation
-import kotlin.test.Test
+import org.junit.Test
 import kotlin.test.assertEquals
 
-internal class PunctuationLocatorTest {
-
+internal class MarkLocatorTest {
     @Test
     fun `Returns location of punctuation characters`() {
         val testCode = """
-            , .  :  ;
+            ( = { + - | ] & >
         """.trimIndent()
 
-        val result = PunctuationLocator.locate(testCode)
+        val result = MarkLocator.locate(testCode)
 
-        assertEquals(4, result.size)
+        assertEquals(9, result.size)
         assertEquals(PhraseLocation(0, 1), result[0])
         assertEquals(PhraseLocation(2, 3), result[1])
-        assertEquals(PhraseLocation(5, 6), result[2])
-        assertEquals(PhraseLocation(8, 9), result[3])
+        assertEquals(PhraseLocation(4, 5), result[2])
+        assertEquals(PhraseLocation(6, 7), result[3])
+        assertEquals(PhraseLocation(8, 9), result[4])
+        assertEquals(PhraseLocation(10, 11), result[5])
+        assertEquals(PhraseLocation(12, 13), result[6])
+        assertEquals(PhraseLocation(14, 15), result[7])
+        assertEquals(PhraseLocation(16, 17), result[8])
     }
 
     @Test
@@ -27,7 +31,7 @@ internal class PunctuationLocatorTest {
             , ); ),
         """.trimIndent()
 
-        val result = PunctuationLocator.locate(testCode)
+        val result = MarkLocator.locate(testCode)
 
         assertEquals(3, result.size)
         assertEquals(PhraseLocation(0, 1), result[0])
@@ -41,7 +45,7 @@ internal class PunctuationLocatorTest {
             ,,,
         """.trimIndent()
 
-        val result = PunctuationLocator.locate(testCode)
+        val result = MarkLocator.locate(testCode)
 
         assertEquals(3, result.size)
         assertEquals(PhraseLocation(0, 1), result[0])
@@ -55,7 +59,7 @@ internal class PunctuationLocatorTest {
             ,,,class,
         """.trimIndent()
 
-        val result = PunctuationLocator.locate(testCode)
+        val result = MarkLocator.locate(testCode)
 
         assertEquals(4, result.size)
         assertEquals(PhraseLocation(0, 1), result[0])

@@ -1,11 +1,10 @@
 package dev.snipme.highlights.internal
 
-fun String.indicesOf(phrase: String, ignoreCase: Boolean = true): List<Int> {
-    val pattern = if (ignoreCase) {
-        Regex(phrase, RegexOption.IGNORE_CASE)
-    } else {
-        Regex(phrase)
-    }
+fun String.indicesOf(
+    phrase: String,
+    options: Set<RegexOption> = setOf(RegexOption.IGNORE_CASE)
+): List<Int> {
+    val pattern = Regex(phrase, options)
 
     return pattern
         .findAll(this)
