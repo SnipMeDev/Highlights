@@ -27,8 +27,7 @@ internal object MultilineCommentLocator {
 
         comments.forEach {
             val (start, end) = it
-            val ending = end + 1 // Phrase end + '/' comment terminator
-            locations.add(PhraseLocation(start, ending))
+            locations.add(PhraseLocation(start, end))
         }
 
         return locations

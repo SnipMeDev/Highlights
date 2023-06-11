@@ -1,11 +1,12 @@
 package dev.snipme.highlights.internal
 
-fun String.indicesOf(phrase: String, ignoreCase: Boolean = true): List<Int> {
-    val pattern = if (ignoreCase) {
-        Regex(phrase, RegexOption.IGNORE_CASE)
-    } else {
-        Regex(phrase)
-    }
+import dev.snipme.highlights.internal.SyntaxTokens.TOKEN_DELIMITERS
+
+fun String.indicesOf(
+    phrase: String,
+    options: Set<RegexOption> = setOf(RegexOption.IGNORE_CASE)
+): List<Int> {
+    val pattern = Regex(phrase, options)
 
     return pattern
         .findAll(this)
@@ -25,4 +26,20 @@ fun String.lengthToEOF(start: Int = 0): Int {
         endIndex++
     }
     return endIndex - start
+}
+
+// TODO Create unit tests for this
+// Sometimes keyword can be found in the middle of word.
+// This returns information if index points only to the keyword
+fun String.isIndependentPhrase(
+    code: String,
+    index: Int,
+): Boolean {
+    if (index == 0) return true
+    if (index == code.lastIndex) return true
+
+    val charBefore = code[maxOf(index - 1, 0)]
+    val charAfter = code[minOf(index + this.length, code.lastIndex)]
+
+    return charBefore.isLetter().not() && charAfter.isDigit().not()
 }
