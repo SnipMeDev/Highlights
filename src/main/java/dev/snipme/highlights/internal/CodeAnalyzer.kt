@@ -41,7 +41,7 @@ internal object CodeAnalyzer {
         when {
             snapshot == null -> analyzeFull(code, language)
             language != snapshot!!.language -> analyzeFull(code, language)
-            code != snapshot!!.code -> analyzePartial(snapshot, code)
+            code != snapshot!!.code -> analyzePartial(snapshot!!, code)
             else -> snapshot!!.structure
         }
 
@@ -53,14 +53,15 @@ internal object CodeAnalyzer {
 
     private fun analyzePartial(snapshot: CodeSnapshot, code: String): CodeStructure {
         val difference = CodeComparator.compare(snapshot.code, code)
-        val structure = when(difference) {
-            is CodeDifference.Increase -> snapshot.structure +
-            is CodeDifference.Decrease -> TODO()
-            CodeDifference.None -> return snapshot.structure
-        }
+//        val structure = when(difference) {
+//            is CodeDifference.Increase -> snapshot.structure +
+//            is CodeDifference.Decrease -> TODO()
+//            CodeDifference.None -> return snapshot.structure
+//        }
 
-        CodeAnalyzer.snapshot = CodeSnapshot(code, structure, language)
-        return structure
+//        CodeAnalyzer.snapshot = CodeSnapshot(code, structure, language)
+//        return structure
+        return snapshot.structure
     }
 
     private fun analyzeForLanguage(code: String, language: SyntaxLanguage) =

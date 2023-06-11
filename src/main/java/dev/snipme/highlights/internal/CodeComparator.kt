@@ -2,7 +2,7 @@ package dev.snipme.highlights.internal
 
 private const val WORDS_DELIMITER = " "
 
-sealed class CodeDifference {
+internal sealed class CodeDifference {
     data class Increase(val change: String) : CodeDifference()
     data class Decrease(val change: String) : CodeDifference()
     object None : CodeDifference()
@@ -48,5 +48,4 @@ internal object CodeComparator {
 
         return differentWords.joinToString(WORDS_DELIMITER)
     }
-
 }
