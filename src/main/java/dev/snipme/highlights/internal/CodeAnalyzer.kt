@@ -93,7 +93,6 @@ internal object CodeAnalyzer {
 
     private fun analyzeCodeWithKeywords(code: String, keywords: List<String>): CodeStructure =
         CodeStructure(
-            tokens = TokenLocator.locate(code),
             marks = MarkLocator.locate(code),
             punctuations = PunctuationLocator.locate(code),
             keywords = KeywordLocator.locate(code, keywords),

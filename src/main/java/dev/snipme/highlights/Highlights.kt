@@ -53,7 +53,6 @@ class Highlights private constructor(
         val highlights = mutableListOf<CodeHighlight>()
         val structure = getCodeStructure()
         with(structure) {
-            tokens.forEach { highlights.add(ColorHighlight(it, theme.code)) }
             marks.forEach { highlights.add(ColorHighlight(it, theme.mark)) }
             punctuations.forEach { highlights.add(ColorHighlight(it, theme.punctuation)) }
             keywords.forEach { highlights.add(ColorHighlight(it, theme.keyword)) }

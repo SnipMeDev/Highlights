@@ -4,7 +4,6 @@ data class PhraseLocation(val start: Int, val end: Int)
 
 // TODO Migrate to set
 data class CodeStructure(
-    val tokens: List<PhraseLocation>,
     val marks: List<PhraseLocation>,
     val punctuations: List<PhraseLocation>,
     val keywords: List<PhraseLocation>,
@@ -16,27 +15,25 @@ data class CodeStructure(
 ) {
     operator fun plus(new: CodeStructure): CodeStructure =
         CodeStructure(
-            tokens = tokens + new.tokens,
-            marks = tokens + new.marks,
-            punctuations = tokens + new.punctuations,
-            keywords = tokens + new.keywords,
-            strings = tokens + new.strings,
-            literals = tokens + new.literals,
-            comments = tokens + new.comments,
-            multilineComments = tokens + new.multilineComments,
-            annotations = tokens + new.annotations,
+            marks = marks + new.marks,
+            punctuations = punctuations + new.punctuations,
+            keywords = keywords + new.keywords,
+            strings = strings + new.strings,
+            literals = literals + new.literals,
+            comments = comments + new.comments,
+            multilineComments = multilineComments + new.multilineComments,
+            annotations = annotations + new.annotations,
         )
 
     operator fun minus(new: CodeStructure): CodeStructure =
         CodeStructure(
-            tokens = tokens - new.tokens,
-            marks = tokens - new.marks,
-            punctuations = tokens - new.punctuations,
-            keywords = tokens - new.keywords,
-            strings = tokens - new.strings,
-            literals = tokens - new.literals,
-            comments = tokens - new.comments,
-            multilineComments = tokens - new.multilineComments,
-            annotations = tokens - new.annotations,
+            marks = marks - new.marks,
+            punctuations = punctuations - new.punctuations,
+            keywords = keywords - new.keywords,
+            strings = strings - new.strings,
+            literals = literals - new.literals,
+            comments = comments - new.comments,
+            multilineComments = multilineComments - new.multilineComments,
+            annotations = annotations - new.annotations,
         )
 }
