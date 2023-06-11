@@ -1,6 +1,5 @@
 package dev.snipme.highlights.internal.locator
 
-import dev.snipme.highlights.internal.printResults
 import dev.snipme.highlights.model.PhraseLocation
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -44,8 +43,6 @@ internal class NumericLiteralLocatorTest {
         val testCode = "val one = 1_23__456".trimIndent()
 
         val result = NumericLiteralLocator.locate(testCode)
-
-        result.printResults(testCode)
 
         assertEquals(1, result.size)
         assertEquals(PhraseLocation(10, 19), result.first())

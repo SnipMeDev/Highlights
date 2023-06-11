@@ -35,8 +35,6 @@ internal class MultilineCommentLocatorTest {
 
         val result = MultilineCommentLocator.locate(testCode)
 
-        result.printResults(testCode)
-
         assertEquals(1, result.size)
         assertEquals(PhraseLocation(0, 16), result[0])
     }

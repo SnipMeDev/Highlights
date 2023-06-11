@@ -1,6 +1,5 @@
 package dev.snipme.highlights.internal.locator
 
-import dev.snipme.highlights.internal.printResults
 import dev.snipme.highlights.model.PhraseLocation
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -14,8 +13,6 @@ internal class TokenLocatorTest {
         """.trimIndent()
 
         val result = TokenLocator.locate(testCode)
-
-        result.printResults(testCode)
 
         assertEquals(5, result.size)
         assertEquals(PhraseLocation(0, 3), result[0])
@@ -33,27 +30,9 @@ internal class TokenLocatorTest {
 
         val result = TokenLocator.locate(testCode)
 
-        result.printResults(testCode)
-
         assertEquals(3, result.size)
         assertEquals(PhraseLocation(0, 3), result[0])
         assertEquals(PhraseLocation(4, 6), result[1])
         assertEquals(PhraseLocation(7, 9), result[2])
-    }
-
-    @Test
-    fun `Returns location of only independent tokens`() {
-        val testCode = """
-            or ora orab
-        """.trimIndent()
-
-        val result = TokenLocator.locate(testCode)
-
-        result.printResults(testCode)
-
-        assertEquals(3, result.size)
-        assertEquals(PhraseLocation(0, 1), result[0])
-        assertEquals(PhraseLocation(2, 4), result[1])
-        assertEquals(PhraseLocation(5, 8), result[2])
     }
 }

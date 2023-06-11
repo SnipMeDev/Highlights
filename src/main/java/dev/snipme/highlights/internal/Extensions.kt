@@ -1,5 +1,7 @@
 package dev.snipme.highlights.internal
 
+import dev.snipme.highlights.internal.SyntaxTokens.TOKEN_DELIMITERS
+
 fun String.indicesOf(
     phrase: String,
     options: Set<RegexOption> = setOf(RegexOption.IGNORE_CASE)
@@ -38,6 +40,5 @@ fun String.isIndependentPhrase(
     val charBefore = code[maxOf(index - 1, 0)]
     val charAfter = code[minOf(index + this.length, code.lastIndex)]
 
-    return charBefore.isLetter().not() && charAfter.isDigit().not() &&
-            charAfter.isLetter().not()
+    return charBefore.isLetter().not() && charAfter.isDigit().not()
 }
