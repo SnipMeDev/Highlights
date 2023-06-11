@@ -39,7 +39,6 @@ internal object CodeComparator {
         updated: List<String>,
         isDecrease: Boolean,
     ): String {
-        // current > updated
         val differentWords = if (isDecrease) {
             current.filterIndexed { index, it -> it != updated.getOrNull(index) }
         } else {
