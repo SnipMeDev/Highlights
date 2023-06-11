@@ -59,9 +59,9 @@ class Highlights private constructor(
             keywords.forEach { highlights.add(ColorHighlight(it, theme.keyword)) }
             strings.forEach { highlights.add(ColorHighlight(it, theme.string)) }
             literals.forEach { highlights.add(ColorHighlight(it, theme.literal)) }
+            annotations.forEach { highlights.add(ColorHighlight(it, theme.metadata)) }
             comments.forEach { highlights.add(ColorHighlight(it, theme.comment)) }
             multilineComments.forEach { highlights.add(ColorHighlight(it, theme.multilineComment)) }
-            annotations.forEach { highlights.add(ColorHighlight(it, theme.metadata)) }
         }
 
         emphasisLocations.forEach { highlights.add(BoldHighlight(it)) }

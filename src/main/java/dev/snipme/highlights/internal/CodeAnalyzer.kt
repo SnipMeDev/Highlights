@@ -28,10 +28,43 @@ import dev.snipme.highlights.internal.locator.PunctuationLocator
 import dev.snipme.highlights.internal.locator.StringLocator
 import dev.snipme.highlights.internal.locator.TokenLocator
 
+data class CodeSnapshot(
+    val code: String,
+    val structure: CodeStructure,
+    val language: SyntaxLanguage,
+)
+
 internal object CodeAnalyzer {
+    private var snapshot: CodeSnapshot? = null
 
     fun analyze(code: String, language: SyntaxLanguage = DEFAULT): CodeStructure =
-        when(language) {
+        when {
+            snapshot == null -> analyzeFull(code, language)
+            language != snapshot!!.language -> analyzeFull(code, language)
+            code != snapshot!!.code -> analyzePartial(snapshot, code)
+            else -> snapshot!!.structure
+        }
+
+    private fun analyzeFull(code: String, language: SyntaxLanguage): CodeStructure {
+        val structure = analyzeForLanguage(code, language)
+        snapshot = CodeSnapshot(code, structure, language)
+        return structure
+    }
+
+    private fun analyzePartial(snapshot: CodeSnapshot, code: String): CodeStructure {
+        val difference = CodeComparator.compare(snapshot.code, code)
+        val structure = when(difference) {
+            is CodeDifference.Increase -> snapshot.structure +
+            is CodeDifference.Decrease -> TODO()
+            CodeDifference.None -> return snapshot.structure
+        }
+
+        CodeAnalyzer.snapshot = CodeSnapshot(code, structure, language)
+        return structure
+    }
+
+    private fun analyzeForLanguage(code: String, language: SyntaxLanguage) =
+        when (language) {
             DEFAULT -> analyzeCodeWithKeywords(code, ALL_KEYWORDS)
             MIXED -> analyzeCodeWithKeywords(code, ALL_MIXED_KEYWORDS)
             C -> analyzeCodeWithKeywords(code, C_KEYWORDS)
