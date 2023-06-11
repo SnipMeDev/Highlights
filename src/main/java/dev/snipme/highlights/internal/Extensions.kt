@@ -28,6 +28,7 @@ fun String.lengthToEOF(start: Int = 0): Int {
     return endIndex - start
 }
 
+// TODO Create unit tests for this
 // Sometimes keyword can be found in the middle of word.
 // This returns information if index points only to the keyword
 fun String.isIndependentPhrase(
