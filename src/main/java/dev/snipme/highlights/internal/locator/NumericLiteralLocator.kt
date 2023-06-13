@@ -26,11 +26,12 @@ internal object NumericLiteralLocator {
             .filterNot { foundPhrases.contains(it) }
             .filter { it.isNotEmpty() } // Filter spaces and others
             .filter {
-                it.first().isDigit() || NUMBER_START_CHARACTERS.contains(it.first())
+                it.first().isDigit() || (NUMBER_START_CHARACTERS.contains(it.first())
+                        && it.getOrNull(1)?.isDigit() == true)
             } // Find start of literals
             .forEach { number ->
                 // For given literal find all occurrences
-                code.indicesOf(number).forEach { startIndex ->
+                code.indicesOf(number, setOf(RegexOption.LITERAL)).forEach { startIndex ->
                     if (code.isFullNumber(number, startIndex).not()) return@forEach
                     // Omit in the middle of text, probably variable name (this100)
                     if (code.isNumberFirstIndex(startIndex).not()) return@forEach

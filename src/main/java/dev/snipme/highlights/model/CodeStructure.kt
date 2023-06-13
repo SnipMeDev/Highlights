@@ -11,7 +11,8 @@ data class CodeStructure(
     val literals: List<PhraseLocation>,
     val comments: List<PhraseLocation>,
     val multilineComments: List<PhraseLocation>,
-    val annotations: List<PhraseLocation>
+    val annotations: List<PhraseLocation>,
+    val incremental: Boolean,
 ) {
     operator fun plus(new: CodeStructure): CodeStructure =
         CodeStructure(
@@ -23,6 +24,7 @@ data class CodeStructure(
             comments = comments + new.comments,
             multilineComments = multilineComments + new.multilineComments,
             annotations = annotations + new.annotations,
+            incremental = new.incremental,
         )
 
     operator fun minus(new: CodeStructure): CodeStructure =
@@ -35,5 +37,6 @@ data class CodeStructure(
             comments = comments - new.comments,
             multilineComments = multilineComments - new.multilineComments,
             annotations = annotations - new.annotations,
+            incremental = new.incremental,
         )
 }

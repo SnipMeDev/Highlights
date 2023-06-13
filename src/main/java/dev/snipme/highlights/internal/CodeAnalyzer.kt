@@ -67,7 +67,7 @@ internal object CodeAnalyzer {
             CodeDifference.None -> return codeSnapshot.structure
         }
 
-        snapshot = CodeSnapshot(code, structure, codeSnapshot.language)
+        snapshot = CodeSnapshot(code, structure.copy(incremental = true), codeSnapshot.language)
 
         return structure
     }
@@ -101,5 +101,6 @@ internal object CodeAnalyzer {
             comments = CommentLocator.locate(code),
             multilineComments = MultilineCommentLocator.locate(code),
             annotations = AnnotationLocator.locate(code),
+            incremental = false,
         )
 }

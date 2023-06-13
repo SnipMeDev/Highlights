@@ -1,5 +1,6 @@
 package dev.snipme.highlights.internal.locator
 
+import dev.snipme.highlights.internal.printResults
 import dev.snipme.highlights.model.PhraseLocation
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -128,5 +129,20 @@ internal class NumericLiteralLocatorTest {
         assertEquals(PhraseLocation(7, 10), result[2])
         assertEquals(PhraseLocation(11, 16), result[3])
         assertEquals(PhraseLocation(17, 19), result[4])
+    }
+
+    @Test
+    fun `Not returns location of the literal characters only`() {
+        val testCode = """
+            ..
+            LL
+            xx
+        """.trimIndent()
+
+        val result = NumericLiteralLocator.locate(testCode)
+
+        result.printResults(testCode)
+
+        assertEquals(0, result.size)
     }
 }
