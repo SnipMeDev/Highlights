@@ -26,7 +26,6 @@ import dev.snipme.highlights.internal.locator.MarkLocator
 import dev.snipme.highlights.internal.locator.MultilineCommentLocator
 import dev.snipme.highlights.internal.locator.PunctuationLocator
 import dev.snipme.highlights.internal.locator.StringLocator
-import dev.snipme.highlights.internal.locator.TokenLocator
 
 data class CodeSnapshot(
     val code: String,
@@ -35,7 +34,8 @@ data class CodeSnapshot(
 )
 
 internal object CodeAnalyzer {
-    private var snapshot: CodeSnapshot? = null
+    var snapshot: CodeSnapshot? = null
+        private set
 
     fun analyze(code: String, language: SyntaxLanguage = DEFAULT): CodeStructure =
         when {
@@ -45,6 +45,10 @@ internal object CodeAnalyzer {
             else -> snapshot!!.structure
         }
 
+    fun clearSnapshot() {
+        snapshot = null
+    }
+
     private fun analyzeFull(code: String, language: SyntaxLanguage): CodeStructure {
         val structure = analyzeForLanguage(code, language)
         snapshot = CodeSnapshot(code, structure, language)
@@ -52,9 +56,13 @@ internal object CodeAnalyzer {
     }
 
     private fun analyzePartial(codeSnapshot: CodeSnapshot, code: String): CodeStructure {
-        val difference = CodeComparator.compare(codeSnapshot.code, code)
+        val difference = CodeComparator.difference(codeSnapshot.code, code)
         val structure = when (difference) {
             is CodeDifference.Increase -> {
+                println(CodeAnalyzer.snapshot?.code)
+                println("DIFF")
+                println(difference.change)
+                println("DIFF")
                 val newStructure = analyzeForLanguage(difference.change, codeSnapshot.language)
                 codeSnapshot.structure + newStructure
             }
@@ -67,7 +75,7 @@ internal object CodeAnalyzer {
             CodeDifference.None -> return codeSnapshot.structure
         }
 
-        snapshot = CodeSnapshot(code, structure.copy(incremental = true), codeSnapshot.language)
+        snapshot = CodeSnapshot(code, structure, codeSnapshot.language)
 
         return structure
     }

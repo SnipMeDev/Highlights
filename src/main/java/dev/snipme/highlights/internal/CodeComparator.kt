@@ -9,9 +9,9 @@ internal sealed class CodeDifference {
 }
 
 internal object CodeComparator {
-    fun compare(current: String, updated: String): CodeDifference {
-        val currentWords = current.split(WORDS_DELIMITER)
-        val updatedWords = updated.split(WORDS_DELIMITER)
+    fun difference(current: String, updated: String): CodeDifference {
+        val currentWords = current.tokenize()
+        val updatedWords = updated.tokenize()
 
         return when {
             currentWords.size == updatedWords.size -> CodeDifference.None
@@ -20,7 +20,7 @@ internal object CodeComparator {
                 findDifference(
                     currentWords,
                     updatedWords,
-                    isDecrease = false
+                    isIncrease = true
                 )
             )
 
@@ -28,7 +28,7 @@ internal object CodeComparator {
                 findDifference(
                     currentWords,
                     updatedWords,
-                    isDecrease = true
+                    isIncrease = false
                 )
             )
         }
@@ -37,14 +37,17 @@ internal object CodeComparator {
     private fun findDifference(
         current: List<String>,
         updated: List<String>,
-        isDecrease: Boolean,
+        isIncrease: Boolean,
     ): String {
-        val differentWords = if (isDecrease) {
-            current.filterIndexed { index, it -> it != updated.getOrNull(index) }
+        val differentWords = if (isIncrease) {
+            updated - current
         } else {
-            updated.filterIndexed { index, it -> it != current.getOrNull(index) }
+            current - updated
         }
 
-        return differentWords.joinToString(WORDS_DELIMITER)
+        return differentWords.joinToString(WORDS_DELIMITER).trim()
     }
+
+    private fun String.tokenize() =
+        this.split("\n").map { it.split(WORDS_DELIMITER) }.flatten()
 }

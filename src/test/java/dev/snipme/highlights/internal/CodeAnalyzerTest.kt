@@ -5,6 +5,7 @@ import dev.snipme.highlights.model.PhraseLocation
 import kotlin.system.measureTimeMillis
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 internal class CodeAnalyzerTest {
@@ -90,6 +91,8 @@ internal class CodeAnalyzerTest {
 
     @Test
     fun `Returns incremental structure of code analyzed second time`() {
+        CodeAnalyzer.clearSnapshot()
+
         val testCode = """
             /** a */
             // b
@@ -119,7 +122,8 @@ internal class CodeAnalyzerTest {
 
         val result: CodeStructure
         val secondExecutionTime = measureTimeMillis {
-            result = CodeAnalyzer.analyze(testCode)
+            result = CodeAnalyzer.analyze(secondTestCode)
+            assertNotNull(CodeAnalyzer.snapshot)
             assertEquals(true, result.incremental)
         }
 
@@ -130,7 +134,7 @@ internal class CodeAnalyzerTest {
                 PhraseLocation(30, 31),
                 PhraseLocation(31, 32)
             ),
-            result.marks
+            result.marks.also { it.printResults(secondTestCode) }
         )
 
         assertEquals(

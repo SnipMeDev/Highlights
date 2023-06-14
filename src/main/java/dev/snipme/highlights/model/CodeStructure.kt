@@ -24,7 +24,7 @@ data class CodeStructure(
             comments = comments + new.comments,
             multilineComments = multilineComments + new.multilineComments,
             annotations = annotations + new.annotations,
-            incremental = new.incremental,
+            incremental = true,
         )
 
     operator fun minus(new: CodeStructure): CodeStructure =
@@ -37,6 +37,6 @@ data class CodeStructure(
             comments = comments - new.comments,
             multilineComments = multilineComments - new.multilineComments,
             annotations = annotations - new.annotations,
-            incremental = new.incremental,
+            incremental = true,
         )
 }
