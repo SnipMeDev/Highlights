@@ -2,6 +2,8 @@ package dev.snipme.highlights.internal
 
 import dev.snipme.highlights.model.CodeStructure
 import dev.snipme.highlights.model.PhraseLocation
+import dev.snipme.highlights.model.SyntaxLanguage
+import kotlin.coroutines.CoroutineContext
 import kotlin.system.measureTimeMillis
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -104,7 +106,7 @@ internal class CodeAnalyzerTest {
         """.trimIndent()
 
         val firstExecutionTime = measureTimeMillis {
-            val result = CodeAnalyzer.analyze(testCode)
+            val result = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
             assertEquals(false, result.incremental)
         }
 
@@ -122,7 +124,7 @@ internal class CodeAnalyzerTest {
 
         val result: CodeStructure
         val secondExecutionTime = measureTimeMillis {
-            result = CodeAnalyzer.analyze(secondTestCode)
+            result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN)
             assertNotNull(CodeAnalyzer.snapshot)
             assertEquals(true, result.incremental)
         }
@@ -132,9 +134,11 @@ internal class CodeAnalyzerTest {
         assertEquals(
             listOf(
                 PhraseLocation(30, 31),
-                PhraseLocation(31, 32)
+                PhraseLocation(31, 32),
+                PhraseLocation(67, 68),
+                PhraseLocation(69, 70)
             ),
-            result.marks.also { it.printResults(secondTestCode) }
+            result.marks
         )
 
         assertEquals(
