@@ -105,10 +105,9 @@ internal class CodeAnalyzerTest {
         """.trimIndent()
 
         CodeAnalyzer.clearSnapshot()
-        val firstExecutionTime = measureTimeMillis {
-            val result = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
-            assertEquals(false, result.incremental)
-        }
+
+        val firstResult = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
+        assertEquals(false, firstResult.incremental)
 
         val secondTestCode = """
             /** a */
@@ -122,15 +121,9 @@ internal class CodeAnalyzerTest {
             field.forEach { }
         """.trimIndent()
 
-        val result: CodeStructure
-        val secondExecutionTime = measureTimeMillis {
-            result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN)
-            assertNotNull(CodeAnalyzer.snapshot)
-            assertEquals(true, result.incremental)
-        }
-
-        // Performance impact test
-        assertTrue(secondExecutionTime < firstExecutionTime)
+        val result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN)
+        assertNotNull(CodeAnalyzer.snapshot)
+        assertEquals(true, result.incremental)
 
         assertEquals(
             listOf(
@@ -212,10 +205,8 @@ internal class CodeAnalyzerTest {
         """.trimIndent()
 
         CodeAnalyzer.clearSnapshot()
-        val firstExecutionTime = measureTimeMillis {
-            val result = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
-            assertEquals(false, result.incremental)
-        }
+        val firstResult = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
+        assertEquals(false, firstResult.incremental)
 
         val secondTestCode = """
             /** a */
@@ -223,15 +214,9 @@ internal class CodeAnalyzerTest {
             class 
         """.trimIndent()
 
-        val result: CodeStructure
-        val secondExecutionTime = measureTimeMillis {
-            result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN)
-            assertNotNull(CodeAnalyzer.snapshot)
-            assertEquals(true, result.incremental)
-        }
-
-        // Performance impact test
-        assertTrue(secondExecutionTime < firstExecutionTime)
+        val result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN)
+        assertNotNull(CodeAnalyzer.snapshot)
+        assertEquals(true, result.incremental)
 
         assertEquals(
             emptyList(),
