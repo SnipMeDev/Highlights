@@ -45,7 +45,7 @@ internal object CodeComparator {
             current - updated
         }
 
-        return differentWords.joinToString(WORDS_DELIMITER).trim()
+        return differentWords.joinToString(WORDS_DELIMITER)
     }
 
     private fun String.tokenize() =

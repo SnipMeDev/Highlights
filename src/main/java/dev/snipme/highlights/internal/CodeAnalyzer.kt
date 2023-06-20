@@ -59,10 +59,6 @@ internal object CodeAnalyzer {
         val difference = CodeComparator.difference(codeSnapshot.code, code)
         val structure = when (difference) {
             is CodeDifference.Increase -> {
-                println(CodeAnalyzer.snapshot?.code)
-                println("DIFF")
-                println(difference.change)
-                println("DIFF")
                 val newStructure = analyzeForLanguage(difference.change, codeSnapshot.language)
                 newStructure.printPhrases(difference.change)
                 codeSnapshot.structure + newStructure.move(codeSnapshot.code.length + 1)

@@ -129,14 +129,15 @@ internal class CodeAnalyzerTest {
             assertEquals(true, result.incremental)
         }
 
+        // Performance impact test
         assertTrue(secondExecutionTime < firstExecutionTime)
 
         assertEquals(
             listOf(
                 PhraseLocation(30, 31),
                 PhraseLocation(31, 32),
-                PhraseLocation(67, 68),
-                PhraseLocation(69, 70)
+                PhraseLocation(68, 69),
+                PhraseLocation(70, 71)
             ),
             result.marks
         )
@@ -148,6 +149,7 @@ internal class CodeAnalyzerTest {
                 PhraseLocation(42, 43),
                 PhraseLocation(43, 44),
                 PhraseLocation(48, 49),
+                PhraseLocation(59, 60),
             ),
             result.punctuations
         )
@@ -155,7 +157,8 @@ internal class CodeAnalyzerTest {
         assertEquals(
             listOf(
                 PhraseLocation(14, 19),
-                PhraseLocation(22, 29)
+                PhraseLocation(22, 29),
+                PhraseLocation(54, 59)
             ),
             result.keywords
         )
