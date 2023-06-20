@@ -24,6 +24,7 @@ internal class CodeAnalyzerTest {
             123.00f
         """.trimIndent()
 
+        CodeAnalyzer.clearSnapshot()
         val result = CodeAnalyzer.analyze(testCode)
 
         assertEquals(
@@ -93,8 +94,6 @@ internal class CodeAnalyzerTest {
 
     @Test
     fun `Returns incremental structure of code analyzed second time`() {
-        CodeAnalyzer.clearSnapshot()
-
         val testCode = """
             /** a */
             // b
@@ -105,6 +104,7 @@ internal class CodeAnalyzerTest {
             123.00f
         """.trimIndent()
 
+        CodeAnalyzer.clearSnapshot()
         val firstExecutionTime = measureTimeMillis {
             val result = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
             assertEquals(false, result.incremental)
@@ -195,6 +195,87 @@ internal class CodeAnalyzerTest {
             listOf(
                 PhraseLocation(38, 40),
             ),
+            result.annotations
+        )
+    }
+
+    @Test
+    fun `Returns incremental structure of decreased code analyzed second time`() {
+        val testCode = """
+            /** a */
+            // b
+            class C extends {}
+            "d";
+            @E
+            ...
+            123.00f
+        """.trimIndent()
+
+        CodeAnalyzer.clearSnapshot()
+        val firstExecutionTime = measureTimeMillis {
+            val result = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
+            assertEquals(false, result.incremental)
+        }
+
+        val secondTestCode = """
+            /** a */
+            // b
+            class 
+        """.trimIndent()
+
+        val result: CodeStructure
+        val secondExecutionTime = measureTimeMillis {
+            result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN)
+            assertNotNull(CodeAnalyzer.snapshot)
+            assertEquals(true, result.incremental)
+        }
+
+        // Performance impact test
+        assertTrue(secondExecutionTime < firstExecutionTime)
+
+        assertEquals(
+            emptyList(),
+            result.marks
+        )
+
+        assertEquals(
+            emptyList(),
+            result.punctuations
+        )
+
+        assertEquals(
+            listOf(
+                PhraseLocation(14, 19),
+            ),
+            result.keywords
+        )
+
+        assertEquals(
+            emptyList(),
+            result.strings
+        )
+
+        assertEquals(
+            emptyList(),
+            result.literals
+        )
+
+        assertEquals(
+            listOf(
+                PhraseLocation(9, 13),
+            ),
+            result.comments
+        )
+
+        assertEquals(
+            listOf(
+                PhraseLocation(0, 8),
+            ),
+            result.multilineComments
+        )
+
+        assertEquals(
+            emptyList(),
             result.annotations
         )
     }

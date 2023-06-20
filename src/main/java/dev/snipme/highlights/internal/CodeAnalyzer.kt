@@ -60,13 +60,13 @@ internal object CodeAnalyzer {
         val structure = when (difference) {
             is CodeDifference.Increase -> {
                 val newStructure = analyzeForLanguage(difference.change, codeSnapshot.language)
-                newStructure.printPhrases(difference.change)
                 codeSnapshot.structure + newStructure.move(codeSnapshot.code.length + 1)
             }
 
             is CodeDifference.Decrease -> {
                 val newStructure = analyzeForLanguage(difference.change, codeSnapshot.language)
-                codeSnapshot.structure - newStructure
+                val lengthDifference = codeSnapshot.code.length - difference.change.length
+                codeSnapshot.structure - newStructure.move(lengthDifference)
             }
 
             CodeDifference.None -> return codeSnapshot.structure

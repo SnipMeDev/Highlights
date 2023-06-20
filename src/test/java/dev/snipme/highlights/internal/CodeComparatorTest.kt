@@ -101,6 +101,6 @@ internal class CodeComparatorTest {
 
         val result = CodeComparator.difference(currentCode, newCode)
 
-        assertEquals(CodeDifference.Increase("field.forEach { }"), result)
+        assertEquals(CodeDifference.Increase(" field.forEach { }"), result)
     }
 }
