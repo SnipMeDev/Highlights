@@ -26,12 +26,59 @@ import dev.snipme.highlights.internal.locator.MarkLocator
 import dev.snipme.highlights.internal.locator.MultilineCommentLocator
 import dev.snipme.highlights.internal.locator.PunctuationLocator
 import dev.snipme.highlights.internal.locator.StringLocator
-import dev.snipme.highlights.internal.locator.TokenLocator
+
+data class CodeSnapshot(
+    val code: String,
+    val structure: CodeStructure,
+    val language: SyntaxLanguage,
+)
 
 internal object CodeAnalyzer {
+    var snapshot: CodeSnapshot? = null
+        private set
 
     fun analyze(code: String, language: SyntaxLanguage = DEFAULT): CodeStructure =
-        when(language) {
+        when {
+            snapshot == null -> analyzeFull(code, language)
+            language != snapshot!!.language -> analyzeFull(code, language)
+            code != snapshot!!.code -> analyzePartial(snapshot!!, code)
+            else -> snapshot!!.structure
+        }
+
+    fun clearSnapshot() {
+        snapshot = null
+    }
+
+    private fun analyzeFull(code: String, language: SyntaxLanguage): CodeStructure {
+        val structure = analyzeForLanguage(code, language)
+        snapshot = CodeSnapshot(code, structure, language)
+        return structure
+    }
+
+    private fun analyzePartial(codeSnapshot: CodeSnapshot, code: String): CodeStructure {
+        val difference = CodeComparator.difference(codeSnapshot.code, code)
+        val structure = when (difference) {
+            is CodeDifference.Increase -> {
+                val newStructure = analyzeForLanguage(difference.change, codeSnapshot.language)
+                codeSnapshot.structure + newStructure.move(codeSnapshot.code.length + 1)
+            }
+
+            is CodeDifference.Decrease -> {
+                val newStructure = analyzeForLanguage(difference.change, codeSnapshot.language)
+                val lengthDifference = codeSnapshot.code.length - difference.change.length
+                codeSnapshot.structure - newStructure.move(lengthDifference)
+            }
+
+            CodeDifference.None -> return codeSnapshot.structure
+        }
+
+        snapshot = CodeSnapshot(code, structure, codeSnapshot.language)
+
+        return structure
+    }
+
+    private fun analyzeForLanguage(code: String, language: SyntaxLanguage) =
+        when (language) {
             DEFAULT -> analyzeCodeWithKeywords(code, ALL_KEYWORDS)
             MIXED -> analyzeCodeWithKeywords(code, ALL_MIXED_KEYWORDS)
             C -> analyzeCodeWithKeywords(code, C_KEYWORDS)
@@ -49,9 +96,8 @@ internal object CodeAnalyzer {
             SWIFT -> analyzeCodeWithKeywords(code, SWIFT_KEYWORDS)
         }
 
-    private fun analyzeCodeWithKeywords(code: String, keywords: List<String>): CodeStructure =
-        CodeStructure(
-            tokens = TokenLocator.locate(code),
+    private fun analyzeCodeWithKeywords(code: String, keywords: List<String>): CodeStructure {
+        return CodeStructure(
             marks = MarkLocator.locate(code),
             punctuations = PunctuationLocator.locate(code),
             keywords = KeywordLocator.locate(code, keywords),
@@ -60,5 +106,7 @@ internal object CodeAnalyzer {
             comments = CommentLocator.locate(code),
             multilineComments = MultilineCommentLocator.locate(code),
             annotations = AnnotationLocator.locate(code),
+            incremental = false,
         )
+    }
 }

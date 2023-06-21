@@ -63,4 +63,31 @@ internal class PunctuationLocatorTest {
         assertEquals(PhraseLocation(2, 3), result[2])
         assertEquals(PhraseLocation(8, 9), result[3])
     }
+
+    @Test
+    fun `Returns locations of the punctuation next to strings`() {
+        val testCode = """
+           "a";
+           "b";
+        """.trimIndent()
+
+        val result = PunctuationLocator.locate(testCode)
+
+        assertEquals(2, result.size)
+        assertEquals(PhraseLocation(3, 4), result[0])
+        assertEquals(PhraseLocation(8, 9), result[1])
+    }
+
+    @Test
+    fun `Not returns locations of the non punctuation characters`() {
+        val testCode = """
+           /** a */
+           "b";
+        """.trimIndent()
+
+        val result = PunctuationLocator.locate(testCode)
+
+        assertEquals(1, result.size)
+        assertEquals(PhraseLocation(12, 13), result[0])
+    }
 }

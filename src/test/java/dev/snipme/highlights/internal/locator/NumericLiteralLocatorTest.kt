@@ -129,4 +129,17 @@ internal class NumericLiteralLocatorTest {
         assertEquals(PhraseLocation(11, 16), result[3])
         assertEquals(PhraseLocation(17, 19), result[4])
     }
+
+    @Test
+    fun `Not returns location of the literal characters only`() {
+        val testCode = """
+            ..
+            LL
+            xx
+        """.trimIndent()
+
+        val result = NumericLiteralLocator.locate(testCode)
+
+        assertEquals(0, result.size)
+    }
 }

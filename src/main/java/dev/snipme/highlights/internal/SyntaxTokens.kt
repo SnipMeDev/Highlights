@@ -22,7 +22,7 @@ internal object SyntaxTokens {
             + "throws,transient").split(",")
 
     val KOTLIN_KEYWORDS = JAVA_KEYWORDS +
-            ("as,as?,fun,in,!in,is,!is,object,typealias,val,var,when,by,constructor,delegate,dynamic,field,"
+            ("as,as?,fun,in,!in,is,!is,object,typealias,val,var,when,by,constructor,delegate,dynamic,"
             + "file,get,init,set,value,where,actual,annotation,companion,crossinline,data,enum,expect,"
             + "external,field,infix,inline,inner,internal,lateinit,noinline,open,operator,out,override,"
             + "reified,sealed,suspend,tailrec,vararg").split(",")
