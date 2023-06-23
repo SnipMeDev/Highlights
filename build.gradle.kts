@@ -7,16 +7,25 @@ plugins {
     id("maven-publish")
 }
 
+val libraryName = "Highlights"
+val libraryDescription = "Kotlin Multiplatform (KMM) syntax highlighting engine"
+
 group = "dev.snipme"
-version = "0.1.0"
+version = "0.1.0-SNAPSHOT"
 
 publishing {
     publications {
         create<MavenPublication>("HighlightsPublication") {
             from(components["java"])
             groupId = group as String
-            artifactId = "Highlights"
+            artifactId = libraryName
             version = version as String
+
+            pom {
+                name.set(libraryName)
+                description.set(libraryDescription)
+                url.set("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            }
         }
     }
 
