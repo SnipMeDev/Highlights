@@ -1,10 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.publish.maven.MavenPublication
 
+apply(from = "publish-root.gradle")
+
 plugins {
     id("java-library")
     kotlin("jvm") version "1.8.21"
     id("maven-publish")
+    id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
 }
 
 val libraryName = "Highlights"
@@ -25,6 +28,19 @@ publishing {
                 name.set(libraryName)
                 description.set(libraryDescription)
                 url.set("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                licenses {
+                    license {
+                        name.set("Apache-2.0")
+                        url.set("https://opensource.org/license/apache-2-0")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("tkadziolka")
+                        name.set("Tomasz Kądziołka")
+                        email.set("kontakt@tkadziolka.pl")
+                    }
+                }
             }
         }
     }
