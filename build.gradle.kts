@@ -20,8 +20,7 @@ version = "0.1.0-SNAPSHOT"
 
 publishing {
     publications {
-        create<MavenPublication>("HighlightsPublication") {
-
+        create<MavenPublication>("release") {
             from(components["java"]) // jar
 
             groupId = group as String
