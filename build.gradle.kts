@@ -24,7 +24,7 @@ publishing {
             from(components["java"]) // jar
 
             groupId = group as String
-            artifactId = libraryName
+            artifactId = libraryName.toLowerCase()
             version = version as String
 
             pom {
