@@ -1,14 +1,10 @@
 package dev.snipme.highlights.internal
 
-import dev.snipme.highlights.model.CodeStructure
 import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.model.SyntaxLanguage
-import kotlin.coroutines.CoroutineContext
-import kotlin.system.measureTimeMillis
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 internal class CodeAnalyzerTest {
 

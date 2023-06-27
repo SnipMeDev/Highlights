@@ -13,7 +13,7 @@ internal object MarkLocator {
             .forEach {
                 code.indicesOf(
                     it.toString(),
-                    setOf(RegexOption.IGNORE_CASE, RegexOption.LITERAL),
+                    setOf(RegexOption.IGNORE_CASE),
                 ).forEach { index ->
                     locations.add(PhraseLocation(index, index + 1))
                 }

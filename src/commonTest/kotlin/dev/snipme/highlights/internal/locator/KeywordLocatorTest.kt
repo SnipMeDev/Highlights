@@ -1,5 +1,6 @@
 package dev.snipme.highlights.internal.locator
 
+import dev.snipme.highlights.internal.printResults
 import dev.snipme.highlights.model.PhraseLocation
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -34,6 +35,8 @@ internal class KeywordLocatorTest {
         val keywords = listOf("static", "new", "class", "extends")
 
         val result = KeywordLocator.locate(testCode, keywords)
+
+        result.printResults(testCode)
 
         assertEquals(2, result.size)
         assertEquals(PhraseLocation(0, 5), result[0])

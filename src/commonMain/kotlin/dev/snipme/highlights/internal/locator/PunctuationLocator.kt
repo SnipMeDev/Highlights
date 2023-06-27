@@ -14,7 +14,7 @@ internal object PunctuationLocator {
             .filter { it.isNotBlank() }
             .filter { it in PUNCTUATION_CHARACTERS }
             .forEach {
-                code.indicesOf(it, setOf(RegexOption.LITERAL)).forEach { index ->
+                code.indicesOf(it, ).forEach { index ->
                     if (code[index].isWhitespace()) return@forEach
                     locations.add(PhraseLocation(index, index + 1))
                 }
