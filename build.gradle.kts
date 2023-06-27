@@ -5,8 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 apply(from = "publish-root.gradle")
 
 plugins {
-    id("java-library")
-    kotlin("jvm") version "1.8.21"
+    kotlin("multiplatform") version "1.8.22"
     id("maven-publish")
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("signing")
@@ -16,12 +15,47 @@ val libraryName = "Highlights"
 val libraryDescription = "Kotlin Multiplatform (KMM) syntax highlighting engine"
 
 group = "dev.snipme"
-version = "0.1.0-SNAPSHOT"
+version = "0.2.0-SNAPSHOT"
+
+kotlin {
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+        withJava()
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+    }
+
+    val hostOs = System.getProperty("os.name")
+    val isMingwX64 = hostOs.startsWith("Windows")
+    val nativeTarget = when {
+        hostOs == "Mac OS X" -> macosX64("native")
+        hostOs == "Linux" -> linuxX64("native")
+        isMingwX64 -> mingwX64("native")
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+    }
+
+
+    sourceSets {
+        val commonMain by getting
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+        val jvmMain by getting
+        val jvmTest by getting
+        val nativeMain by getting
+        val nativeTest by getting
+    }
+}
 
 publishing {
     publications {
         create<MavenPublication>("release") {
-            from(components["java"]) // jar
+            from(components["kotlin"]) // jar
 
             groupId = group as String
             artifactId = libraryName.toLowerCase()
@@ -49,10 +83,6 @@ publishing {
             }
         }
     }
-
-    repositories {
-        mavenLocal()
-    }
 }
 
 signing {
@@ -69,21 +99,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_7
 }
 
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    testImplementation(kotlin("test"))
-}
-
-repositories {
-    mavenCentral()
-}
-
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
+tasks.withType<Wrapper> {
+    gradleVersion = "7.6"
+    distributionType = Wrapper.DistributionType.BIN
 }

@@ -1,7 +1,7 @@
 package dev.snipme.highlights.internal.locator
 
 import dev.snipme.highlights.model.PhraseLocation
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class TokenLocatorTest {
