@@ -17,7 +17,7 @@ internal object MultilineCommentLocator {
         MULTILINE_COMMENT_DELIMITERS.forEach { commentBlock ->
             val (prefix, postfix) = commentBlock
             startIndices.addAll(code.indicesOf(prefix))
-            endIndices.addAll(code.indicesOf(postfix).map { it + (postfix.lastIndex) })
+            endIndices.addAll(code.indicesOf(postfix).map { it + (postfix.length) })
         }
 
         val endIndex = minOf(startIndices.size, endIndices.size) -1

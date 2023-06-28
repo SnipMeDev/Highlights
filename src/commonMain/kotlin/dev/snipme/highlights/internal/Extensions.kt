@@ -6,6 +6,7 @@ fun String.indicesOf(
 ): Set<Int> {
     val indices = mutableSetOf<Int>()
 
+    // No found
     val startIndexOf = indexOf(phrase, 0)
     if (startIndexOf < 0) {
         return emptySet()
@@ -13,31 +14,17 @@ fun String.indicesOf(
 
     indices.add(startIndexOf)
 
+    // The found is the only one
     if (startIndexOf == (lastIndex - phrase.length)) {
         return indices
     }
 
-    val lastIndexOf = lastIndexOf(phrase)
-    if (lastIndexOf < 0) {
-        return indices
+    var startingIndex = indexOf(phrase, startIndexOf + phrase.length)
+
+    while (startingIndex > 0) {
+        indices.add(startingIndex)
+        startingIndex = indexOf(phrase, startingIndex + phrase.length)
     }
-
-    indices.add(lastIndexOf)
-
-
-//    do {
-//        phraseIndex =
-//
-//        println("Phrase = $phrase, indexOf = $phraseIndex")
-//
-//        if (phraseIndex >= 0) {
-//            indices.add(phraseIndex)
-//            startIndex += phrase.length
-//        } else {
-//            break
-//        }
-//
-//    } while (phraseIndex >= 0)
 
     return indices
 }

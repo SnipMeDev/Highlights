@@ -5,7 +5,6 @@ import kotlin.test.assertEquals
 
 internal class ExtensionsKtTest {
 
-
     @Test
     fun `Returns empty result of phrase that is not present`() {
         val text = "b c d"
@@ -53,8 +52,16 @@ internal class ExtensionsKtTest {
 
         val result = text.indicesOf(phrase)
 
-        assertEquals(setOf(0, 9, 17), result)
+        assertEquals(setOf(0, 9, 16), result)
     }
 
+    @Test
+    fun `Returns all indices of special phrase`() {
+        val text = "//a /a b /** d //a"
+        val phrase = "/**"
 
+        val result = text.indicesOf(phrase)
+
+        assertEquals(setOf(9), result)
+    }
 }
