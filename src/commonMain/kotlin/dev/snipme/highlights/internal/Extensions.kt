@@ -2,7 +2,6 @@ package dev.snipme.highlights.internal
 
 fun String.indicesOf(
     phrase: String,
-    options: Set<RegexOption> = setOf(RegexOption.IGNORE_CASE)
 ): Set<Int> {
     val indices = mutableSetOf<Int>()
 
