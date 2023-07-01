@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.configurationcache.extensions.capitalized
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 apply(from = "publish-root.gradle")
@@ -11,13 +12,11 @@ plugins {
     id("signing")
 }
 
-val libraryName = "Highlights"
-val libraryDescription = "Kotlin Multiplatform (KMM) syntax highlighting engine"
-
 group = "dev.snipme"
 version = "0.2.0-SNAPSHOT"
 
 kotlin {
+    // Android
     jvm {
         compilations.all {
             kotlinOptions.jvmTarget = "1.8"
@@ -27,43 +26,41 @@ kotlin {
             useJUnitPlatform()
         }
     }
-
-    val hostOs = System.getProperty("os.name")
-    val isMingwX64 = hostOs.startsWith("Windows")
-    val nativeTarget = when {
-        hostOs == "Mac OS X" -> macosX64("native")
-        hostOs == "Linux" -> linuxX64("native")
-        isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-    }
-
-
+    // iOS
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    // Dependencies
     sourceSets {
-        val commonMain by getting
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
             }
         }
-        val jvmMain by getting
-        val jvmTest by getting
-        val nativeMain by getting
-        val nativeTest by getting
+    }
+}
+
+afterEvaluate {
+    configure<PublishingExtension> {
+        publications.all {
+            val mavenPublication = this as? MavenPublication
+            mavenPublication?.artifactId = mavenPublication?.artifactId?.toLowerCase()
+        }
     }
 }
 
 publishing {
     publications {
         create<MavenPublication>("release") {
-            from(components["kotlin"]) // jar
+            from(components["kotlin"])
 
             groupId = group as String
-            artifactId = libraryName.toLowerCase()
+            artifactId = "highlights"
             version = version as String
 
             pom {
-                name.set(libraryName)
-                description.set(libraryDescription)
+                name.set("Highlights")
+                description.set("Kotlin Multiplatform (KMM) syntax highlighting engine")
                 url.set("https://github.com/SnipMeDev/Highlights")
 
                 licenses {
@@ -92,14 +89,4 @@ signing {
         rootProject.ext["signing.password"] as String
     )
     sign(publishing.publications)
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
-}
-
-tasks.withType<Wrapper> {
-    gradleVersion = "7.6"
-    distributionType = Wrapper.DistributionType.BIN
 }
