@@ -40,15 +40,6 @@ kotlin {
     }
 }
 
-afterEvaluate {
-    configure<PublishingExtension> {
-        publications.all {
-            val mavenPublication = this as? MavenPublication
-            mavenPublication?.artifactId = mavenPublication?.artifactId?.toLowerCase()
-        }
-    }
-}
-
 publishing {
     publications {
         create<MavenPublication>("release") {
