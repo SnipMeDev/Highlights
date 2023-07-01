@@ -121,7 +121,7 @@ internal object SyntaxTokens {
     val STRING_DELIMITERS = listOf("\'", "\"", "\"\"\"")
     val COMMENT_DELIMITERS = listOf("//", "#")
     // TODO Add support for other other languages like Dart or Python
-    val MULTILINE_COMMENT_DELIMITERS = listOf(Pair("/\\*", "\\*/"))
+    val MULTILINE_COMMENT_DELIMITERS = listOf(Pair("/*", "*/"))
     val PUNCTUATION_CHARACTERS = listOf(",", ".", ":", ";")
     val MARK_CHARACTERS = listOf("(", ")", "=", "{", "}", "<", ">", "-", "+", "[", "]", "|", "&")
 }

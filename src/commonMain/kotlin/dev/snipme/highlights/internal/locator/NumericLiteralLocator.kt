@@ -31,7 +31,7 @@ internal object NumericLiteralLocator {
             } // Find start of literals
             .forEach { number ->
                 // For given literal find all occurrences
-                code.indicesOf(number, setOf(RegexOption.LITERAL)).forEach { startIndex ->
+                code.indicesOf(number).forEach { startIndex ->
                     if (code.isFullNumber(number, startIndex).not()) return@forEach
                     // Omit in the middle of text, probably variable name (this100)
                     if (code.isNumberFirstIndex(startIndex).not()) return@forEach

@@ -12,7 +12,7 @@ internal object TokenLocator {
             .asSequence() // Manipulate on given word separately
             .filter { it.isNotBlank() } // Filter spaces and others
             .forEach { token ->
-                code.indicesOf(token, setOf(RegexOption.IGNORE_CASE, RegexOption.LITERAL))
+                code.indicesOf(token)
                     .filter { token.isIndependentPhrase(code, it) }
                     .forEach { startIndex ->
                         locations.add(PhraseLocation(startIndex, startIndex + token.length))

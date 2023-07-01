@@ -11,10 +11,7 @@ internal object MarkLocator {
             .toSet()
             .filter { it.toString() in MARK_CHARACTERS }
             .forEach {
-                code.indicesOf(
-                    it.toString(),
-                    setOf(RegexOption.IGNORE_CASE, RegexOption.LITERAL),
-                ).forEach { index ->
+                code.indicesOf(it.toString()).forEach { index ->
                     locations.add(PhraseLocation(index, index + 1))
                 }
             }

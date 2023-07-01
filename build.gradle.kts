@@ -1,35 +1,57 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.configurationcache.extensions.capitalized
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 apply(from = "publish-root.gradle")
 
 plugins {
-    id("java-library")
-    kotlin("jvm") version "1.8.21"
+    kotlin("multiplatform") version "1.8.22"
     id("maven-publish")
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("signing")
 }
 
-val libraryName = "Highlights"
-val libraryDescription = "Kotlin Multiplatform (KMM) syntax highlighting engine"
-
 group = "dev.snipme"
-version = "0.1.0-SNAPSHOT"
+version = "0.2.0-SNAPSHOT"
+
+kotlin {
+    // Android
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+        withJava()
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+    }
+    // iOS
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    // Dependencies
+    sourceSets {
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+    }
+}
 
 publishing {
     publications {
         create<MavenPublication>("release") {
-            from(components["java"]) // jar
+            from(components["kotlin"])
 
             groupId = group as String
-            artifactId = libraryName.toLowerCase()
+            artifactId = "highlights"
             version = version as String
 
             pom {
-                name.set(libraryName)
-                description.set(libraryDescription)
+                name.set("Highlights")
+                description.set("Kotlin Multiplatform (KMM) syntax highlighting engine")
                 url.set("https://github.com/SnipMeDev/Highlights")
 
                 licenses {
@@ -49,10 +71,6 @@ publishing {
             }
         }
     }
-
-    repositories {
-        mavenLocal()
-    }
 }
 
 signing {
@@ -62,28 +80,4 @@ signing {
         rootProject.ext["signing.password"] as String
     )
     sign(publishing.publications)
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
-}
-
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    testImplementation(kotlin("test"))
-}
-
-repositories {
-    mavenCentral()
-}
-
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
 }

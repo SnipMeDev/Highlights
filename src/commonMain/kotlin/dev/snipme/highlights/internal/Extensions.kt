@@ -1,17 +1,31 @@
 package dev.snipme.highlights.internal
 
-import dev.snipme.highlights.internal.SyntaxTokens.TOKEN_DELIMITERS
-
 fun String.indicesOf(
     phrase: String,
-    options: Set<RegexOption> = setOf(RegexOption.IGNORE_CASE)
-): List<Int> {
-    val pattern = Regex(phrase, options)
+): Set<Int> {
+    val indices = mutableSetOf<Int>()
 
-    return pattern
-        .findAll(this)
-        .map { it.range.first }
-        .toList()
+    // No found
+    val startIndexOf = indexOf(phrase, 0)
+    if (startIndexOf < 0) {
+        return emptySet()
+    }
+
+    indices.add(startIndexOf)
+
+    // The found is the only one
+    if (startIndexOf == (lastIndex - phrase.length)) {
+        return indices
+    }
+
+    var startingIndex = indexOf(phrase, startIndexOf + phrase.length)
+
+    while (startingIndex > 0) {
+        indices.add(startingIndex)
+        startingIndex = indexOf(phrase, startingIndex + phrase.length)
+    }
+
+    return indices
 }
 
 fun Char.isNewLine(): Boolean {
