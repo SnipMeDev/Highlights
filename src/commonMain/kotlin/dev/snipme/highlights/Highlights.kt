@@ -22,6 +22,8 @@ class Highlights private constructor(
         fun default() = fromBuilder(Builder())
 
         fun fromBuilder(builder: Builder) = builder.build()
+
+        fun themes(darkMode: Boolean) = SyntaxThemes.themes(darkMode)
     }
 
     data class Builder(
