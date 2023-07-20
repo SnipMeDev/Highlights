@@ -2,7 +2,8 @@
 
 ### Added
 
-- Public static `themes` function for accessing all predefined themes on the ios environment
+- Public static `themes` and `languages` functions for easier accessing 
+  all predefined values
 
 ## [0.2.1]
 
