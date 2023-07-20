@@ -1,3 +1,5 @@
+![highlights_banner](https://github.com/SnipMeDev/Highlights/assets/8405055/bd4da3e7-b1b2-48cc-bacd-b26ba3ca53de)
+
 # Highlights
 Kotlin Multiplatform syntax highlighting engine
 
