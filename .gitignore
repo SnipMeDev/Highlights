@@ -27,3 +27,5 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+# MacOS files
+*.DS_Store

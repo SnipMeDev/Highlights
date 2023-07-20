@@ -1,3 +1,10 @@
+## [0.3.0]
+
+### Added
+
+- Public static `themes` and `languages` functions for easier accessing 
+  all predefined values
+
 ## [0.2.1]
 
 ### Added

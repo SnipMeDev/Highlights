@@ -10,11 +10,10 @@ import dev.snipme.highlights.model.SyntaxLanguage
 import dev.snipme.highlights.model.SyntaxTheme
 import dev.snipme.highlights.model.SyntaxThemes
 
-// TODO Handle logger (lambda)
 class Highlights private constructor(
     private var code: String,
     private val language: SyntaxLanguage,
-    private val theme: SyntaxTheme, // Default
+    private val theme: SyntaxTheme,
     private var emphasisLocations: List<PhraseLocation>
 ) {
 
@@ -22,6 +21,10 @@ class Highlights private constructor(
         fun default() = fromBuilder(Builder())
 
         fun fromBuilder(builder: Builder) = builder.build()
+
+        fun themes(darkMode: Boolean) = SyntaxThemes.themes(darkMode)
+
+        fun languages() = SyntaxLanguage.values().toList()
     }
 
     data class Builder(
