@@ -1,3 +1,9 @@
+## [0.3.0]
+
+### Added
+
+- Public static `themes` function for accessing all predefined themes on the ios environment
+
 ## [0.2.1]
 
 ### Added
