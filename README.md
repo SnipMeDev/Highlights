@@ -3,6 +3,44 @@
 # Highlights
 Kotlin Multiplatform syntax highlighting engine
 
+## Installation
+```sh
+implementation("dev.snipme:highlights:0.3.1-SNAPSHOT")
+```
+
+## Usage
+
+To start, simply put any code snippet in the default builder
+
+```kotlin
+Highlights.default().apply {
+    setCode("public class ExampleClass {}")
+    // Keywords = [public, class], Marks = [{, }]
+    getCodeStructure()
+    // BoldHighlight, ColorHighlight
+    getHighlights()
+}
+```
+
+You can also set language, theme and phrase emphasis. 
+Language and theme has impact on the ColorHighlight and emphasis is represented by the BoldHighlight.
+
+```kotlin
+Highlights.Builder()
+    .code("public class ExampleClass {}")
+    .theme(SyntaxThemes.monokai())
+    .language(SyntaxLanguage.JAVA)
+    .emphasis(PhraseLocation(13, 25)) // ExampleClass
+    .build()
+    .run {
+        getHighlights()
+    }
+```
+
+## Themes
+
+TBD
+
 License
 =======
 
