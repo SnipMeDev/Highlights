@@ -1,3 +1,10 @@
+## [0.3.1]
+
+### Added
+
+- README code usage examples
+- folder with sample
+
 ## [0.3.0]
 
 ### Added
