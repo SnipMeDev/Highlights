@@ -4,6 +4,7 @@
 
 - README code usage examples
 - folder with sample
+- README installation section
 
 ## [0.3.0]
 

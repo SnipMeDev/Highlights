@@ -33,12 +33,15 @@ val sampleClass = """
 fun main(args: Array<String>) {
     println("### HIGHLIGHTS ###")
     println()
+
     println("Available languages:")
     println("${SyntaxLanguage.getNames()}")
     println()
+
     println("Available themes:")
     println("${Highlights.themes(darkMode = false).keys}")
     println()
+
     println("This is a sample class:")
     println(sampleClass)
     println()
