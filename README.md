@@ -37,7 +37,7 @@ Highlights.Builder()
     }
 ```
 
-More advance example of this library is shown [here](/sample).
+More advance usage of this library is shown [here](/sample).
 
 ## Themes
 
