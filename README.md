@@ -5,10 +5,12 @@ Kotlin Multiplatform syntax highlighting engine
 
 ## Installation
 ```sh
-implementation("dev.snipme:highlights:0.3.1-SNAPSHOT")
+implementation("dev.snipme:highlights:0.4.0")
 ```
 
 ## Usage
+
+> 💡 As each Highlights instance caches code analysis, it is recommended to re-use the same instance for small code changes.
 
 To start, simply put any code snippet in the default builder
 
