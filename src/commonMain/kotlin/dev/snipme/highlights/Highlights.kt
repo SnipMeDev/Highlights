@@ -1,6 +1,7 @@
 package dev.snipme.highlights
 
 import dev.snipme.highlights.internal.CodeAnalyzer
+import dev.snipme.highlights.internal.CodeSnapshot
 import dev.snipme.highlights.model.BoldHighlight
 import dev.snipme.highlights.model.CodeHighlight
 import dev.snipme.highlights.model.CodeStructure
@@ -16,6 +17,8 @@ class Highlights private constructor(
     private val theme: SyntaxTheme,
     private var emphasisLocations: List<PhraseLocation>
 ) {
+    var snapshot: CodeSnapshot? = null
+        private set
 
     companion object {
         fun default() = fromBuilder(Builder())
@@ -50,7 +53,11 @@ class Highlights private constructor(
         this.emphasisLocations = locations.toList()
     }
 
-    fun getCodeStructure(): CodeStructure = CodeAnalyzer.analyze(code, language)
+    fun getCodeStructure(): CodeStructure {
+        val structure = CodeAnalyzer.analyze(code, language, snapshot)
+        snapshot = CodeSnapshot(code, structure, language)
+        return structure
+    }
 
     fun getHighlights(): List<CodeHighlight> {
         val highlights = mutableListOf<CodeHighlight>()
