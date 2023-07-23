@@ -20,7 +20,6 @@ internal class CodeAnalyzerTest {
             123.00f
         """.trimIndent()
 
-        CodeAnalyzer.clearSnapshot()
         val result = CodeAnalyzer.analyze(testCode)
 
         assertEquals(
@@ -100,8 +99,6 @@ internal class CodeAnalyzerTest {
             123.00f
         """.trimIndent()
 
-        CodeAnalyzer.clearSnapshot()
-
         val firstResult = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
         assertEquals(false, firstResult.incremental)
 
@@ -117,8 +114,9 @@ internal class CodeAnalyzerTest {
             field.forEach { }
         """.trimIndent()
 
-        val result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN)
-        assertNotNull(CodeAnalyzer.snapshot)
+        val snapshot = CodeSnapshot(testCode, firstResult, SyntaxLanguage.KOTLIN)
+
+        val result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN, snapshot)
         assertEquals(true, result.incremental)
 
         assertEquals(
@@ -200,7 +198,6 @@ internal class CodeAnalyzerTest {
             123.00f
         """.trimIndent()
 
-        CodeAnalyzer.clearSnapshot()
         val firstResult = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
         assertEquals(false, firstResult.incremental)
 
@@ -210,8 +207,9 @@ internal class CodeAnalyzerTest {
             class 
         """.trimIndent()
 
-        val result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN)
-        assertNotNull(CodeAnalyzer.snapshot)
+        val snapshot = CodeSnapshot(testCode, firstResult, SyntaxLanguage.KOTLIN)
+
+        val result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN, snapshot)
         assertEquals(true, result.incremental)
 
         assertEquals(

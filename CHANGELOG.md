@@ -1,3 +1,9 @@
+## [0.4.0]
+
+### Changed
+
+- Snapshot is moved to Highlights to keep it with each instance
+
 ## [0.3.1]
 
 ### Added

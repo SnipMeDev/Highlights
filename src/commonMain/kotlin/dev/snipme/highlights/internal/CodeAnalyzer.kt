@@ -34,25 +34,20 @@ data class CodeSnapshot(
 )
 
 internal object CodeAnalyzer {
-    var snapshot: CodeSnapshot? = null
-        private set
-
-    fun analyze(code: String, language: SyntaxLanguage = DEFAULT): CodeStructure =
+    fun analyze(
+        code: String,
+        language: SyntaxLanguage = DEFAULT,
+        snapshot: CodeSnapshot? = null,
+    ): CodeStructure =
         when {
             snapshot == null -> analyzeFull(code, language)
-            language != snapshot!!.language -> analyzeFull(code, language)
-            code != snapshot!!.code -> analyzePartial(snapshot!!, code)
-            else -> snapshot!!.structure
+            language != snapshot.language -> analyzeFull(code, language)
+            code != snapshot.code -> analyzePartial(snapshot, code)
+            else -> snapshot.structure
         }
 
-    fun clearSnapshot() {
-        snapshot = null
-    }
-
     private fun analyzeFull(code: String, language: SyntaxLanguage): CodeStructure {
-        val structure = analyzeForLanguage(code, language)
-        snapshot = CodeSnapshot(code, structure, language)
-        return structure
+        return analyzeForLanguage(code, language)
     }
 
     private fun analyzePartial(codeSnapshot: CodeSnapshot, code: String): CodeStructure {
@@ -71,8 +66,6 @@ internal object CodeAnalyzer {
 
             CodeDifference.None -> return codeSnapshot.structure
         }
-
-        snapshot = CodeSnapshot(code, structure, codeSnapshot.language)
 
         return structure
     }
