@@ -3,12 +3,12 @@
 # Highlights
 Kotlin Multiplatform syntax highlighting engine
 
-## Installation
+## Installation ⬇️
 ```sh
 implementation("dev.snipme:highlights:0.4.1")
 ```
 
-## Functionalities
+## Features ✨
 - Code component analysis (Keyword, comment, etc.)
 - Multiple syntax languages (Java, Swift, Kotlin, C, ...)
 - Themes
@@ -16,7 +16,7 @@ implementation("dev.snipme:highlights:0.4.1")
 - Result caching and support for incremental changes
 - Written in pure Kotlin, so available for many platforms 📱 💻 🖥️
 
-## Usage
+## Usage ✍️
 
 > 💡 As each Highlights instance caches code analysis, it is recommended to re-use the same instance for small code changes.
 
@@ -49,11 +49,11 @@ Highlights.Builder()
 
 More advance usage of this library is shown [here](/sample).
 
-## Themes
+## Themes 🖌️
 
 The library comes with predefined syntax coloring themes available in `SyntaxThemes`:
 
-### Dark
+### Dark 🌚
 
 <table>
     <th>Darcula</th>
@@ -125,7 +125,7 @@ The library comes with predefined syntax coloring themes available in `SyntaxThe
     </tr>
 </table>
 
-### Light
+### Light 🌞
 
 <table>
     <th>Darcula</th>
@@ -213,7 +213,34 @@ SyntaxTheme(
 )
 ```
 
-## Contribution
+## Popular uses 🙌
+
+If your project uses this code, please write me or add your info
+
+<table>
+    <th>Type</th>
+    <th>Name</th>
+    <tr>
+        <td>Library</td>
+        <td>
+            <a href="https://github.com/SnipMeDev/KodeView">KodeView</a>
+        </td>
+    </tr>
+    <tr>
+        <td>Application</td>
+        <td>
+            <a href="https://play.google.com/store/apps/details?id=pl.tkadziolka.snipbook">SnippLog</a>
+        </td>
+    </tr>
+</table>
+
+## TODO 🚧
+- [ ] Migrate some lists to sets
+- [ ] Optimize code analysis
+- [ ] Add more themes and languages
+- [ ] Support italic and underline text style
+
+## Contribution 💻
 Any form of support is very welcomed. 
 Bugs, problems and new feature requests should be placed in the `Issues` tab with proper labeling.
 New feature can be also submitted via `Pull Requests`. 
@@ -222,7 +249,7 @@ Then make sure:
 - CHANGELOG and README have been updated
 - New code matches library's vision and code style
 
-License
+License 🖋️
 =======
 
     Copyright 2023 Tomasz Kądziołka.
