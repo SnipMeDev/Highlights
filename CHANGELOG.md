@@ -1,3 +1,8 @@
+## [0.4.2]
+
+### Changed
+- Version everywhere to 0.4.2
+
 ## [0.4.1]
 
 ### Added

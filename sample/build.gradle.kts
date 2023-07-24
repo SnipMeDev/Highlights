@@ -30,5 +30,5 @@ application {
 }
 
 dependencies {
-    implementation("dev.snipme:highlights:0.4.0-SNAPSHOT")
+    implementation("dev.snipme:highlights:0.4.2")
 }
