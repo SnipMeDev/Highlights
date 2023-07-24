@@ -5,8 +5,16 @@ Kotlin Multiplatform syntax highlighting engine
 
 ## Installation
 ```sh
-implementation("dev.snipme:highlights:0.4.0")
+implementation("dev.snipme:highlights:0.4.1")
 ```
+
+## Functionalities
+- Code component analysis (Keyword, comment, etc.)
+- Multiple syntax languages (Java, Swift, Kotlin, C, ...)
+- Themes
+- Text bolding (emphasis)
+- Result caching and support for incremental changes
+- Written in pure Kotlin, so available for many platforms 📱 💻 🖥️
 
 ## Usage
 
@@ -204,6 +212,15 @@ SyntaxTheme(
     mark = 0xEDEDED
 )
 ```
+
+## Contribution
+Any form of support is very welcomed. 
+Bugs, problems and new feature requests should be placed in the `Issues` tab with proper labeling.
+New feature can be also submitted via `Pull Requests`. 
+Then make sure:
+- Current and added tests have passed
+- CHANGELOG and README have been updated
+- New code matches library's vision and code style
 
 License
 =======
