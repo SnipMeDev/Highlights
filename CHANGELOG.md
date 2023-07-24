@@ -1,3 +1,8 @@
+## [0.5.0]
+
+### Changed
+- Publication script to add pom and java doc to all targets
+
 ## [0.4.2]
 
 ### Changed

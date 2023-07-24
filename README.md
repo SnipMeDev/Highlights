@@ -4,8 +4,14 @@
 Kotlin Multiplatform syntax highlighting engine
 
 ## Installation ⬇️
-```sh
-implementation("dev.snipme:highlights:0.4.2")
+```shell
+repositories {
+    mavenCentral()
+}
+```
+
+```shell
+implementation("dev.snipme:highlights:0.5.0")
 ```
 
 ## Features ✨

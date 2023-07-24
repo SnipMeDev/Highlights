@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.snipme"
-version = "0.4.2"
+version = "0.5.0"
 
 kotlin {
     // Android
@@ -41,33 +41,52 @@ kotlin {
 }
 
 publishing {
-    publications {
-        create<MavenPublication>("release") {
-            from(components["kotlin"])
+    val emptyJar = tasks.register<Jar>("emptyJar") {
+        archiveAppendix.set("empty")
+    }
 
-            groupId = group as String
-            artifactId = "highlights"
-            version = version as String
+    publications.forEach {
+        val publication = it as? MavenPublication ?: return@forEach
 
-            pom {
-                name.set("Highlights")
-                description.set("Kotlin Multiplatform (KMM) syntax highlighting engine")
-                url.set("https://github.com/SnipMeDev/Highlights")
+        publication.artifact(emptyJar) {
+            classifier = "javadoc"
+        }
 
-                licenses {
-                    license {
-                        name.set("Apache-2.0")
-                        url.set("https://opensource.org/license/apache-2-0")
-                    }
+        publication.pom.withXml {
+            val root = asNode()
+            root.appendNode("name", project.name)
+            root.appendNode(
+                "description",
+                "Kotlin Multiplatform (KMM) syntax highlighting engine"
+            )
+            root.appendNode("url", "https://github.com/SnipMeDev/Highlights")
+
+            root.appendNode("licenses").apply {
+                appendNode("license").apply {
+                    appendNode("name", "The Apache Software License, Version 2.0")
+                    appendNode("url", "https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    appendNode("distribution", "repo")
                 }
+            }
 
-                developers {
-                    developer {
-                        id.set("tkadziolka")
-                        name.set("Tomasz Kądziołka")
-                        email.set("kontakt@tkadziolka.pl")
-                    }
+            root.appendNode("developers").apply {
+                appendNode("developer").apply {
+                    appendNode("id", "tkadziolka")
+                    appendNode("name", "Tomasz Kądziołka")
+                    appendNode("email", "kontakt@tkadziolka.pl")
                 }
+            }
+
+            root.appendNode("scm").apply {
+                appendNode(
+                    "connection",
+                    "scm:git:ssh://git@github.com:SnipMeDev/Highlights.git"
+                )
+                appendNode(
+                    "developerConnection",
+                    "scm:git:ssh://git@github.org:SnipMeDev/Highlights.git",
+                )
+                appendNode("url", "https://github.com/SnipMeDev/Highlights")
             }
         }
     }
