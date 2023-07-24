@@ -5,7 +5,7 @@ Kotlin Multiplatform syntax highlighting engine
 
 ## Installation ⬇️
 ```sh
-implementation("dev.snipme:highlights:0.4.1")
+implementation("dev.snipme:highlights:0.4.2")
 ```
 
 ## Features ✨
