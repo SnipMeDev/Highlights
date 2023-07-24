@@ -43,6 +43,8 @@ More advance usage of this library is shown [here](/sample).
 
 ## Themes
 
+The library comes with predefined syntax coloring themes available in `SyntaxThemes`:
+
 ### Dark
 
 <table>
@@ -117,6 +119,91 @@ More advance usage of this library is shown [here](/sample).
 
 ### Light
 
+<table>
+    <th>Darcula</th>
+    <th>Monokai</th>
+    <th>Notepad</th>
+    <th>Matrix</th>
+    <th>Pastel</th>
+    <tr>
+<td>
+
+- ![#121212](https://placehold.co/15x15/121212/121212.png) Code
+- ![#CC7832](https://placehold.co/15x15/CC7832/CC7832.png) Keyword
+- ![#6A8759](https://placehold.co/15x15/6A8759/6A8759.png) String
+- ![#6897BB](https://placehold.co/15x15/6897BB/6897BB.png) Literal
+- ![#909090](https://placehold.co/15x15/909090/909090.png) Comment
+- ![#BBB529](https://placehold.co/15x15/BBB529/BBB529.png) Metadata
+- ![#629755](https://placehold.co/15x15/629755/629755.png) Multiline Comment
+- ![#CC7832](https://placehold.co/15x15/CC7832/CC7832.png) Punctuation
+- ![#121212](https://placehold.co/15x15/121212/121212.png) Mark
+</td>
+<td>
+
+- ![#07070D](https://placehold.co/15x15/07070D/07070D.png) Code
+- ![#F92672](https://placehold.co/15x15/F92672/F92672.png) Keyword
+- ![#E6DB74](https://placehold.co/15x15/E6DB74/E6DB74.png) String
+- ![#AE81FF](https://placehold.co/15x15/AE81FF/AE81FF.png) Literal
+- ![#FD971F](https://placehold.co/15x15/FD971F/FD971F.png) Comment
+- ![#B8F4B8](https://placehold.co/15x15/B8F4B8/B8F4B8.png) Metadata
+- ![#FD971F](https://placehold.co/15x15/FD971F/FD971F.png) Multiline Comment
+- ![#07070D](https://placehold.co/15x15/07070D/07070D.png) Punctuation
+- ![#07070D](https://placehold.co/15x15/07070D/07070D.png) Mark
+</td>
+<td>
+
+- ![#000080](https://placehold.co/15x15/000080/000080.png) Code
+- ![#0000FF](https://placehold.co/15x15/0000FF/0000FF.png) Keyword
+- ![#808080](https://placehold.co/15x15/808080/808080.png) String
+- ![#FF8000](https://placehold.co/15x15/FF8000/FF8000.png) Literal
+- ![#008000](https://placehold.co/15x15/008000/008000.png) Comment
+- ![#000080](https://placehold.co/15x15/000080/000080.png) Metadata
+- ![#008000](https://placehold.co/15x15/008000/008000.png) Multiline Comment
+- ![#AA2C8C](https://placehold.co/15x15/AA2C8C/AA2C8C.png) Punctuation
+- ![#AA2C8C](https://placehold.co/15x15/AA2C8C/AA2C8C.png) Mark
+</td>
+<td>
+
+- ![#008500](https://placehold.co/15x15/008500/008500.png) Code
+- ![#008500](https://placehold.co/15x15/008500/008500.png) Keyword
+- ![#269926](https://placehold.co/15x15/269926/269926.png) String
+- ![#39E639](https://placehold.co/15x15/39E639/39E639.png) Literal
+- ![#67E667](https://placehold.co/15x15/67E667/67E667.png) Comment
+- ![#008500](https://placehold.co/15x15/008500/008500.png) Metadata
+- ![#67E667](https://placehold.co/15x15/67E667/67E667.png) Multiline Comment
+- ![#008500](https://placehold.co/15x15/008500/008500.png) Punctuation
+- ![#008500](https://placehold.co/15x15/008500/008500.png) Mark
+</td>
+<td>
+
+- ![#20211F](https://placehold.co/15x15/20211F/20211F.png) Code
+- ![#729FCF](https://placehold.co/15x15/729FCF/729FCF.png) Keyword
+- ![#93CF55](https://placehold.co/15x15/93CF55/93CF55.png) String
+- ![#8AE234](https://placehold.co/15x15/8AE234/8AE234.png) Literal
+- ![#888A85](https://placehold.co/15x15/888A85/888A85.png) Comment
+- ![#5DB895](https://placehold.co/15x15/5DB895/5DB895.png) Metadata
+- ![#888A85](https://placehold.co/15x15/888A85/888A85.png) Multiline Comment
+- ![#CB956D](https://placehold.co/15x15/CB956D/CB956D.png) Punctuation
+- ![#CB956D](https://placehold.co/15x15/CB956D/CB956D.png) Mark
+</td>
+    </tr>
+</table>
+
+You can also prepare your own themes and use them. Just create the `SyntaxTheme` class:
+
+```kotlin
+SyntaxTheme(
+    code = 0xEDEDED,
+    keyword = 0xCC7832,
+    string = 0x6A8759,
+    literal = 0x6897BB,
+    comment = 0x909090,
+    metadata = 0xBBB529,
+    multilineComment = 0x629755,
+    punctuation = 0xCC7832,
+    mark = 0xEDEDED
+)
+```
 
 License
 =======
