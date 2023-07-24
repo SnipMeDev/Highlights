@@ -1,3 +1,8 @@
+## [0.4.1]
+
+### Added
+- More sections to README
+
 ## [0.4.0]
 
 ### Changed
