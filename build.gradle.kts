@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.snipme"
-version = "0.5.0"
+version = "0.6.0"
 
 kotlin {
     // Android
@@ -30,6 +30,17 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
+    // Desktop
+    mingwX64()
+    linuxX64()
+    linuxArm64()
+    macosX64()
+    macosArm64()
+    // Web
+    js {
+        browser()
+        nodejs()
+    }
     // Dependencies
     sourceSets {
         val commonTest by getting {
@@ -57,7 +68,7 @@ publishing {
             root.appendNode("name", project.name)
             root.appendNode(
                 "description",
-                "Kotlin Multiplatform (KMM) syntax highlighting engine"
+                "Kotlin Multiplatform syntax highlighting engine."
             )
             root.appendNode("url", "https://github.com/SnipMeDev/Highlights")
 

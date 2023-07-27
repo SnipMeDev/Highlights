@@ -4,7 +4,6 @@ import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.model.SyntaxLanguage
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 internal class CodeAnalyzerTest {
 

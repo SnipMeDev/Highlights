@@ -1,3 +1,11 @@
+## [0.6.0]
+
+### Added
+- Support for other non-mobile targets
+
+### Changed
+- Project maven description
+
 ## [0.5.0]
 
 ### Changed
