@@ -5,6 +5,7 @@
 
 ### Changed
 - Project maven description
+- Kotlin version to 1.9.0
 
 ## [0.5.0]
 

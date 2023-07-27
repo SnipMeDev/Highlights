@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 apply(from = "publish-root.gradle")
 
 plugins {
-    kotlin("multiplatform") version "1.8.22"
+    kotlin("multiplatform") version "1.9.0"
     id("maven-publish")
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("signing")
