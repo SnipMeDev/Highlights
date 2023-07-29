@@ -27,7 +27,10 @@ implementation("dev.snipme:highlights:0.6.0")
 - Written in pure Kotlin, so available for many platforms 📱 💻 🖥️
 
 ## Support ☕
-TBD
+Kotlin Multiplatform is a fresh environment and developing for it is neither fast nor easy 🥲
+
+If you feel that any of our project has saved you a time or effort, then consider supporting us via:  
+[🧋 Buy Me A Coffee](https://bmc.link/SnipMeDev)
 
 ## Usage ✍️
 
