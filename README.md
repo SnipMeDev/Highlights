@@ -1,7 +1,11 @@
 ![highlights_banner_opaque](https://github.com/SnipMeDev/Highlights/assets/8405055/e123ce0f-6f58-451a-9e0a-893c0809b909)
 
+[![Maven Central](https://img.shields.io/maven-central/v/dev.snipme/highlights)](https://mvnrepository.com/artifact/dev.snipme)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.9.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
+
 # Highlights
-Kotlin Multiplatform syntax highlighting engine
+Kotlin Multiplatform syntax highlighting engine.
 
 ## Installation ⬇️
 ```shell
@@ -11,7 +15,7 @@ repositories {
 ```
 
 ```shell
-implementation("dev.snipme:highlights:0.5.0")
+implementation("dev.snipme:highlights:0.6.0")
 ```
 
 ## Features ✨
@@ -21,6 +25,12 @@ implementation("dev.snipme:highlights:0.5.0")
 - Text bolding (emphasis)
 - Result caching and support for incremental changes
 - Written in pure Kotlin, so available for many platforms 📱 💻 🖥️
+
+## Support ☕
+Kotlin Multiplatform is a fresh environment and developing for it is neither fast nor easy 🥲
+
+If you feel that any of our project has saved you a time or effort, then consider supporting us via:  
+[🧋 Buy Me A Coffee](https://bmc.link/SnipMeDev)
 
 ## Usage ✍️
 

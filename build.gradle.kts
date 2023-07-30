@@ -6,14 +6,14 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 apply(from = "publish-root.gradle")
 
 plugins {
-    kotlin("multiplatform") version "1.8.22"
+    kotlin("multiplatform") version "1.9.0"
     id("maven-publish")
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("signing")
 }
 
 group = "dev.snipme"
-version = "0.5.0"
+version = "0.6.0"
 
 kotlin {
     // Android
@@ -30,6 +30,17 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
+    // Desktop
+    mingwX64()
+    linuxX64()
+    linuxArm64()
+    macosX64()
+    macosArm64()
+    // Web
+    js {
+        browser()
+        nodejs()
+    }
     // Dependencies
     sourceSets {
         val commonTest by getting {
@@ -57,7 +68,7 @@ publishing {
             root.appendNode("name", project.name)
             root.appendNode(
                 "description",
-                "Kotlin Multiplatform (KMM) syntax highlighting engine"
+                "Kotlin Multiplatform syntax highlighting engine."
             )
             root.appendNode("url", "https://github.com/SnipMeDev/Highlights")
 

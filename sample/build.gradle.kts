@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.21"
+    kotlin("jvm") version "1.9.0"
     application
 }
 
@@ -10,6 +10,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
@@ -30,5 +31,5 @@ application {
 }
 
 dependencies {
-    implementation("dev.snipme:highlights:0.5.0")
+    implementation("dev.snipme:highlights:0.6.0")
 }

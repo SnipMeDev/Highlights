@@ -1,3 +1,12 @@
+## [0.6.0]
+
+### Added
+- Support for other non-mobile targets
+
+### Changed
+- Project maven description
+- Kotlin version to 1.9.0
+
 ## [0.5.0]
 
 ### Changed
