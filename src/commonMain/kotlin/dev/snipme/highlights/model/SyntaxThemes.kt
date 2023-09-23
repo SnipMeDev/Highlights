@@ -10,6 +10,7 @@ object SyntaxThemes {
 
     val dark = mapOf(
         DARCULA_KEY to SyntaxTheme(
+            key = DARCULA_KEY,
             code = 0xEDEDED,
             keyword = 0xCC7832,
             string = 0x6A8759,
@@ -21,6 +22,7 @@ object SyntaxThemes {
             mark = 0xEDEDED
         ),
         MONOKAI_KEY to SyntaxTheme(
+            key = MONOKAI_KEY,
             code = 0xF8F8F2,
             keyword = 0xF92672,
             string = 0xE6DB74,
@@ -32,6 +34,7 @@ object SyntaxThemes {
             mark = 0xF8F8F2
         ),
         NOTEPAD_KEY to SyntaxTheme(
+            key = NOTEPAD_KEY,
             code = 0x000080,
             keyword = 0x0000FF,
             string = 0x808080,
@@ -43,6 +46,7 @@ object SyntaxThemes {
             mark = 0xAA2C8C
         ),
         MATRIX_KEY to SyntaxTheme(
+            key = MATRIX_KEY,
             code = 0x008500,
             keyword = 0x008500,
             string = 0x269926,
@@ -54,6 +58,7 @@ object SyntaxThemes {
             mark = 0x008500
         ),
         PASTEL_KEY to SyntaxTheme(
+            key = PASTEL_KEY,
             code = 0xDFDEE0,
             keyword = 0x729FCF,
             string = 0x93CF55,
@@ -68,6 +73,7 @@ object SyntaxThemes {
 
     val light = mapOf(
         DARCULA_KEY to SyntaxTheme(
+            key = DARCULA_KEY,
             code = 0x121212,
             keyword = 0xCC7832,
             string = 0x6A8759,
@@ -79,6 +85,7 @@ object SyntaxThemes {
             mark = 0x121212
         ),
         MONOKAI_KEY to SyntaxTheme(
+            key = MONOKAI_KEY,
             code = 0x07070D,
             keyword = 0xF92672,
             string = 0xE6DB74,
@@ -90,6 +97,7 @@ object SyntaxThemes {
             mark = 0x07070D
         ),
         NOTEPAD_KEY to SyntaxTheme(
+            key = NOTEPAD_KEY,
             code = 0x000080,
             keyword = 0x0000FF,
             string = 0x808080,
@@ -101,6 +109,7 @@ object SyntaxThemes {
             mark = 0xAA2C8C
         ),
         MATRIX_KEY to SyntaxTheme(
+            key = MATRIX_KEY,
             code = 0x008500,
             keyword = 0x008500,
             string = 0x269926,
@@ -112,6 +121,7 @@ object SyntaxThemes {
             mark = 0x008500
         ),
         PASTEL_KEY to SyntaxTheme(
+            key = PASTEL_KEY,
             code = 0x20211F,
             keyword = 0x729FCF,
             string = 0x93CF55,
@@ -127,10 +137,12 @@ object SyntaxThemes {
     fun themes(darkMode: Boolean = false) = if (darkMode) dark else light
 
     fun default(darkMode: Boolean = false) = themes(darkMode)[DARCULA_KEY]!!
-    fun darcula(darkMode: Boolean = false) = themes(darkMode)[DARCULA_KEY]!!
-    fun monokai(darkMode: Boolean = false) = themes(darkMode)[MONOKAI_KEY]!!
-    fun notepad(darkMode: Boolean = false) = themes(darkMode)[NOTEPAD_KEY]!!
-    fun matrix(darkMode: Boolean = false) = themes(darkMode)[MATRIX_KEY]!!
-    fun pastel(darkMode: Boolean = false) = themes(darkMode)[PASTEL_KEY]!!
 
+    fun getNames(): List<String> = SyntaxThemes.light.map {
+        it.key
+            .lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+    }
+
+    fun SyntaxTheme.useDark(darkMode: Boolean) = if (darkMode) dark[key] else light[key]
 }
