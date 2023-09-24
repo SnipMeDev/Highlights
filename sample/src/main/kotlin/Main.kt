@@ -2,6 +2,7 @@ import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.BoldHighlight
 import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.model.SyntaxLanguage
+import dev.snipme.highlights.model.SyntaxThemes
 
 val sampleClass = """
     @Serializable
@@ -39,7 +40,7 @@ fun main() {
     println()
 
     println("Available themes:")
-    println("${Highlights.themes(darkMode = false).keys}")
+    println("${SyntaxThemes.getNames()}")
     println()
 
     println("This is a sample class:")
@@ -48,6 +49,7 @@ fun main() {
 
     val highlights = Highlights.Builder()
         .code(sampleClass)
+        .theme(SyntaxThemes.monokai())
         .language(SyntaxLanguage.JAVA)
         .build()
 

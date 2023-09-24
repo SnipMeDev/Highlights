@@ -15,7 +15,7 @@ repositories {
 ```
 
 ```shell
-implementation("dev.snipme:highlights:0.6.0")
+implementation("dev.snipme:highlights:0.7.0")
 ```
 
 ## Features ✨
@@ -217,6 +217,7 @@ You can also prepare your own themes and use them. Just create the `SyntaxTheme`
 
 ```kotlin
 SyntaxTheme(
+    key = "MY_THEME",
     code = 0xEDEDED,
     keyword = 0xCC7832,
     string = 0x6A8759,

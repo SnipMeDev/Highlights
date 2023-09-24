@@ -1,3 +1,13 @@
+## [0.7.0]
+
+### Added
+- `key` field to `SyntaxTheme` model
+- `getNames()` function to `SyntaxThemes`
+- `SyntaxTheme.useDark(darkMode: Boolean)` extension to `SyntaxThemes`
+
+### Changed
+- static theme constructors names in `SyntaxTheme`
+
 ## [0.6.0]
 
 ### Added

@@ -1,7 +1,7 @@
 package dev.snipme.highlights.model
 
-// TODO Replace Int with Pair to support light / dark mode
 data class SyntaxTheme(
+    val key: String,
     val code: Int,
     val keyword: Int,
     val string: Int,
@@ -13,7 +13,8 @@ data class SyntaxTheme(
     val mark: Int
 ) {
     companion object {
-        fun simple(code: Int, string: Int, accent: Int, value: Int) = SyntaxTheme(
+        fun simple(key: String, code: Int, string: Int, accent: Int, value: Int) = SyntaxTheme(
+            key = key,
             code = code,
             keyword = accent,
             string = string,
@@ -25,16 +26,18 @@ data class SyntaxTheme(
             mark = code
         )
 
-        fun general(code: Int, string: Int, accent: Int, value: Int, comment: Int) = SyntaxTheme(
-            code = code,
-            keyword = accent,
-            string = string,
-            literal = value,
-            comment = comment,
-            metadata = code,
-            multilineComment = comment,
-            punctuation = accent,
-            mark = code
-        )
+        fun basic(key: String, code: Int, string: Int, accent: Int, value: Int, comment: Int) =
+            SyntaxTheme(
+                key = key,
+                code = code,
+                keyword = accent,
+                string = string,
+                literal = value,
+                comment = comment,
+                metadata = code,
+                multilineComment = comment,
+                punctuation = accent,
+                mark = code
+            )
     }
 }
