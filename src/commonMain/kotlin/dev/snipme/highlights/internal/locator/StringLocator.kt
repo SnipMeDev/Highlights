@@ -14,16 +14,24 @@ internal object StringLocator {
 
     private fun findStrings(code: String): List<PhraseLocation> {
         val locations = mutableListOf<PhraseLocation>()
-        val textIndices = mutableListOf<Int>()
 
         // Find index of each string delimiter like " or ' or """
         STRING_DELIMITERS.forEach {
+            val textIndices = mutableListOf<Int>()
             textIndices += code.indicesOf(it)
-        }
 
-        // For given indices find words between
-        for (i in START_INDEX..textIndices.lastIndex step TWO_ELEMENTS) {
-            locations.add(PhraseLocation(textIndices[i], textIndices[i + 1] + QUOTE_ENDING_POSITION))
+            // For given indices find words between
+            for (i in START_INDEX..textIndices.lastIndex step TWO_ELEMENTS) {
+                if (textIndices.getOrNull(i + 1) != null) {
+                    locations.add(
+                        PhraseLocation(
+                            textIndices[i],
+                            textIndices[i + 1] + QUOTE_ENDING_POSITION
+                        )
+                    )
+                }
+            }
+
         }
 
         return locations
