@@ -39,7 +39,7 @@ fun main() {
     println()
 
     println("Available themes:")
-    println("${Highlights.themes(darkMode = false).keys}")
+    println("${SyntaxThemes.getNames()}")
     println()
 
     println("This is a sample class:")
@@ -48,6 +48,7 @@ fun main() {
 
     val highlights = Highlights.Builder()
         .code(sampleClass)
+        .theme(SyntaxThemes.monokai())
         .language(SyntaxLanguage.JAVA)
         .build()
 

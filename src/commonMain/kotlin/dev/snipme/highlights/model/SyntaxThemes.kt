@@ -138,6 +138,12 @@ object SyntaxThemes {
 
     fun default(darkMode: Boolean = false) = themes(darkMode)[DARCULA_KEY]!!
 
+    fun darcula(darkMode: Boolean = false) = themes(darkMode)[DARCULA_KEY]!!
+    fun monokai(darkMode: Boolean = false) = themes(darkMode)[MONOKAI_KEY]!!
+    fun notepad(darkMode: Boolean = false) = themes(darkMode)[NOTEPAD_KEY]!!
+    fun matrix(darkMode: Boolean = false) = themes(darkMode)[MATRIX_KEY]!!
+    fun pastel(darkMode: Boolean = false) = themes(darkMode)[PASTEL_KEY]!!
+
     fun getNames(): List<String> = SyntaxThemes.light.map {
         it.key
             .lowercase()
