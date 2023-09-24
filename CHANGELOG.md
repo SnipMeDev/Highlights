@@ -1,3 +1,16 @@
+## [0.7.0]
+
+### Removed
+- single theme getters like darcula, monokai, etc.
+
+### Added
+- `key` field to `SyntaxTheme` model
+- `getNames()` function to `SyntaxThemes`
+- `SyntaxTheme.useDark(darkMode: Boolean)` extension to `SyntaxThemes`
+
+### Changed
+- static theme constructors in `SyntaxTheme`
+
 ## [0.6.0]
 
 ### Added

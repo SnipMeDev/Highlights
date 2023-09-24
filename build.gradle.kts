@@ -13,7 +13,6 @@ plugins {
 }
 
 group = "dev.snipme"
-// TODO Publish this to maven
 version = "0.7.0"
 
 kotlin {

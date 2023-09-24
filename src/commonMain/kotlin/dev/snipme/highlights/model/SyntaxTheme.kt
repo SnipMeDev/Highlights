@@ -1,6 +1,5 @@
 package dev.snipme.highlights.model
 
-// TODO Replace Int with Pair to support light / dark mode
 data class SyntaxTheme(
     val key: String,
     val code: Int,
