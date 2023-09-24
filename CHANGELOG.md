@@ -1,3 +1,8 @@
+## [0.7.1]
+
+### Fixed
+- unclosed string notation during input
+
 ## [0.7.0]
 
 ### Added

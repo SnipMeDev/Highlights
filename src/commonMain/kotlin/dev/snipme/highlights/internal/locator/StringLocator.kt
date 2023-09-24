@@ -31,7 +31,6 @@ internal object StringLocator {
                     )
                 }
             }
-
         }
 
         return locations

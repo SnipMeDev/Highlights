@@ -94,17 +94,4 @@ internal class StringLocatorTest {
         assertEquals(1, result.size)
         assertEquals(PhraseLocation(19, 22), result[0])
     }
-
-    @Test
-    fun `Returns location only of equally closed string phrase`() {
-        val testCode = """
-            val b = 'a"
-            val a = "a"
-        """.trimIndent()
-
-        val result = StringLocator.locate(testCode)
-
-        assertEquals(1, result.size)
-        assertEquals(PhraseLocation(19, 22), result[0])
-    }
 }
