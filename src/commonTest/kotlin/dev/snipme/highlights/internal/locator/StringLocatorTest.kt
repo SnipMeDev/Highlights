@@ -2,8 +2,8 @@ package dev.snipme.highlights.internal.locator
 
 import dev.snipme.highlights.internal.printResults
 import dev.snipme.highlights.model.PhraseLocation
-import kotlin.test.assertEquals
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class StringLocatorTest {
     @Test
