@@ -4,6 +4,10 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
+
+    plugins {
+//        id("org.jetbrains.kotlin.native.cocoapods") apply false
+    }
 }
 
 dependencyResolutionManagement {

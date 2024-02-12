@@ -1,7 +1,4 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.configurationcache.extensions.capitalized
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+
 
 apply(from = "publish-root.gradle")
 
@@ -10,6 +7,8 @@ plugins {
     id("maven-publish")
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("signing")
+    id("org.jetbrains.gradle.apple.applePlugin") version "212.4638.14-0.13.1"
+    kotlin("native.cocoapods") version "1.9.0"
 }
 
 group = "dev.snipme"
@@ -41,6 +40,40 @@ kotlin {
         browser()
         nodejs()
     }
+// TODO Generate cocoapods framework
+    cocoapods {
+        // Required properties
+        // Specify the required Pod version here. Otherwise, the Gradle project version is used.
+        version = "0.7.1"
+        summary = "Kotlin Multiplatform syntax highlighting engine."
+        homepage = "Link to a Kotlin/Native module homepage"
+//        podfile = project.file("../kodeview_tester/ios/Podfile")
+
+        // Optional properties
+        // Configure the Pod name here instead of changing the Gradle project name
+//        name = "Highlights"
+
+        framework {
+            // Required properties
+            // Framework name configuration. Use this property instead of deprecated 'frameworkName'
+            baseName = "Highlights"
+        }
+//
+//            // Optional properties
+//            // Specify the framework linking type. It's dynamic by default.
+//            isStatic = false
+//            // Dependency export
+////            export(project(":"))
+//            transitiveExport = false // This is default.
+//            // Bitcode embedding
+//            embedBitcode(BITCODE)
+//        }
+
+//        // Maps custom Xcode configuration to NativeBuildType
+//        xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = DEBUG
+//        xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = RELEASE
+    }
+
     // Dependencies
     sourceSets {
         val commonTest by getting {
