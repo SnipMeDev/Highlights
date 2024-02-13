@@ -1,9 +1,5 @@
 package dev.snipme.highlights.internal
 
-import dev.snipme.highlights.internal.locator.AnnotationLocator
-import dev.snipme.highlights.model.CodeStructure
-import dev.snipme.highlights.model.SyntaxLanguage
-import dev.snipme.highlights.model.SyntaxLanguage.*
 import dev.snipme.highlights.internal.SyntaxTokens.ALL_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.ALL_MIXED_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.COFFEE_KEYWORDS
@@ -19,13 +15,31 @@ import dev.snipme.highlights.internal.SyntaxTokens.RUBY_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.RUST_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.SH_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.SWIFT_KEYWORDS
+import dev.snipme.highlights.internal.locator.AnnotationLocator
 import dev.snipme.highlights.internal.locator.CommentLocator
 import dev.snipme.highlights.internal.locator.KeywordLocator
-import dev.snipme.highlights.internal.locator.NumericLiteralLocator
 import dev.snipme.highlights.internal.locator.MarkLocator
 import dev.snipme.highlights.internal.locator.MultilineCommentLocator
+import dev.snipme.highlights.internal.locator.NumericLiteralLocator
 import dev.snipme.highlights.internal.locator.PunctuationLocator
 import dev.snipme.highlights.internal.locator.StringLocator
+import dev.snipme.highlights.model.CodeStructure
+import dev.snipme.highlights.model.SyntaxLanguage
+import dev.snipme.highlights.model.SyntaxLanguage.C
+import dev.snipme.highlights.model.SyntaxLanguage.COFFEESCRIPT
+import dev.snipme.highlights.model.SyntaxLanguage.CPP
+import dev.snipme.highlights.model.SyntaxLanguage.CSHARP
+import dev.snipme.highlights.model.SyntaxLanguage.DEFAULT
+import dev.snipme.highlights.model.SyntaxLanguage.JAVA
+import dev.snipme.highlights.model.SyntaxLanguage.JAVASCRIPT
+import dev.snipme.highlights.model.SyntaxLanguage.KOTLIN
+import dev.snipme.highlights.model.SyntaxLanguage.MIXED
+import dev.snipme.highlights.model.SyntaxLanguage.PERL
+import dev.snipme.highlights.model.SyntaxLanguage.PYTHON
+import dev.snipme.highlights.model.SyntaxLanguage.RUBY
+import dev.snipme.highlights.model.SyntaxLanguage.RUST
+import dev.snipme.highlights.model.SyntaxLanguage.SHELL
+import dev.snipme.highlights.model.SyntaxLanguage.SWIFT
 
 data class CodeSnapshot(
     val code: String,
@@ -90,14 +104,19 @@ internal object CodeAnalyzer {
         }
 
     private fun analyzeCodeWithKeywords(code: String, keywords: List<String>): CodeStructure {
+        val comments = CommentLocator.locate(code)
+        val multiLineComments = MultilineCommentLocator.locate(code)
+
+        val allComments = comments + multiLineComments
+
         return CodeStructure(
             marks = MarkLocator.locate(code),
             punctuations = PunctuationLocator.locate(code),
-            keywords = KeywordLocator.locate(code, keywords),
+            keywords = KeywordLocator.locate(code, keywords, allComments),
             strings = StringLocator.locate(code),
             literals = NumericLiteralLocator.locate(code),
-            comments = CommentLocator.locate(code),
-            multilineComments = MultilineCommentLocator.locate(code),
+            comments = comments,
+            multilineComments = multiLineComments,
             annotations = AnnotationLocator.locate(code),
             incremental = false,
         )

@@ -1,17 +1,27 @@
 package dev.snipme.highlights.internal.locator
 
-import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.internal.SyntaxTokens.TOKEN_DELIMITERS
 import dev.snipme.highlights.internal.indicesOf
 import dev.snipme.highlights.internal.isIndependentPhrase
-
+import dev.snipme.highlights.model.PhraseLocation
 
 internal object KeywordLocator {
 
-    fun locate(code: String, keywords: List<String>): List<PhraseLocation> {
+    fun locate(
+        code: String,
+        keywords: List<String>,
+        ignoreRanges: List<PhraseLocation> = emptyList(),
+    ): List<PhraseLocation> {
         val locations = mutableListOf<PhraseLocation>()
         val foundKeywords = findKeywords(code, keywords)
-        foundKeywords.forEach { keyword ->
+
+        val interpretedKeywords = foundKeywords.filterNot { keyword ->
+            val index = code.indexOf(keyword)
+            val length = keyword.length
+            ignoreRanges.any { it.start <= index && it.end >= index + length }
+        }
+
+        interpretedKeywords.forEach { keyword ->
             val indices = code
                 .indicesOf(keyword)
                 .filter { keyword.isIndependentPhrase(code, it) }
