@@ -106,14 +106,15 @@ internal object CodeAnalyzer {
     private fun analyzeCodeWithKeywords(code: String, keywords: List<String>): CodeStructure {
         val comments = CommentLocator.locate(code)
         val multiLineComments = MultilineCommentLocator.locate(code)
+        val strings = StringLocator.locate(code)
 
-        val allComments = comments + multiLineComments
+        val plainTextRanges = comments + multiLineComments + strings
 
         return CodeStructure(
             marks = MarkLocator.locate(code),
             punctuations = PunctuationLocator.locate(code),
-            keywords = KeywordLocator.locate(code, keywords, allComments),
-            strings = StringLocator.locate(code),
+            keywords = KeywordLocator.locate(code, keywords, plainTextRanges),
+            strings = strings,
             literals = NumericLiteralLocator.locate(code),
             comments = comments,
             multilineComments = multiLineComments,
