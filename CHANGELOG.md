@@ -1,3 +1,8 @@
+## [0.8.0]
+
+### Changed
+- Kotlin version to 1.9.22
+
 ## [0.7.1]
 
 ### Fixed
