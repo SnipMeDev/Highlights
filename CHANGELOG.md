@@ -3,6 +3,10 @@
 ### Changed
 - Kotlin version to 1.9.22
 
+### Fixed
+- scientific notation numbers highlight length
+- redundant keyword highlights in strings and comments
+
 ## [0.7.1]
 
 ### Fixed
