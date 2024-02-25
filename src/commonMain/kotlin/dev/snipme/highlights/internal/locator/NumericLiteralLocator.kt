@@ -1,13 +1,13 @@
 package dev.snipme.highlights.internal.locator
 
-import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.internal.SyntaxTokens.TOKEN_DELIMITERS
 import dev.snipme.highlights.internal.indicesOf
+import dev.snipme.highlights.model.PhraseLocation
 
-private const val NUMBER_ENDING_LETTER_COUNT = 1
 private val NUMBER_START_CHARACTERS = listOf('-', '.')
 private val NUMBER_TYPE_CHARACTERS = listOf('e', 'u', 'f', 'l')
 private val HEX_NUMBER_CHARACTERS = listOf('a', 'b', 'c', 'd', 'e', 'f')
+private val NUMBER_SPECIAL_CHARACTERS = listOf('_')
 
 internal object NumericLiteralLocator {
 
@@ -24,7 +24,7 @@ internal object NumericLiteralLocator {
         code.split(*delimiters) // Separate words
             .asSequence() // Manipulate on given word separately
             .filterNot { foundPhrases.contains(it) }
-            .filter { it.isNotEmpty() } // Filter spaces and others
+            .filter { it.isNotBlank() } // Filter spaces and others
             .filter {
                 it.first().isDigit() || (NUMBER_START_CHARACTERS.contains(it.first())
                         && it.getOrNull(1)?.isDigit() == true)
@@ -36,7 +36,7 @@ internal object NumericLiteralLocator {
                     // Omit in the middle of text, probably variable name (this100)
                     if (code.isNumberFirstIndex(startIndex).not()) return@forEach
                     // Add matching occurrence to the output locations
-                    val length = calculateNumberLength(number)
+                    val length = calculateNumberLength(number.lowercase())
                     locations.add(PhraseLocation(startIndex, startIndex + length))
                 }
 
@@ -79,13 +79,23 @@ internal object NumericLiteralLocator {
             }
         }
 
+        // Highlight only 4f when e.g. number is like 4fff
         if (NUMBER_TYPE_CHARACTERS.any { letters.contains(it) }) {
-            return number.count { it.isDigit() } +
-                    number.count { NUMBER_START_CHARACTERS.contains(it) } +
-                    NUMBER_ENDING_LETTER_COUNT
+            var length = 1 // Single letter
+            length += number.count { it.isDigit() }
+            length += number.count { NUMBER_START_CHARACTERS.contains(it) }
+            length += number.count { NUMBER_SPECIAL_CHARACTERS.contains(it) }
+            if ("e+" in number) length++
+            return length
         }
 
-        return number.length
+        return number.filter {
+            it.isDigit() ||
+                    NUMBER_START_CHARACTERS.contains(it) ||
+                    NUMBER_TYPE_CHARACTERS.contains(it) ||
+                    NUMBER_SPECIAL_CHARACTERS.contains(it)
+
+        }.length
     }
 
     private fun getLengthOfSubstringFor(number: String, condition: (Char) -> Boolean): Int {

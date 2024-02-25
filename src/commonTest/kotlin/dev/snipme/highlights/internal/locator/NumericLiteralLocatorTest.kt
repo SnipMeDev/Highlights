@@ -142,4 +142,50 @@ internal class NumericLiteralLocatorTest {
 
         assertEquals(0, result.size)
     }
+
+    @Test
+    fun `Returns whole location of the all scientific notations`() {
+        val testCode = """
+            1e+10
+            100e100
+            0.11E-10
+            123.456E+10
+            100_00E10
+            12e+1000
+        """.trimIndent()
+
+        val result = NumericLiteralLocator.locate(testCode)
+
+        assertEquals(6, result.size)
+        assertEquals(PhraseLocation(0, 5), result[0])
+        assertEquals(PhraseLocation(6, 13), result[1])
+        assertEquals(PhraseLocation(14, 22), result[2])
+        assertEquals(PhraseLocation(23, 34), result[3])
+        assertEquals(PhraseLocation(35, 44), result[4])
+        assertEquals(PhraseLocation(45, 53), result[5])
+    }
+
+    @Test
+    fun `Returns only proper length number with letter`() {
+        val testCode = """
+           12e+1000
+           12.dp
+           12f.d
+           -2b
+           12sss
+           0b10000
+           13.22f
+        """.trimIndent()
+
+        val result = NumericLiteralLocator.locate(testCode)
+
+        assertEquals(7, result.size)
+        assertEquals(PhraseLocation(0, 8), result[0])
+        assertEquals(PhraseLocation(9, 12), result[1])
+        assertEquals(PhraseLocation(15, 19), result[2])
+        assertEquals(PhraseLocation(21, 23), result[3])
+        assertEquals(PhraseLocation(25, 27), result[4])
+        assertEquals(PhraseLocation(31, 38), result[5])
+        assertEquals(PhraseLocation(39, 45), result[6])
+    }
 }
