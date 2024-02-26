@@ -31,7 +31,9 @@ internal object NumericLiteralLocator {
             } // Find start of literals
             .forEach { number ->
                 // For given literal find all occurrences
-                code.indicesOf(number).forEach { startIndex ->
+                val indices = code.indicesOf(number)
+                for (startIndex in indices) {
+                    // TODO Correct this and publish
                     if (code.isFullNumber(number, startIndex).not()) return@forEach
                     // Omit in the middle of text, probably variable name (this100)
                     if (code.isNumberFirstIndex(startIndex).not()) return@forEach
