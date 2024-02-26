@@ -1,19 +1,14 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.configurationcache.extensions.capitalized
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
-
 apply(from = "publish-root.gradle")
 
 plugins {
-    kotlin("multiplatform") version "1.9.0"
+    kotlin("multiplatform") version "1.9.22"
     id("maven-publish")
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("signing")
 }
 
 group = "dev.snipme"
-version = "0.7.1"
+version = "0.8.0"
 
 kotlin {
     // Android
