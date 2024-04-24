@@ -25,23 +25,23 @@ internal object SyntaxTokens {
         strictfp,super,switch,synchronized,this,throw,throws,transient,try,void,volatile,while
     """.trimIndent().split(",")
 
-    // TODO Finish kotlin keywords
     val KOTLIN_KEYWORDS = """
-        abstract,annotation,as,break,by,catch,class,companion,const,constructor,continue,coroutine,
-        do,else,enum,false,final,finally,for,fun,get,if,import,in,!in,interface,internal,is,!is,
-        lateinit,native,null,object,override,package,private,protected,public,reified,return,set,
-        super,suspend,this,throw,true,try,typealias,typeof,val,var,when,while,yield
+        actual,abstract,annotation,as,as?,break,by,catch,class,companion,const,constructor,continue,
+        coroutine,crossinline,data,delegate,dynamic,do,else,enum,expect,external,false,final,
+        finally,for,fun,get,if,import,in,!in,infix,inline,interface,internal,is,!is,lazy,lateinit,
+        native,null,object,open,operator,out,override,package,private,protected,public,reified,
+        return,sealed,set,super,suspend,tailrec,this,throw,true,try,typealias,typeof,val,var,vararg,
+        when,while,yield
     """.trimIndent()
 
 
-            ("as,as?,fun,in,!in,is,!is,object,typealias,val,var,when,by,constructor,delegate,dynamic,"
-                    + "file,get,init,set,value,where,actual,annotation,companion,crossinline,data,enum,expect,"
-                    + "external,field,infix,inline,inner,internal,lateinit,noinline,open,operator,out,override,"
-                    + "reified,sealed,suspend,tailrec,vararg").split(",")
-
-    val RUST_KEYWORDS = FLOW_CONTROL_KEYWORDS + ("as,assert,const,copy,drop,"
-            + "enum,extern,fail,false,fn,impl,let,log,loop,match,mod,move,mut,priv,"
-            + "pub,pure,ref,self,static,struct,true,trait,type,unsafe,use").split(",")
+    val RUST_KEYWORDS =
+    """
+        as,async,await,break,const,continue,crate,dyn,else,enum,extern,false,fn,for,if,impl,in,let,
+        loop,match,mod,move,mut,pub,ref,return,Self,self,static,struct,super,trait,true,type,union,
+        unsafe,use,where,while,abstract,become,box,do,final,macro,override,priv,try,typeof,
+        unsized,virtual,yield
+    """.trimIndent().split(",")
 
     val CSHARP_KEYWORDS = JAVA_KEYWORDS +
             ("as,base,by,checked,decimal,delegate,descending,dynamic,event,"
@@ -95,37 +95,46 @@ internal object SyntaxTokens {
             + SH_KEYWORDS + SWIFT_KEYWORDS)
 
     val ALL_MIXED_KEYWORDS: List<String> =
-        """#available #column #define #defined #elif #else #else#elseif #endif #error #file #function 
-                 #if #ifdef #ifndef #include #line #pragma #selector #undef abstract add after alias 
-                 alignas alignof and and_eq andalso as ascending asm assert associatedtype associativity 
-                 async atomic_cancel atomic_commit atomic_noexcept auto await base become begin bitand 
-                 bitor bnot bor box break bsl bsr bxor case catch chan  
-                 checked class compl concept cond const const_cast constexpr continue convenience 
-                 covariant crate debugger decltype def default defer deferred defined? deinit 
-                 del delegate delete descending didset div do dynamic dynamic_cast dynamictype 
-                 elif else elseif elsif end ensure eval event except explicit export extends extension 
-                 extern external factory fallthrough false final finally fixed fn for foreach friend 
-                 from fun func function get global go goto group guard if impl implements implicit import 
-                 in indirect infix init inline inout instanceof interface internal into is join lambda 
-                 lazy left let library local lock long loop macro map match mod module move mut mutable 
-                 mutating namespace native new next nil noexcept none nonlocal nonmutating not not_eq 
-                 null nullptr object of offsetof operator optional or or_eq orderby orelse out override 
-                 package params part partial pass postfix precedence prefix priv private proc protected 
-                 protocol pub public pure raise range readonly receive redo ref register reinterpret_cast 
-                 rem remove repeat required requires rescue rethrow rethrows retry return right sbyte 
-                 sealed select self set short signed sizeof stackalloc static static_assert static_cast 
-                 strictfp struct subscript super switch sync synchronized template then this 
-                 thread_local throw throws trait transaction_safe transaction_safe_dynamic transient 
-                 true try type typealias typedef typeid typename typeof uint ulong unchecked undef 
-                 union unless unowned unsafe unsigned unsized until use ushort using value var virtual 
-                 void volatile wchar_t weak when where while willset with xor xor_eq xorauto yield 
-                 yieldabstract yieldarguments val list override get set as as? in !in !is is by 
-                 constructor delegate dynamic field file init param property receiver setparam data 
-                 data expect lateinit crossinline companion annotation actual noinline open reified 
-                 suspend tailrec vararg it constraint alter column table all any asc backup database 
-                 between check create index replace view procedure unique desc distinct drop exec 
-                 exists foreign key full outer having inner insert like limit order primary rownum 
-                 top truncate update values"""
+        """#available #column #define #defined #elif #else #else#elseif #endif #error #file #function
+    #if #ifdef #ifndef #include #line #pragma #selector #undef abstract add after alias
+    alignas alignof and and_eq andalso as ascending asm assert associatedtype associativity
+    async atomic_cancel atomic_commit atomic_noexcept auto await base become begin bitand
+    bitor bnot bor box break bsl bsr bxor case catch chan
+    checked
+    class compl concept cond const const_cast constexpr continue convenience
+    covariant crate debugger decltype def default defer deferred defined? deinit
+    del delegate delete descending didset div do dynamic dynamic_cast dynamictype
+    elif else elseif elsif end ensure eval event except explicit export extends extension
+    extern external factory fallthrough false final finally fixed fn for foreach friend
+    from
+    fun func function get global go goto group guard if impl implements implicit import
+    in indirect infix init inline inout instanceof
+    interface internal into is join lambda
+    lazy left let library local lock long loop macro map match mod module move mut mutable
+    mutating namespace native new next nil noexcept none nonlocal nonmutating not not_eq
+    null nullptr
+    object of offsetof operator optional or or_eq orderby orelse out override
+    package params part partial pass postfix precedence prefix priv private proc protected
+    protocol pub public pure raise range readonly receive redo ref register reinterpret_cast
+    rem remove repeat required requires rescue rethrow rethrows retry return right sbyte
+    sealed select self set short signed sizeof stackalloc static static_assert static_cast
+    strictfp struct subscript super switch sync synchronized template then this
+    thread_local throw throws trait transaction_safe transaction_safe_dynamic transient
+    true try type
+    typealias typedef typeid typename typeof uint ulong unchecked undef
+    union unless unowned unsafe unsigned unsized until use ushort using
+    value var virtual
+    void volatile wchar_t weak when where while willset with xor xor_eq xorauto yield
+    yieldabstract yieldarguments
+    val list
+        override get
+        setas as? in !in !is is by
+        constructor delegate dynamic field file init param property receiver setparam data
+        data expect lateinit crossinline companion annotation actual noinline open reified
+        suspend tailrec vararg it constraint alter column table all any asc backup database
+        between check create index replace view procedure unique desc distinct drop exec
+        exists foreign key full outer having inner insert like limit order primary rownum
+        top truncate update values"""
             .split(" ")
 
     // TODO Migrate to list of chars
@@ -139,3 +148,5 @@ internal object SyntaxTokens {
     val PUNCTUATION_CHARACTERS = listOf(",", ".", ":", ";")
     val MARK_CHARACTERS = listOf("(", ")", "=", "{", "}", "<", ">", "-", "+", "[", "]", "|", "&")
 }
+
+
