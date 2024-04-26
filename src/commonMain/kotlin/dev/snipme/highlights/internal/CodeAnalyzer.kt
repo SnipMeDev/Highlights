@@ -2,12 +2,12 @@ package dev.snipme.highlights.internal
 
 import dev.snipme.highlights.internal.SyntaxTokens.ALL_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.ALL_MIXED_KEYWORDS
-import dev.snipme.highlights.internal.SyntaxTokens.COFFEE_KEYWORDS
+import dev.snipme.highlights.internal.SyntaxTokens.COFFEE_SCRIPT_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.CPP_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.CSHARP_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.C_KEYWORDS
+import dev.snipme.highlights.internal.SyntaxTokens.JAVASCRIPT_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.JAVA_KEYWORDS
-import dev.snipme.highlights.internal.SyntaxTokens.JSCRIPT_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.KOTLIN_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.PERL_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.PYTHON_KEYWORDS
@@ -94,8 +94,8 @@ internal object CodeAnalyzer {
             KOTLIN -> analyzeCodeWithKeywords(code, KOTLIN_KEYWORDS)
             RUST -> analyzeCodeWithKeywords(code, RUST_KEYWORDS)
             CSHARP -> analyzeCodeWithKeywords(code, CSHARP_KEYWORDS)
-            COFFEESCRIPT -> analyzeCodeWithKeywords(code, COFFEE_KEYWORDS)
-            JAVASCRIPT -> analyzeCodeWithKeywords(code, JSCRIPT_KEYWORDS)
+            COFFEESCRIPT -> analyzeCodeWithKeywords(code, COFFEE_SCRIPT_KEYWORDS)
+            JAVASCRIPT -> analyzeCodeWithKeywords(code, JAVASCRIPT_KEYWORDS)
             PERL -> analyzeCodeWithKeywords(code, PERL_KEYWORDS)
             PYTHON -> analyzeCodeWithKeywords(code, PYTHON_KEYWORDS)
             RUBY -> analyzeCodeWithKeywords(code, RUBY_KEYWORDS)

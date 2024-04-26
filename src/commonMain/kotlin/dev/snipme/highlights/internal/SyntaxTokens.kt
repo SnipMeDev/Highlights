@@ -1,8 +1,6 @@
 package dev.snipme.highlights.internal
 
 internal object SyntaxTokens {
-    // TODO Think over it
-    val FLOW_CONTROL_KEYWORDS = "break,continue,do,else,for,if,return,while".split(",")
 
     val C_KEYWORDS = """
         auto,break,case,char,const,continue,default,do,double,else,enum,extern,float,for,goto,if,
@@ -32,51 +30,61 @@ internal object SyntaxTokens {
         native,null,object,open,operator,out,override,package,private,protected,public,reified,
         return,sealed,set,super,suspend,tailrec,this,throw,true,try,typealias,typeof,val,var,vararg,
         when,while,yield
-    """.trimIndent()
+    """.trimIndent().split(",")
 
-
-    val RUST_KEYWORDS =
-    """
+    val RUST_KEYWORDS = """
         as,async,await,break,const,continue,crate,dyn,else,enum,extern,false,fn,for,if,impl,in,let,
         loop,match,mod,move,mut,pub,ref,return,Self,self,static,struct,super,trait,true,type,union,
         unsafe,use,where,while,abstract,become,box,do,final,macro,override,priv,try,typeof,
         unsized,virtual,yield
     """.trimIndent().split(",")
 
-    val CSHARP_KEYWORDS = JAVA_KEYWORDS +
-            ("as,base,by,checked,decimal,delegate,descending,dynamic,event,"
-                    + "fixed,foreach,from,group,implicit,in,internal,into,is,let,"
-                    + "lock,object,out,override,orderby,params,partial,readonly,ref,sbyte,"
-                    + "sealed,stackalloc,string,select,uint,ulong,unchecked,unsafe,ushort,"
-                    + "var,virtual,where").split(",")
+    val CSHARP_KEYWORDS = """
+        abstract,as,base,bool,break,byte,case,catch,char,checked,class,const,continue,decimal,
+        default,delegate,do,double,else,enum,event,explicit,extern,false,finally,fixed,float,for,
+        foreach,goto,if,implicit,in,int,interface,internal,is,lock,long,namespace,new,null,object,
+        operator,out,override,params,private,protected,public,readonly,ref,return,sbyte,sealed,
+        short,sizeof,stackalloc,static,string,struct,switch,this,throw,true,try,typeof,uint,ulong,
+        unchecked,unsafe,ushort,using,virtual,void,volatile,while
+    """.trimIndent().split(",")
 
-    val COFFEE_KEYWORDS = ("all,and,by,catch,class,else,extends,false,finally,"
-            + "for,if,in,is,isnt,loop,new,no,not,null,of,off,on,or,return,super,then,"
-            + "throw,true,try,unless,until,when,while,yes").split(",")
+    val COFFEE_SCRIPT_KEYWORDS = """
+        =,->,Infinity,NaN,and,arguments,await,break,by,case,catch,class,continue,debugger,delete,
+        defer,default,do,else,export,extends,false,finally,for,function,if,import,in,instanceof,is,
+        isnt,let,loop,new,no,not,null,of,on,or,package,return,super,switch,this,throw,true,try,
+        typeof,unless,undefined,var,wait,when,with,yield
+    """.trimIndent().split(",")
 
-    val JSCRIPT_KEYWORDS = COMMON_KEYWORDS +
-            ("debugger,eval,export,function,get,null,set,undefined,var,with,"
-                    + "Infinity,NaN").split(",")
+    val JAVASCRIPT_KEYWORDS = """
+        async,await,boolean,break,case,catch,class,const,continue,debugger,default,delete,do,else,
+        enum,export,extends,false,finally,for,function,if,implements,import,in,instanceof,interface,
+        let,new,null,package,private,protected,public,return,super,switch,this,throw,true,try,typeof,
+        var,void,while,with,yield
+    """.trimIndent().split(",")
 
-    val PERL_KEYWORDS = ("caller,delete,die,do,dump,elsif,eval,exit,foreach,for,"
-            + "goto,if,import,last,local,my,next,no,our,print,package,redo,require,"
-            + "sub,undef,unless,until,use,wantarray,while,BEGIN,END").split(",")
+    val PERL_KEYWORDS = """
+        __DATA__,__END__,__FILE__,__LINE__,__PACKAGE__,and,cmp,continue,do,else,elsif,eq,eval,for,
+        foreach,goto,gt,if,last,last,le,lt,my,ne,next,no,not,or,package,redo,ref,return,sub,unless,
+        until,use,while,xor
+    """.trimIndent().split(",")
 
-    val PYTHON_KEYWORDS = FLOW_CONTROL_KEYWORDS +
-            ("and,as,assert,class,def,del,"
-                    + "elif,except,exec,finally,from,global,import,in,is,lambda,"
-                    + "nonlocal,not,or,pass,print,raise,try,with,yield,"
-                    + "False,True,None").split(",")
+    val PYTHON_KEYWORDS = """
+        False,True,and,as,assert,async,await,break,class,continue,def,del,elif,else,except,finally,
+        for,from,global,if,import,in,is,lambda,nonlocal,not,or,pass,raise,return,try,while,with,
+        yield
+    """.trimIndent().split(",")
 
-    val RUBY_KEYWORDS = FLOW_CONTROL_KEYWORDS +
-            ("alias,and,begin,case,class,"
-                    + "def,defined,elsif,end,ensure,false,in,module,next,nil,not,or,redo,"
-                    + "rescue,retry,self,super,then,true,undef,unless,until,when,yield,"
-                    + "BEGIN,END").split(",")
+    val RUBY_KEYWORDS = """
+        __ENCODING__,__END__,__FILE__,__LINE__,BEGIN,END,alias,and,begin,break,case,class,def,
+        defined?,do,else,elsif,end,ensure,false,for,if,in,module,next,nil,not,or,redo,rescue,retry,
+        return,self,super,then,true,undef,unless,until,when,while,yield
+    """.trimIndent().split(",")
 
-    val SH_KEYWORDS = FLOW_CONTROL_KEYWORDS +
-            ("case,done,elif,esac,eval,fi,"
-                    + "function,in,local,set,then,until").split(",")
+    val SH_KEYWORDS = """
+        alias,bg,bind,break,builtin,caller,cd,command,compgen,complete,compopt,continue,declare,
+        dirs,disown,echo,enable,eval,exec,exit,export,fc,fg,getopts,hash,help,history,jobs,kill,let,
+        local,logout,popd,printf,pushd,pwd,read,readonly,return,set,shift,shopt,source,suspend,test,
+    """.trimIndent()
 
     val SWIFT_KEYWORDS = FLOW_CONTROL_KEYWORDS + "," +
             "associatedtype,async,await,class,deinit,enum,extension,fileprivate," +
@@ -89,9 +97,11 @@ internal object SyntaxTokens {
             "mutating,none,nonmutating,optional,override,postfix,precedence,prefix,Protocol,required," +
             "right,set,Type,unowned,weak,willSet,var,_".split(",")
 
+    // TODO Add Dart, GO, PHP, Typescript,  language
+
     val ALL_KEYWORDS = (CPP_KEYWORDS + KOTLIN_KEYWORDS + CSHARP_KEYWORDS
-            + RUST_KEYWORDS + COFFEE_KEYWORDS
-            + JSCRIPT_KEYWORDS + PERL_KEYWORDS + PYTHON_KEYWORDS + RUBY_KEYWORDS
+            + RUST_KEYWORDS + COFFEE_SCRIPT_KEYWORDS
+            + JAVASCRIPT_KEYWORDS + PERL_KEYWORDS + PYTHON_KEYWORDS + RUBY_KEYWORDS
             + SH_KEYWORDS + SWIFT_KEYWORDS)
 
     val ALL_MIXED_KEYWORDS: List<String> =
@@ -148,5 +158,4 @@ internal object SyntaxTokens {
     val PUNCTUATION_CHARACTERS = listOf(",", ".", ":", ";")
     val MARK_CHARACTERS = listOf("(", ")", "=", "{", "}", "<", ">", "-", "+", "[", "]", "|", "&")
 }
-
 
