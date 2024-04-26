@@ -101,6 +101,7 @@ internal object CodeAnalyzer {
             RUBY -> analyzeCodeWithKeywords(code, RUBY_KEYWORDS)
             SHELL -> analyzeCodeWithKeywords(code, SH_KEYWORDS)
             SWIFT -> analyzeCodeWithKeywords(code, SWIFT_KEYWORDS)
+            // TODO Add new languages
         }
 
     private fun analyzeCodeWithKeywords(code: String, keywords: List<String>): CodeStructure {
