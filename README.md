@@ -65,6 +65,26 @@ Highlights.Builder()
 
 More advance usage of this library is shown [here](/sample).
 
+## Languages 🌍
+
+`C`,
+`C++`,
+`DART`,
+`JAVA`,
+`KOTLIN`,
+`RUST`,
+`C#`,
+`COFFEESCRIPT`,
+`JAVASCRIPT`,
+`PERL`,
+`PYTHON`,
+`RUBY`,
+`SHELL`,
+`SWIFT`,
+`TYPESCRIPT`,
+`GO`,
+`PHP`
+
 ## Themes 🖌️
 
 The library comes with predefined syntax coloring themes available in `SyntaxThemes`:
