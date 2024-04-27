@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "dev.snipme"
-version = "0.8.0"
+version = "0.8.1"
 
 kotlin {
     // Android
