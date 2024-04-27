@@ -1,20 +1,23 @@
 package dev.snipme.highlights.internal
 
 import dev.snipme.highlights.internal.SyntaxTokens.ALL_KEYWORDS
-import dev.snipme.highlights.internal.SyntaxTokens.ALL_MIXED_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.COFFEE_SCRIPT_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.CPP_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.CSHARP_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.C_KEYWORDS
+import dev.snipme.highlights.internal.SyntaxTokens.DART_KEYWORDS
+import dev.snipme.highlights.internal.SyntaxTokens.GO_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.JAVASCRIPT_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.JAVA_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.KOTLIN_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.PERL_KEYWORDS
+import dev.snipme.highlights.internal.SyntaxTokens.PHP_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.PYTHON_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.RUBY_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.RUST_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.SH_KEYWORDS
 import dev.snipme.highlights.internal.SyntaxTokens.SWIFT_KEYWORDS
+import dev.snipme.highlights.internal.SyntaxTokens.TYPESCRIPT_KEYWORDS
 import dev.snipme.highlights.internal.locator.AnnotationLocator
 import dev.snipme.highlights.internal.locator.CommentLocator
 import dev.snipme.highlights.internal.locator.KeywordLocator
@@ -29,17 +32,20 @@ import dev.snipme.highlights.model.SyntaxLanguage.C
 import dev.snipme.highlights.model.SyntaxLanguage.COFFEESCRIPT
 import dev.snipme.highlights.model.SyntaxLanguage.CPP
 import dev.snipme.highlights.model.SyntaxLanguage.CSHARP
+import dev.snipme.highlights.model.SyntaxLanguage.DART
 import dev.snipme.highlights.model.SyntaxLanguage.DEFAULT
+import dev.snipme.highlights.model.SyntaxLanguage.GO
 import dev.snipme.highlights.model.SyntaxLanguage.JAVA
 import dev.snipme.highlights.model.SyntaxLanguage.JAVASCRIPT
 import dev.snipme.highlights.model.SyntaxLanguage.KOTLIN
-import dev.snipme.highlights.model.SyntaxLanguage.MIXED
 import dev.snipme.highlights.model.SyntaxLanguage.PERL
+import dev.snipme.highlights.model.SyntaxLanguage.PHP
 import dev.snipme.highlights.model.SyntaxLanguage.PYTHON
 import dev.snipme.highlights.model.SyntaxLanguage.RUBY
 import dev.snipme.highlights.model.SyntaxLanguage.RUST
 import dev.snipme.highlights.model.SyntaxLanguage.SHELL
 import dev.snipme.highlights.model.SyntaxLanguage.SWIFT
+import dev.snipme.highlights.model.SyntaxLanguage.TYPESCRIPT
 
 data class CodeSnapshot(
     val code: String,
@@ -87,7 +93,6 @@ internal object CodeAnalyzer {
     private fun analyzeForLanguage(code: String, language: SyntaxLanguage) =
         when (language) {
             DEFAULT -> analyzeCodeWithKeywords(code, ALL_KEYWORDS)
-            MIXED -> analyzeCodeWithKeywords(code, ALL_MIXED_KEYWORDS)
             C -> analyzeCodeWithKeywords(code, C_KEYWORDS)
             CPP -> analyzeCodeWithKeywords(code, CPP_KEYWORDS)
             JAVA -> analyzeCodeWithKeywords(code, JAVA_KEYWORDS)
@@ -101,7 +106,10 @@ internal object CodeAnalyzer {
             RUBY -> analyzeCodeWithKeywords(code, RUBY_KEYWORDS)
             SHELL -> analyzeCodeWithKeywords(code, SH_KEYWORDS)
             SWIFT -> analyzeCodeWithKeywords(code, SWIFT_KEYWORDS)
-            // TODO Add new languages
+            DART -> analyzeCodeWithKeywords(code, DART_KEYWORDS)
+            TYPESCRIPT -> analyzeCodeWithKeywords(code, TYPESCRIPT_KEYWORDS)
+            GO -> analyzeCodeWithKeywords(code, GO_KEYWORDS)
+            PHP -> analyzeCodeWithKeywords(code, PHP_KEYWORDS)
         }
 
     private fun analyzeCodeWithKeywords(code: String, keywords: List<String>): CodeStructure {
