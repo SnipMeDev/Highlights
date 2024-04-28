@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "1.9.23"
     application
 }
 
@@ -31,5 +31,5 @@ application {
 }
 
 dependencies {
-    implementation("dev.snipme:highlights:0.7.0")
+    implementation(":highlights")
 }
