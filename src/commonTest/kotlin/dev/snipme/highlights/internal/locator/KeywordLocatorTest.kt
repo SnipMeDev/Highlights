@@ -98,6 +98,18 @@ internal class KeywordLocatorTest {
     }
 
     @Test
+    fun `Not returns location of keyword inside phrase from start`() {
+        val testCode = """
+            val intent = 0
+        """.trimIndent()
+        val keywords = listOf("int")
+
+        val result = KeywordLocator.locate(testCode, keywords)
+
+        assertEquals(0, result.size)
+    }
+
+    @Test
     fun `Not returns keywords from single comment`() {
         val testCode = """
             // This class is static and should extend another class
