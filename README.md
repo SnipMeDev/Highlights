@@ -15,7 +15,7 @@ repositories {
 ```
 
 ```shell
-implementation("dev.snipme:highlights:0.8.0")
+implementation("dev.snipme:highlights:0.8.1")
 ```
 
 ## Features ✨
@@ -64,6 +64,26 @@ Highlights.Builder()
 ```
 
 More advance usage of this library is shown [here](/sample).
+
+## Languages 🌍
+
+`C`,
+`C++`,
+`DART`,
+`JAVA`,
+`KOTLIN`,
+`RUST`,
+`C#`,
+`COFFEESCRIPT`,
+`JAVASCRIPT`,
+`PERL`,
+`PYTHON`,
+`RUBY`,
+`SHELL`,
+`SWIFT`,
+`TYPESCRIPT`,
+`GO`,
+`PHP`
 
 ## Themes 🖌️
 

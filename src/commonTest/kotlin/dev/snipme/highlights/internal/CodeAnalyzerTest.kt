@@ -98,7 +98,7 @@ internal class CodeAnalyzerTest {
             123.00f
         """.trimIndent()
 
-        val firstResult = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
+        val firstResult = CodeAnalyzer.analyze(testCode)
         assertEquals(false, firstResult.incremental)
 
         val secondTestCode = """
@@ -110,20 +110,18 @@ internal class CodeAnalyzerTest {
             ...
             123.00f
             
-            field.forEach { }
+            class
         """.trimIndent()
 
-        val snapshot = CodeSnapshot(testCode, firstResult, SyntaxLanguage.KOTLIN)
+        val snapshot = CodeSnapshot(testCode, firstResult, SyntaxLanguage.DEFAULT)
 
-        val result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN, snapshot)
+        val result = CodeAnalyzer.analyze(secondTestCode, snapshot = snapshot)
         assertEquals(true, result.incremental)
 
         assertEquals(
             listOf(
                 PhraseLocation(30, 31),
                 PhraseLocation(31, 32),
-                PhraseLocation(68, 69),
-                PhraseLocation(70, 71)
             ),
             result.marks
         )
@@ -135,7 +133,6 @@ internal class CodeAnalyzerTest {
                 PhraseLocation(42, 43),
                 PhraseLocation(43, 44),
                 PhraseLocation(48, 49),
-                PhraseLocation(59, 60),
             ),
             result.punctuations
         )
@@ -144,7 +141,6 @@ internal class CodeAnalyzerTest {
             listOf(
                 PhraseLocation(14, 19),
                 PhraseLocation(22, 29),
-                PhraseLocation(54, 59)
             ),
             result.keywords
         )
@@ -197,7 +193,7 @@ internal class CodeAnalyzerTest {
             123.00f
         """.trimIndent()
 
-        val firstResult = CodeAnalyzer.analyze(testCode, SyntaxLanguage.KOTLIN)
+        val firstResult = CodeAnalyzer.analyze(testCode)
         assertEquals(false, firstResult.incremental)
 
         val secondTestCode = """
@@ -206,9 +202,9 @@ internal class CodeAnalyzerTest {
             class 
         """.trimIndent()
 
-        val snapshot = CodeSnapshot(testCode, firstResult, SyntaxLanguage.KOTLIN)
+        val snapshot = CodeSnapshot(testCode, firstResult, SyntaxLanguage.DEFAULT)
 
-        val result = CodeAnalyzer.analyze(secondTestCode, SyntaxLanguage.KOTLIN, snapshot)
+        val result = CodeAnalyzer.analyze(secondTestCode, snapshot = snapshot)
         assertEquals(true, result.incremental)
 
         assertEquals(

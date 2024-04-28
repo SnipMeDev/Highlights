@@ -2,9 +2,9 @@ package dev.snipme.highlights.model
 
 enum class SyntaxLanguage {
     DEFAULT,
-    MIXED,
     C,
     CPP,
+    DART,
     JAVA,
     KOTLIN,
     RUST,
@@ -15,7 +15,10 @@ enum class SyntaxLanguage {
     PYTHON,
     RUBY,
     SHELL,
-    SWIFT;
+    SWIFT,
+    TYPESCRIPT,
+    GO,
+    PHP;
 
     companion object {
         fun getNames(): List<String> = values().map {
