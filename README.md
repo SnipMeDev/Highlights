@@ -293,10 +293,11 @@ If your project uses this code, please write me or add your info
     </tr>
     <tr>
         <td>Application</td>
-        <td>
-            <a href="https://play.google.com/store/apps/details?id=pl.tkadziolka.snipbook">SnippLog</a>
-            <a href="https://opensource.respawn.pro/FlowMVI/sample/">FlowMVI Sample</a>
-        </td>
+        <td> <a href="https://play.google.com/store/apps/details?id=pl.tkadziolka.snipbook">SnippLog</a> </td>
+    </tr>
+    <tr>
+        <td>Application</td>
+        <td> <a href="https://opensource.respawn.pro/FlowMVI/sample/">FlowMVI Sample</a> </td>
     </tr>
 </table>
 
