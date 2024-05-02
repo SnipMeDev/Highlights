@@ -5,6 +5,7 @@ private const val MONOKAI_KEY = "monokai"
 private const val NOTEPAD_KEY = "notepad"
 private const val MATRIX_KEY = "matrix"
 private const val PASTEL_KEY = "pastel"
+private const val ATOM_ONE_KEY = "atomone"
 
 object SyntaxThemes {
 
@@ -68,6 +69,18 @@ object SyntaxThemes {
             multilineComment = 0x888A85,
             punctuation = 0xCB956D,
             mark = 0xCB956D
+        ),
+        ATOM_ONE_KEY to SyntaxTheme(
+            key = ATOM_ONE_KEY,
+            code = 0xBBBBBB,
+            keyword = 0xD55FDE,
+            string = 0x89CA78,
+            literal = 0xD19A66,
+            comment = 0x5C6370,
+            metadata = 0xE5C07B,
+            multilineComment = 0x5C6370,
+            punctuation = 0xEF596F,
+            mark = 0x2BBAC5
         )
     )
 
@@ -131,7 +144,20 @@ object SyntaxThemes {
             multilineComment = 0x888A85,
             punctuation = 0xCB956D,
             mark = 0xCB956D
+        ),
+        ATOM_ONE_KEY to SyntaxTheme(
+            key = ATOM_ONE_KEY,
+            code = 0x383A42,
+            keyword = 0xA626A4,
+            string = 0x50A14F,
+            literal = 0x986801,
+            comment = 0xA1A1A1,
+            metadata = 0xC18401,
+            multilineComment = 0xA1A1A1,
+            punctuation = 0xE45649,
+            mark = 0x526FFF,
         )
+
     )
 
     fun themes(darkMode: Boolean = false) = if (darkMode) dark else light
@@ -143,6 +169,7 @@ object SyntaxThemes {
     fun notepad(darkMode: Boolean = false) = themes(darkMode)[NOTEPAD_KEY]!!
     fun matrix(darkMode: Boolean = false) = themes(darkMode)[MATRIX_KEY]!!
     fun pastel(darkMode: Boolean = false) = themes(darkMode)[PASTEL_KEY]!!
+    fun atom(darkMode: Boolean = false) = themes(darkMode)[ATOM_ONE_KEY]!!
 
     fun getNames(): List<String> = SyntaxThemes.light.map {
         it.key
