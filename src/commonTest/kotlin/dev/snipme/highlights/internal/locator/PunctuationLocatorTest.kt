@@ -1,5 +1,6 @@
 package dev.snipme.highlights.internal.locator
 
+import dev.snipme.highlights.internal.get
 import dev.snipme.highlights.model.PhraseLocation
 import kotlin.test.Test
 import kotlin.test.assertEquals

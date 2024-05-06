@@ -9,9 +9,9 @@ internal object KeywordLocator {
 
     fun locate(
         code: String,
-        keywords: List<String>,
-        ignoreRanges: List<PhraseLocation> = emptyList(),
-    ): List<PhraseLocation> {
+        keywords: Set<String>,
+        ignoreRanges: Set<PhraseLocation> = emptySet(),
+    ): Set<PhraseLocation> {
         val locations = mutableListOf<PhraseLocation>()
         val foundKeywords = findKeywords(code, keywords)
 
@@ -31,10 +31,10 @@ internal object KeywordLocator {
             }
         }
 
-        return locations.toList()
+        return locations.toSet()
     }
 
-    private fun findKeywords(code: String, keywords: List<String>): Set<String> =
+    private fun findKeywords(code: String, keywords: Set<String>): Set<String> =
         TOKEN_DELIMITERS.toTypedArray().let { delimiters ->
             code.split(*delimiters, ignoreCase = true) // Split into words
                 .asSequence() // Reduce amount of operations

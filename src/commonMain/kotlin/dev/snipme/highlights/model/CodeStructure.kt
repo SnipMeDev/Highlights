@@ -2,58 +2,61 @@ package dev.snipme.highlights.model
 
 data class PhraseLocation(val start: Int, val end: Int)
 
-// TODO Migrate to set
 data class CodeStructure(
-    val marks: List<PhraseLocation>,
-    val punctuations: List<PhraseLocation>,
-    val keywords: List<PhraseLocation>,
-    val strings: List<PhraseLocation>,
-    val literals: List<PhraseLocation>,
-    val comments: List<PhraseLocation>,
-    val multilineComments: List<PhraseLocation>,
-    val annotations: List<PhraseLocation>,
+    val marks: Set<PhraseLocation>,
+    val punctuations: Set<PhraseLocation>,
+    val keywords: Set<PhraseLocation>,
+    val strings: Set<PhraseLocation>,
+    val literals: Set<PhraseLocation>,
+    val comments: Set<PhraseLocation>,
+    val multilineComments: Set<PhraseLocation>,
+    val annotations: Set<PhraseLocation>,
     val incremental: Boolean,
 ) {
     fun move(position: Int) =
         CodeStructure(
-            marks = marks.map { it.copy(start = it.start + position, end = it.end + position) },
+            marks = marks.map {
+                it.copy(start = it.start + position, end = it.end + position)
+            }.toSet(),
             punctuations = punctuations.map {
                 it.copy(
                     start = it.start + position,
                     end = it.end + position
                 )
-            },
+            }.toSet(),
             keywords = keywords.map {
                 it.copy(
                     start = it.start + position,
                     end = it.end + position
                 )
-            },
-            strings = strings.map { it.copy(start = it.start + position, end = it.end + position) },
+            }.toSet(),
+            strings = strings.map {
+                it.copy(start = it.start + position, end = it.end + position)
+            }.toSet(),
             literals = literals.map {
                 it.copy(
                     start = it.start + position,
                     end = it.end + position
                 )
-            },
+            }.toSet(),
             comments = comments.map {
                 it.copy(
                     start = it.start + position,
                     end = it.end + position
                 )
-            },
+            }.toSet(),
             multilineComments = multilineComments.map {
                 it.copy(
                     start = it.start + position,
                     end = it.end + position
                 )
-            },
+            }.toSet(),
             annotations = annotations.map {
                 it.copy(
                     start = it.start + position,
                     end = it.end + position
                 )
-            },
+            }.toSet(),
             incremental = true,
         )
 
@@ -94,6 +97,6 @@ data class CodeStructure(
         print("annotations = ${annotations.join(code)}")
     }
 
-    private fun List<PhraseLocation>.join(code: String) =
-        this.map { code.substring(it.start, it.end) }.joinToString(separator = " ") + "\n"
+    private fun Set<PhraseLocation>.join(code: String) =
+        this.joinToString(separator = " ") { code.substring(it.start, it.end) } + "\n"
 }

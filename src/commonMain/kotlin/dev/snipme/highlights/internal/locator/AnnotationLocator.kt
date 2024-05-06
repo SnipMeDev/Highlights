@@ -6,7 +6,7 @@ import dev.snipme.highlights.internal.indicesOf
 
 internal object AnnotationLocator {
 
-    fun locate(code: String): List<PhraseLocation> {
+    fun locate(code: String): Set<PhraseLocation> {
         val foundAnnotations = emptyList<String>()
         val locations = mutableSetOf<PhraseLocation>()
         code.split(*TOKEN_DELIMITERS.toTypedArray())
@@ -28,6 +28,6 @@ internal object AnnotationLocator {
                 }
             }
 
-        return locations.toList()
+        return locations.toSet()
     }
 }

@@ -1,8 +1,8 @@
 package dev.snipme.highlights.internal.locator
 
-import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.internal.SyntaxTokens.STRING_DELIMITERS
 import dev.snipme.highlights.internal.indicesOf
+import dev.snipme.highlights.model.PhraseLocation
 
 private const val START_INDEX = 0
 private const val TWO_ELEMENTS = 2
@@ -10,9 +10,9 @@ private const val QUOTE_ENDING_POSITION = 1
 
 internal object StringLocator {
 
-    fun locate(code: String): List<PhraseLocation> = findStrings(code)
+    fun locate(code: String): Set<PhraseLocation> = findStrings(code)
 
-    private fun findStrings(code: String): List<PhraseLocation> {
+    private fun findStrings(code: String): Set<PhraseLocation> {
         val locations = mutableListOf<PhraseLocation>()
 
         // Find index of each string delimiter like " or ' or """
@@ -33,6 +33,6 @@ internal object StringLocator {
             }
         }
 
-        return locations
+        return locations.toSet()
     }
 }

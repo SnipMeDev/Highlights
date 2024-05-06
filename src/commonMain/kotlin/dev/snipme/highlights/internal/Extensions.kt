@@ -1,5 +1,15 @@
 package dev.snipme.highlights.internal
 
+inline operator fun <E> Set<E>.get(i: Int): E? {
+    this.forEachIndexed { index, t ->
+        if (i == index) return t
+    }
+
+    return null
+}
+
+//inline operator fun get(index: Int): V? = this
+
 fun String.indicesOf(
     phrase: String,
 ): Set<Int> {

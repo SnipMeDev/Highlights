@@ -5,7 +5,7 @@ import dev.snipme.highlights.internal.indicesOf
 import dev.snipme.highlights.model.PhraseLocation
 
 internal object MarkLocator {
-    fun locate(code: String): List<PhraseLocation> {
+    fun locate(code: String): Set<PhraseLocation> {
         val locations = mutableListOf<PhraseLocation>()
         code.asSequence()
             .toSet()
@@ -16,6 +16,6 @@ internal object MarkLocator {
                 }
             }
 
-        return locations
+        return locations.toSet()
     }
 }

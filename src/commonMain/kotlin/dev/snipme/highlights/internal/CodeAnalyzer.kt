@@ -112,7 +112,7 @@ internal object CodeAnalyzer {
             PHP -> analyzeCodeWithKeywords(code, PHP_KEYWORDS)
         }
 
-    private fun analyzeCodeWithKeywords(code: String, keywords: List<String>): CodeStructure {
+    private fun analyzeCodeWithKeywords(code: String, keywords: Set<String>): CodeStructure {
         val comments = CommentLocator.locate(code)
         val multiLineComments = MultilineCommentLocator.locate(code)
         val strings = StringLocator.locate(code)
