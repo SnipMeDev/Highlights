@@ -1,5 +1,7 @@
 package dev.snipme.highlights.internal
 
+import dev.snipme.highlights.model.PhraseLocation
+
 inline operator fun <E> Set<E>.get(i: Int): E? {
     this.forEachIndexed { index, t ->
         if (i == index) return t
@@ -66,4 +68,11 @@ fun String.isIndependentPhrase(
     val charAfter = code[minOf(index + this.length, code.lastIndex)]
 
     return charBefore.isLetter().not() && charAfter.isDigit().not()
+}
+
+fun Set<PhraseLocation>.toRangeSet(): Set<IntRange> =
+    this.map { IntRange(it.start, it.end) }.toSet()
+
+operator fun IntRange.contains(range: IntRange): Boolean {
+    return range.first >= this.first && range.last <= this.last
 }

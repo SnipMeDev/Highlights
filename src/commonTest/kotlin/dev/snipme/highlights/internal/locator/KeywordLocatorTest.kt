@@ -117,7 +117,7 @@ internal class KeywordLocatorTest {
         """.trimIndent()
         val keywords = setOf("static", "class", "extends")
 
-        val result = KeywordLocator.locate(testCode, keywords, setOf(PhraseLocation(0, 55)))
+        val result = KeywordLocator.locate(testCode, keywords, setOf(IntRange(0, 55)))
 
         assertEquals(0, result.size)
     }
@@ -131,7 +131,7 @@ internal class KeywordLocatorTest {
         """.trimIndent()
         val keywords = setOf("static", "class", "extends")
 
-        val result = KeywordLocator.locate(testCode, keywords, setOf(PhraseLocation(0, 56)))
+        val result = KeywordLocator.locate(testCode, keywords, setOf(IntRange(0, 56)))
 
         assertEquals(0, result.size)
     }
@@ -143,7 +143,7 @@ internal class KeywordLocatorTest {
         """.trimIndent()
         val keywords = setOf("static", "class", "extends")
 
-        val result = KeywordLocator.locate(testCode, keywords, setOf(PhraseLocation(0, 54)))
+        val result = KeywordLocator.locate(testCode, keywords, setOf(IntRange(0, 54)))
 
         assertEquals(0, result.size)
     }

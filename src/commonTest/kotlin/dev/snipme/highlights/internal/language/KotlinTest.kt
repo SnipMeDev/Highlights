@@ -9,7 +9,6 @@ class KotlinTest {
 
     @Test
     fun test() {
-        // TODO Remove "value" from comments
         // TODO Return only valid first "val" keyword
         val code = """
             val intent = 0
