@@ -16,7 +16,7 @@ class JavaTest {
             code = code
         ).build().getCodeStructure()
 
-        result.printPhrases(code)
+        result.printStructure(code)
 
         assertEquals(3, result.keywords.size)
     }

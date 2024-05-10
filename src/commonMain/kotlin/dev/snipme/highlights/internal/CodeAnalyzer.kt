@@ -120,6 +120,7 @@ internal object CodeAnalyzer {
         val strings = StringLocator.locate(code, commentRanges)
         val plainTextRanges = (comments + multiLineComments + strings).toRangeSet()
 
+        // TODO Apply ignored ranges to other locators
         return CodeStructure(
             marks = MarkLocator.locate(code),
             punctuations = PunctuationLocator.locate(code),

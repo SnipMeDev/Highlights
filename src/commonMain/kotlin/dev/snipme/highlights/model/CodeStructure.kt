@@ -86,7 +86,7 @@ data class CodeStructure(
             incremental = true,
         )
 
-    fun printPhrases(code: String) {
+    fun printStructure(code: String) {
         print("marks = ${marks.join(code)}")
         print("punctuations = ${punctuations.join(code)}")
         print("keywords = ${keywords.join(code)}")

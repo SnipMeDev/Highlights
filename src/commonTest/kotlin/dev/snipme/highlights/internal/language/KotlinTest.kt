@@ -9,10 +9,15 @@ class KotlinTest {
 
     @Test
     fun test() {
-        // TODO Return only valid first "val" keyword
         val code = """
             val intent = 0
             copy(input = input(intent.value)) // highlights "value"
+            
+            // calling configure() is equivalent to:
+            
+            val new = 1
+            
+            val initialPages = 0
             
         """.trimIndent()
 
@@ -21,6 +26,8 @@ class KotlinTest {
             code = code
         ).build().getCodeStructure()
 
-        assertEquals(2, result.keywords.size)
+        result.printStructure(code)
+
+        assertEquals(4, result.keywords.size)
     }
 }
