@@ -1,7 +1,6 @@
 package dev.snipme.highlights.internal.locator
 
 import dev.snipme.highlights.internal.SyntaxTokens.TOKEN_DELIMITERS
-import dev.snipme.highlights.internal.contains
 import dev.snipme.highlights.internal.indicesOf
 import dev.snipme.highlights.internal.isIndependentPhrase
 import dev.snipme.highlights.model.PhraseLocation
@@ -13,19 +12,13 @@ internal object KeywordLocator {
         keywords: Set<String>,
         ignoreRanges: Set<IntRange> = emptySet(),
     ): Set<PhraseLocation> {
-        val locations = mutableListOf<PhraseLocation>()
+        val locations = mutableSetOf<PhraseLocation>()
         val foundKeywords = findKeywords(code, keywords)
 
-        val interpretedKeywords = foundKeywords.filterNot { keyword ->
-            val index = code.indexOf(keyword)
-            val length = keyword.length
-            val keywordRange = IntRange(index, index + length)
-            ignoreRanges.any { ignored -> keywordRange in ignored }
-        }
-
-        interpretedKeywords.forEach { keyword ->
+        foundKeywords.forEach { keyword ->
             val indices = code
                 .indicesOf(keyword)
+                .filterNot { index -> ignoreRanges.any { index in it } }
                 .filter { keyword.isIndependentPhrase(code, it) }
 
             indices.forEach { index ->
@@ -33,7 +26,7 @@ internal object KeywordLocator {
             }
         }
 
-        return locations.toSet()
+        return locations
     }
 
     private fun findKeywords(code: String, keywords: Set<String>): Set<String> =

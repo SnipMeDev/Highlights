@@ -139,7 +139,7 @@ internal class KeywordLocatorTest {
     @Test
     fun `Not returns keywords from string`() {
         val testCode = """
-            val text = "This class is static and should extend another class"
+            "This class is static and should extend another class"
         """.trimIndent()
         val keywords = setOf("static", "class", "extends")
 
