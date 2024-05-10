@@ -10,8 +10,6 @@ inline operator fun <E> Set<E>.get(i: Int): E? {
     return null
 }
 
-//inline operator fun get(index: Int): V? = this
-
 fun String.indicesOf(
     phrase: String,
 ): Set<Int> {
@@ -67,7 +65,8 @@ fun String.isIndependentPhrase(
     val charBefore = code[maxOf(index - 1, 0)]
     val charAfter = code[minOf(index + this.length, code.lastIndex)]
 
-    return charBefore.isLetter().not() && charAfter.isDigit().not()
+    return charBefore.isLetter().not() &&
+            charAfter.isDigit().not() && (charAfter == code.last() || charAfter.isLetter().not())
 }
 
 fun Set<PhraseLocation>.toRangeSet(): Set<IntRange> =

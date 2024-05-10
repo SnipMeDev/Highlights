@@ -28,8 +28,8 @@ internal object SyntaxTokens {
         coroutine,crossinline,data,delegate,dynamic,do,else,enum,expect,external,false,final,
         finally,for,fun,get,if,import,in,!in,infix,inline,interface,internal,is,!is,lazy,lateinit,
         native,null,object,open,operator,out,override,package,private,protected,public,reified,
-        return,sealed,set,super,suspend,tailrec,this,throw,true,try,typealias,typeof,val,var,vararg,
-        when,while,yield
+        return,sealed,set,super,suspend,tailrec,this,throw,true,try,typealias,typeof,val,value,var,
+        vararg,when,while,yield
     """.toTokenList()
 
     val RUST_KEYWORDS = """

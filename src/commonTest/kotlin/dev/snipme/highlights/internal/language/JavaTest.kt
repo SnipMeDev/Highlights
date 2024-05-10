@@ -1,26 +1,23 @@
-package dev.snipme.highlights.internal.language
-
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.SyntaxLanguage
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class KotlinTest {
+class JavaTest {
 
     @Test
     fun test() {
-        // TODO Return only valid first "val" keyword
         val code = """
-            val intent = 0
-            copy(input = input(intent.value)) // highlights "value"
-            
+           this.class.abcd ) new
         """.trimIndent()
 
         val result = Highlights.Builder(
-            language = SyntaxLanguage.KOTLIN,
+            language = SyntaxLanguage.JAVA,
             code = code
         ).build().getCodeStructure()
 
-        assertEquals(2, result.keywords.size)
+        result.printPhrases(code)
+
+        assertEquals(3, result.keywords.size)
     }
 }
