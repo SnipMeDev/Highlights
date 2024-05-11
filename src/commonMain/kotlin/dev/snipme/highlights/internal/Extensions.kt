@@ -52,18 +52,21 @@ fun String.lengthToEOF(start: Int = 0): Int {
     return endIndex - start
 }
 
-// TODO Create unit tests for this
 // Sometimes keyword can be found in the middle of word.
 // This returns information if index points only to the keyword
 fun String.isIndependentPhrase(
     code: String,
     index: Int,
 ): Boolean {
-    if (index == 0) return true
     if (index == code.lastIndex) return true
+    if (code.length == this.length) return true
 
     val charBefore = code[maxOf(index - 1, 0)]
     val charAfter = code[minOf(index + this.length, code.lastIndex)]
+
+    if (index == 0) {
+        return charAfter.isDigit().not() && charAfter.isLetter().not()
+    }
 
     return charBefore.isLetter().not() &&
             charAfter.isDigit().not() && (charAfter == code.last() || charAfter.isLetter().not())

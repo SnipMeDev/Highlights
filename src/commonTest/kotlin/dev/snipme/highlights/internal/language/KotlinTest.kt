@@ -26,8 +26,6 @@ class KotlinTest {
             code = code
         ).build().getCodeStructure()
 
-        result.printStructure(code)
-
         assertEquals(4, result.keywords.size)
     }
 }
