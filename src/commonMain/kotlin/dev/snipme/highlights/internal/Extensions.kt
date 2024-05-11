@@ -1,5 +1,15 @@
 package dev.snipme.highlights.internal
 
+import dev.snipme.highlights.model.PhraseLocation
+
+inline operator fun <E> Set<E>.get(i: Int): E? {
+    this.forEachIndexed { index, t ->
+        if (i == index) return t
+    }
+
+    return null
+}
+
 fun String.indicesOf(
     phrase: String,
 ): Set<Int> {
@@ -42,18 +52,29 @@ fun String.lengthToEOF(start: Int = 0): Int {
     return endIndex - start
 }
 
-// TODO Create unit tests for this
 // Sometimes keyword can be found in the middle of word.
 // This returns information if index points only to the keyword
 fun String.isIndependentPhrase(
     code: String,
     index: Int,
 ): Boolean {
-    if (index == 0) return true
     if (index == code.lastIndex) return true
+    if (code.length == this.length) return true
 
     val charBefore = code[maxOf(index - 1, 0)]
     val charAfter = code[minOf(index + this.length, code.lastIndex)]
 
-    return charBefore.isLetter().not() && charAfter.isDigit().not()
+    if (index == 0) {
+        return charAfter.isDigit().not() && charAfter.isLetter().not()
+    }
+
+    return charBefore.isLetter().not() &&
+            charAfter.isDigit().not() && (charAfter == code.last() || charAfter.isLetter().not())
+}
+
+fun Set<PhraseLocation>.toRangeSet(): Set<IntRange> =
+    this.map { IntRange(it.start, it.end) }.toSet()
+
+operator fun IntRange.contains(range: IntRange): Boolean {
+    return range.first >= this.first && range.last <= this.last
 }

@@ -6,7 +6,7 @@ import dev.snipme.highlights.internal.indicesOf
 import dev.snipme.highlights.model.PhraseLocation
 
 internal object PunctuationLocator {
-    fun locate(code: String): List<PhraseLocation> {
+    fun locate(code: String): Set<PhraseLocation> {
         val locations = mutableSetOf<PhraseLocation>()
         code.asSequence()
             .map { it.toString().trim() }
@@ -21,6 +21,6 @@ internal object PunctuationLocator {
                 }
             }
 
-        return locations.toList()
+        return locations.toSet()
     }
 }

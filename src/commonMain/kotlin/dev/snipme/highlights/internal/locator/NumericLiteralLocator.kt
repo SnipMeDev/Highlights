@@ -11,11 +11,11 @@ private val NUMBER_SPECIAL_CHARACTERS = listOf('_')
 
 internal object NumericLiteralLocator {
 
-    fun locate(code: String): List<PhraseLocation> {
+    fun locate(code: String): Set<PhraseLocation> {
         return findDigitIndices(code)
     }
 
-    private fun findDigitIndices(code: String): List<PhraseLocation> {
+    private fun findDigitIndices(code: String): Set<PhraseLocation> {
         val foundPhrases = mutableSetOf<String>()
         val locations = mutableSetOf<PhraseLocation>()
 
@@ -45,7 +45,7 @@ internal object NumericLiteralLocator {
                 foundPhrases.add(number)
             }
 
-        return locations.toList()
+        return locations.toSet()
     }
 
     // Returns if given index is the beginning of word (there is no letter before)
