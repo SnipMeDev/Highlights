@@ -125,7 +125,7 @@ internal class ExtensionsKtTest {
             val code = "valuable"
             val index = 0
 
-            val result = "class".isIndependentPhrase(code, index)
+            val result = "val".isIndependentPhrase(code, index)
 
             assertEquals(false, result)
         }
@@ -135,7 +135,7 @@ internal class ExtensionsKtTest {
             val code = "inval"
             val index = 2
 
-            val result = "class".isIndependentPhrase(code, index)
+            val result = "val".isIndependentPhrase(code, index)
 
             assertEquals(false, result)
         }
@@ -145,7 +145,7 @@ internal class ExtensionsKtTest {
             val code = "invaluable"
             val index = 2
 
-            val result = "class".isIndependentPhrase(code, index)
+            val result = "val".isIndependentPhrase(code, index)
 
             assertEquals(false, result)
         }
