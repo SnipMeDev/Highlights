@@ -1,5 +1,6 @@
 package dev.snipme.highlights.internal.locator
 
+import dev.snipme.highlights.internal.get
 import dev.snipme.highlights.model.PhraseLocation
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -9,8 +10,8 @@ internal class KeywordLocatorTest {
     @Test
     fun `Returns empty list for no keywords`() {
         val testCode = "class NewClass"
-        val keywords = listOf<String>()
-        val expectedResult = emptyList<PhraseLocation>()
+        val keywords = setOf<String>()
+        val expectedResult = emptySet<PhraseLocation>()
 
         val result = KeywordLocator.locate(testCode, keywords)
 
@@ -20,7 +21,7 @@ internal class KeywordLocatorTest {
     @Test
     fun `Returns location of first found keyword`() {
         val testCode = "class NewClass"
-        val keywords = listOf("static", "new", "class")
+        val keywords = setOf("static", "new", "class")
 
         val result = KeywordLocator.locate(testCode, keywords)
 
@@ -31,7 +32,7 @@ internal class KeywordLocatorTest {
     @Test
     fun `Returns location of all found keyword in line`() {
         val testCode = "class NewClass extends { }"
-        val keywords = listOf("static", "new", "class", "extends")
+        val keywords = setOf("static", "new", "class", "extends")
 
         val result = KeywordLocator.locate(testCode, keywords)
 
@@ -43,7 +44,7 @@ internal class KeywordLocatorTest {
     @Test
     fun `Returns location of all keyword next to each other`() {
         val testCode = "this.class.abcd ) new"
-        val keywords = listOf("this", "new", "class")
+        val keywords = setOf("this", "new", "class")
 
         val result = KeywordLocator.locate(testCode, keywords)
 
@@ -56,7 +57,7 @@ internal class KeywordLocatorTest {
     @Test
     fun `Returns location of word that is proper keyword only`() {
         val testCode = "class 1class 1 class1 class& %class aclass"
-        val keywords = listOf("this", "new", "class")
+        val keywords = setOf("this", "new", "class")
 
         val result = KeywordLocator.locate(testCode, keywords)
 
@@ -74,7 +75,7 @@ internal class KeywordLocatorTest {
                 static class Example2 {}
             }
         """.trimIndent()
-        val keywords = listOf("static", "class", "extends")
+        val keywords = setOf("static", "class", "extends")
 
         val result = KeywordLocator.locate(testCode, keywords)
 
@@ -90,7 +91,19 @@ internal class KeywordLocatorTest {
         val testCode = """
             aclassa
         """.trimIndent()
-        val keywords = listOf("static", "class", "extends")
+        val keywords = setOf("static", "class", "extends")
+
+        val result = KeywordLocator.locate(testCode, keywords)
+
+        assertEquals(0, result.size)
+    }
+
+    @Test
+    fun `Not returns location of keyword inside phrase from start`() {
+        val testCode = """
+            val intent = 0
+        """.trimIndent()
+        val keywords = setOf("int")
 
         val result = KeywordLocator.locate(testCode, keywords)
 
@@ -102,9 +115,9 @@ internal class KeywordLocatorTest {
         val testCode = """
             // This class is static and should extend another class
         """.trimIndent()
-        val keywords = listOf("static", "class", "extends")
+        val keywords = setOf("static", "class", "extends")
 
-        val result = KeywordLocator.locate(testCode, keywords, listOf(PhraseLocation(0, 55)))
+        val result = KeywordLocator.locate(testCode, keywords, setOf(IntRange(0, 55)))
 
         assertEquals(0, result.size)
     }
@@ -116,9 +129,9 @@ internal class KeywordLocatorTest {
             This class is static and should extend another class
             */
         """.trimIndent()
-        val keywords = listOf("static", "class", "extends")
+        val keywords = setOf("static", "class", "extends")
 
-        val result = KeywordLocator.locate(testCode, keywords, listOf(PhraseLocation(0, 56)))
+        val result = KeywordLocator.locate(testCode, keywords, setOf(IntRange(0, 56)))
 
         assertEquals(0, result.size)
     }
@@ -126,11 +139,11 @@ internal class KeywordLocatorTest {
     @Test
     fun `Not returns keywords from string`() {
         val testCode = """
-            val text = "This class is static and should extend another class"
+            "This class is static and should extend another class"
         """.trimIndent()
-        val keywords = listOf("static", "class", "extends")
+        val keywords = setOf("static", "class", "extends")
 
-        val result = KeywordLocator.locate(testCode, keywords, listOf(PhraseLocation(0, 54)))
+        val result = KeywordLocator.locate(testCode, keywords, setOf(IntRange(0, 54)))
 
         assertEquals(0, result.size)
     }

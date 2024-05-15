@@ -1,7 +1,7 @@
 ![highlights_banner_opaque](https://github.com/SnipMeDev/Highlights/assets/8405055/e123ce0f-6f58-451a-9e0a-893c0809b909)
 
 [![Maven Central](https://img.shields.io/maven-central/v/dev.snipme/highlights)](https://mvnrepository.com/artifact/dev.snipme)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.9.22-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.9.23-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 
 # Highlights
@@ -15,7 +15,7 @@ repositories {
 ```
 
 ```shell
-implementation("dev.snipme:highlights:0.8.1")
+implementation("dev.snipme:highlights:0.9.0")
 ```
 
 ## Features ✨
@@ -97,6 +97,7 @@ The library comes with predefined syntax coloring themes available in `SyntaxThe
     <th>Notepad</th>
     <th>Matrix</th>
     <th>Pastel</th>
+    <th>Atom One</th>
     <tr>
         <td>
 
@@ -158,6 +159,19 @@ The library comes with predefined syntax coloring themes available in `SyntaxThe
 - ![#CB956D](https://placehold.co/15x15/CB956D/CB956D.png) Punctuation
 - ![#CB956D](https://placehold.co/15x15/CB956D/CB956D.png) Mark
 </td>
+<td>
+
+- ![#DFDEE0](https://placehold.co/15x15/BBBBBB/BBBBBB.png) Code
+- ![#729FCF](https://placehold.co/15x15/D55FDE/D55FDE.png) Keyword
+- ![#93CF55](https://placehold.co/15x15/89CA78/89CA78.png) String
+- ![#8AE234](https://placehold.co/15x15/D19A66/D19A66.png) Literal
+- ![#888A85](https://placehold.co/15x15/5C6370/5C6370.png) Comment
+- ![#5DB895](https://placehold.co/15x15/E5C07B/E5C07B.png) Metadata
+- ![#888A85](https://placehold.co/15x15/5C6370/5C6370.png) Multiline Comment
+- ![#CB956D](https://placehold.co/15x15/EF596F/EF596F.png) Punctuation
+- ![#CB956D](https://placehold.co/15x15/2BBAC5/2BBAC5.png) Mark
+
+</td>
     </tr>
 </table>
 
@@ -169,6 +183,7 @@ The library comes with predefined syntax coloring themes available in `SyntaxThe
     <th>Notepad</th>
     <th>Matrix</th>
     <th>Pastel</th>
+    <th>Atom One</th>
     <tr>
 <td>
 
@@ -230,6 +245,19 @@ The library comes with predefined syntax coloring themes available in `SyntaxThe
 - ![#CB956D](https://placehold.co/15x15/CB956D/CB956D.png) Punctuation
 - ![#CB956D](https://placehold.co/15x15/CB956D/CB956D.png) Mark
 </td>
+<td>
+
+- ![#DFDEE0](https://placehold.co/15x15/383A42/383A42.png) Code
+- ![#729FCF](https://placehold.co/15x15/A626A4/A626A4.png) Keyword
+- ![#93CF55](https://placehold.co/15x15/50A14F/50A14F.png) String
+- ![#8AE234](https://placehold.co/15x15/986801/986801.png) Literal
+- ![#888A85](https://placehold.co/15x15/A1A1A1/A1A1A1.png) Comment
+- ![#5DB895](https://placehold.co/15x15/C18401/C18401.png) Metadata
+- ![#888A85](https://placehold.co/15x15/A1A1A1/A1A1A1.png) Multiline Comment
+- ![#CB956D](https://placehold.co/15x15/E45649/E45649.png) Punctuation
+- ![#CB956D](https://placehold.co/15x15/526FFF/526FFF.png) Mark
+
+</td>
     </tr>
 </table>
 
@@ -265,14 +293,16 @@ If your project uses this code, please write me or add your info
     </tr>
     <tr>
         <td>Application</td>
-        <td>
-            <a href="https://play.google.com/store/apps/details?id=pl.tkadziolka.snipbook">SnippLog</a>
-        </td>
+        <td> <a href="https://play.google.com/store/apps/details?id=pl.tkadziolka.snipbook">SnippLog</a> </td>
+    </tr>
+    <tr>
+        <td>Application</td>
+        <td> <a href="https://opensource.respawn.pro/FlowMVI/sample/">FlowMVI Sample</a> </td>
     </tr>
 </table>
 
 ## TODO 🚧
-- [ ] Migrate some lists to sets
+- [X] Migrate some lists to sets
 - [ ] Optimize code analysis
 - [ ] Add more themes and languages
 - [ ] Support italic and underline text style
@@ -289,7 +319,7 @@ Then make sure:
 License 🖋️
 =======
 
-    Copyright 2023 Tomasz Kądziołka.
+    Copyright 2023-2024 Tomasz Kądziołka.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

@@ -30,7 +30,6 @@ val sampleClass = """
         }
     }
 """.trimIndent()
-
 fun main() {
     println("### HIGHLIGHTS ###")
     println()

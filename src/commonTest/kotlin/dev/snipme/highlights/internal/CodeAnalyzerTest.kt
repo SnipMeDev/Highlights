@@ -22,7 +22,7 @@ internal class CodeAnalyzerTest {
         val result = CodeAnalyzer.analyze(testCode)
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(30, 31),
                 PhraseLocation(31, 32)
             ),
@@ -30,7 +30,7 @@ internal class CodeAnalyzerTest {
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(36, 37),
                 PhraseLocation(41, 42),
                 PhraseLocation(42, 43),
@@ -41,7 +41,7 @@ internal class CodeAnalyzerTest {
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(14, 19),
                 PhraseLocation(22, 29)
             ),
@@ -49,35 +49,35 @@ internal class CodeAnalyzerTest {
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(33, 36),
             ),
             result.strings
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(45, 52),
             ),
             result.literals
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(9, 13),
             ),
             result.comments
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(0, 8),
             ),
             result.multilineComments
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(38, 40),
             ),
             result.annotations
@@ -119,7 +119,7 @@ internal class CodeAnalyzerTest {
         assertEquals(true, result.incremental)
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(30, 31),
                 PhraseLocation(31, 32),
             ),
@@ -127,7 +127,7 @@ internal class CodeAnalyzerTest {
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(36, 37),
                 PhraseLocation(41, 42),
                 PhraseLocation(42, 43),
@@ -138,7 +138,7 @@ internal class CodeAnalyzerTest {
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(14, 19),
                 PhraseLocation(22, 29),
             ),
@@ -146,35 +146,35 @@ internal class CodeAnalyzerTest {
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(33, 36),
             ),
             result.strings
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(45, 52),
             ),
             result.literals
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(9, 13),
             ),
             result.comments
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(0, 8),
             ),
             result.multilineComments
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(38, 40),
             ),
             result.annotations
@@ -208,48 +208,48 @@ internal class CodeAnalyzerTest {
         assertEquals(true, result.incremental)
 
         assertEquals(
-            emptyList(),
+            emptySet(),
             result.marks
         )
 
         assertEquals(
-            emptyList(),
+            emptySet(),
             result.punctuations
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(14, 19),
             ),
             result.keywords
         )
 
         assertEquals(
-            emptyList(),
+            emptySet(),
             result.strings
         )
 
         assertEquals(
-            emptyList(),
+            emptySet(),
             result.literals
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(9, 13),
             ),
             result.comments
         )
 
         assertEquals(
-            listOf(
+            setOf(
                 PhraseLocation(0, 8),
             ),
             result.multilineComments
         )
 
         assertEquals(
-            emptyList(),
+            emptySet(),
             result.annotations
         )
     }

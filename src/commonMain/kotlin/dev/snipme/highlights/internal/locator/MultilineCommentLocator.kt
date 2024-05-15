@@ -1,14 +1,14 @@
 package dev.snipme.highlights.internal.locator
 
-import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.internal.SyntaxTokens.MULTILINE_COMMENT_DELIMITERS
 import dev.snipme.highlights.internal.indicesOf
+import dev.snipme.highlights.model.PhraseLocation
 
 private const val START_INDEX = 0
 
 internal object MultilineCommentLocator {
 
-    fun locate(code: String): List<PhraseLocation> {
+    fun locate(code: String): Set<PhraseLocation> {
         val locations = mutableListOf<PhraseLocation>()
         val comments = mutableListOf<Pair<Int, Int>>()
         val startIndices = mutableListOf<Int>()
@@ -30,6 +30,6 @@ internal object MultilineCommentLocator {
             locations.add(PhraseLocation(start, end))
         }
 
-        return locations
+        return locations.toSet()
     }
 }

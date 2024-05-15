@@ -1,3 +1,16 @@
+## [0.9.0]
+
+### Added
+- Atom One theme. Thanks Nek-12!
+- languages snippet tests
+
+### Fixed
+- keyword highlighted in oneline comment
+- keyword highlighted inside other word
+
+### Changed
+- Kotlin version to 1.9.23
+
 ## [0.8.1]
 
 ### Added

@@ -1,14 +1,14 @@
 apply(from = "publish-root.gradle")
 
 plugins {
-    kotlin("multiplatform") version "1.9.22"
+    kotlin("multiplatform") version "1.9.23"
     id("maven-publish")
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("signing")
 }
 
 group = "dev.snipme"
-version = "0.8.1"
+version = "0.9.0"
 
 kotlin {
     // Android
@@ -36,6 +36,7 @@ kotlin {
         browser()
         nodejs()
     }
+    wasmJs()
     // Dependencies
     sourceSets {
         val commonTest by getting {
