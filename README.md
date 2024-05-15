@@ -302,7 +302,7 @@ If your project uses this code, please write me or add your info
 </table>
 
 ## TODO 🚧
-- [ ] Migrate some lists to sets
+- [X] Migrate some lists to sets
 - [ ] Optimize code analysis
 - [ ] Add more themes and languages
 - [ ] Support italic and underline text style
