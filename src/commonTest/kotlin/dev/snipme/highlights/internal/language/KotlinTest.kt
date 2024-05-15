@@ -10,15 +10,25 @@ class KotlinTest {
     @Test
     fun test() {
         val code = """
-            val intent = 0
-            copy(input = input(intent.value)) // highlights "value"
-            
-            // calling configure() is equivalent to:
-            
-            val new = 1
-            
-            val initialPages = 0
-            
+                val intent = 0
+                copy(input = input(intent.value)) // highlights "value"
+                
+                // calling configure() is equivalent to:
+                
+                val new = 1
+                
+                val initialPages = 0
+                    
+                // Visibility modifiers
+                internal val internalVar: Int = 10
+                private fun privateFunction() {
+                    println("This is a private function")
+                }
+        
+                // Data types
+                val number: Int = 42
+                val pi: Double = 3.14
+                val isValid: Boolean = true 
         """.trimIndent()
 
         val result = Highlights.Builder(
@@ -26,6 +36,8 @@ class KotlinTest {
             code = code
         ).build().getCodeStructure()
 
-        assertEquals(4, result.keywords.size)
+        result.printStructure(code)
+
+        assertEquals(11, result.keywords.size)
     }
 }
