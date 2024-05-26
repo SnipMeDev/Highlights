@@ -145,6 +145,6 @@ internal object SyntaxTokens {
     val PUNCTUATION_CHARACTERS = listOf(",", ".", ":", ";")
     val MARK_CHARACTERS = listOf("(", ")", "=", "{", "}", "<", ">", "-", "+", "[", "]", "|", "&")
 
-    private fun String.toTokenList() = trimIndent().split(",").toSet()
+    private fun String.toTokenList() = trimIndent().split("[\\s,]+".toRegex()).toSet()
 }
 
