@@ -27,7 +27,7 @@ class Highlights private constructor(
 
         fun themes(darkMode: Boolean) = SyntaxThemes.themes(darkMode)
 
-        fun languages() = SyntaxLanguage.values().toList()
+        fun languages() = SyntaxLanguage.entries
     }
 
     data class Builder(

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+
 apply(from = "publish-root.gradle")
 
 plugins {
@@ -22,9 +24,16 @@ kotlin {
         }
     }
     // iOS
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+
+    val xcf = XCFramework()
+    val iosTargets = listOf(iosX64(), iosArm64(), iosSimulatorArm64())
+
+    iosTargets.forEach {
+        it.binaries.framework {
+            baseName = "highlights"
+            xcf.add(this)
+        }
+    }
     // Desktop
     mingwX64()
     linuxX64()
