@@ -176,7 +176,5 @@ internal object SyntaxTokens {
     val MULTILINE_COMMENT_DELIMITERS = listOf(Pair("/*", "*/"))
     val PUNCTUATION_CHARACTERS = listOf(",", ".", ":", ";")
     val MARK_CHARACTERS = listOf("(", ")", "=", "{", "}", "<", ">", "-", "+", "[", "]", "|", "&")
-
-    private fun String.toTokenList() = trimIndent().trim().trim('\n').split(",").toSet()
 }
 
