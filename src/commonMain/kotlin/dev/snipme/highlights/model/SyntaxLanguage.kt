@@ -28,6 +28,6 @@ enum class SyntaxLanguage {
         }
 
         fun getByName(name: String): SyntaxLanguage? =
-            values().find { it.name.equals(name, ignoreCase = true) }
+            entries.find { it.name.equals(name, ignoreCase = true) }
     }
 }

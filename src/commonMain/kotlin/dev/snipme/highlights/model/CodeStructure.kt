@@ -1,7 +1,11 @@
 package dev.snipme.highlights.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class PhraseLocation(val start: Int, val end: Int)
 
+@Serializable
 data class CodeStructure(
     val marks: Set<PhraseLocation>,
     val punctuations: Set<PhraseLocation>,

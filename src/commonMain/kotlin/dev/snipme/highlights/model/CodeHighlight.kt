@@ -1,8 +1,19 @@
 package dev.snipme.highlights.model
 
-sealed class CodeHighlight(open val location: PhraseLocation)
-data class BoldHighlight(override val location: PhraseLocation) : CodeHighlight(location)
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+@Serializable
+sealed class CodeHighlight {
+    abstract val location: PhraseLocation
+}
+
+@Serializable
+data class BoldHighlight(override val location: PhraseLocation) : CodeHighlight()
+
+@Serializable
 data class ColorHighlight(
     override val location: PhraseLocation,
     val rgb: Int
-) : CodeHighlight(location)
+) : CodeHighlight()
