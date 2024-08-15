@@ -15,7 +15,7 @@ repositories {
 ```
 
 ```shell
-implementation("dev.snipme:highlights:0.9.1")
+implementation("dev.snipme:highlights:0.9.2")
 ```
 
 ## Features ✨
