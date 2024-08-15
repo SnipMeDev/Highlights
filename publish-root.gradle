@@ -6,9 +6,12 @@ ext["ossrhUsername"] = ''
 ext["ossrhPassword"] = ''
 ext["sonatypeStagingProfileId"] = ''
 
-// Read local.properties file first if it exists
 Properties p = new Properties()
-new FileInputStream("local.properties").withCloseable { is -> p.load(is) }
+def localPropertiesFile = file("local.properties")
+// Read local.properties file if it exists
+if (localPropertiesFile.exists()) {
+    p.load(localPropertiesFile.newInputStream())
+}
 p.each { name, value -> ext[name] = value }
 
 // Set up Sonatype repository

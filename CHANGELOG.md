@@ -1,3 +1,9 @@
+## [0.9.1]
+
+### Fixed
+- loading local.properties
+- splitting javascript keywords
+
 ## [0.9.0]
 
 ### Added
