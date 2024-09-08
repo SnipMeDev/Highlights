@@ -9,6 +9,10 @@ fun List<CodeHighlight>.toJson(): String {
     return Json.encodeToString<List<CodeHighlight>>(this)
 }
 
+fun String.phraseLocationSetFromJson(): Set<PhraseLocation> {
+    return Json.decodeFromString(this)
+}
+
 inline operator fun <E> Set<E>.get(i: Int): E? {
     this.forEachIndexed { index, t ->
         if (i == index) return t
