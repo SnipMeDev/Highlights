@@ -84,6 +84,11 @@ internal object CodeAnalyzer {
                 codeSnapshot.structure - newStructure.move(lengthDifference)
             }
 
+            is CodeDifference.Swap -> {
+                val newStructure = analyzeForLanguage(difference.new, codeSnapshot.language)
+                codeSnapshot.structure.replace(difference.old, newStructure)
+            }
+
             CodeDifference.None -> return codeSnapshot.structure
         }
 

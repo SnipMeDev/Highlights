@@ -86,6 +86,20 @@ data class CodeStructure(
             incremental = true,
         )
 
+    fun replace(old: PhraseLocation, new: CodeStructure): CodeStructure =
+        // TODO
+        CodeStructure(
+            marks = marks - old + new.marks,
+            punctuations = punctuations - old + new.punctuations,
+            keywords = keywords - old + new.keywords,
+            strings = strings - old + new.strings,
+            literals = literals - old + new.literals,
+            comments = comments - old + new.comments,
+            multilineComments = multilineComments - old + new.multilineComments,
+            annotations = annotations - old + new.annotations,
+            incremental = true,
+        )
+
     fun printStructure(code: String) {
         print("marks = ${marks.join(code)}")
         print("punctuations = ${punctuations.join(code)}")
