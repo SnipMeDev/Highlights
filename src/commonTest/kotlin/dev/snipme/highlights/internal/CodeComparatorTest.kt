@@ -76,6 +76,50 @@ internal class CodeComparatorTest {
     }
 
     @Test
+    fun `Returns difference for the char change in token`() {
+        val currentCode = "const foo = 'bar';"
+
+        val newCode = "const foo = 'baz';"
+
+        val result = CodeComparator.difference(currentCode, newCode)
+
+        assertEquals(CodeDifference.Swap("'bar'", "'baz'"), result)
+    }
+
+    @Test
+    fun `Returns difference for the char change in token`() {
+        val currentCode = "const foo = 'bar';"
+
+        val newCode = "co,st foo = 'bar';"
+
+        val result = CodeComparator.difference(currentCode, newCode)
+
+        assertEquals(CodeDifference.Swap("const", "co,st"), result)
+    }
+
+    @Test
+    fun `Returns difference for the char addition in single token`() {
+        val currentCode = "const foo = 'bar';"
+
+        val newCode = "const foo = 'barrr';"
+
+        val result = CodeComparator.difference(currentCode, newCode)
+
+        assertEquals(CodeDifference.Swap("'bar'", "'barrr'"), result)
+    }
+
+    @Test
+    fun `Returns difference for the char subtraction in single token`() {
+        val currentCode = "const foo = 'barrr';"
+
+        val newCode = "const foo = 'bar';"
+
+        val result = CodeComparator.difference(currentCode, newCode)
+
+        assertEquals(CodeDifference.Swap("'barrr'", "'bar'"), result)
+    }
+
+    @Test
     fun `Returns only difference for complex code change`() {
         val currentCode = """
             /** a */

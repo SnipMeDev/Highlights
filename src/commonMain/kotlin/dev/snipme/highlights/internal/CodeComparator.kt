@@ -5,6 +5,7 @@ private const val WORDS_DELIMITER = " "
 internal sealed class CodeDifference {
     data class Increase(val change: String) : CodeDifference()
     data class Decrease(val change: String) : CodeDifference()
+    data class Swap(val old: String, val new: String) : CodeDifference()
     object None : CodeDifference()
 }
 
@@ -14,7 +15,20 @@ internal object CodeComparator {
         val updatedWords = updated.tokenize()
 
         return when {
-            currentWords.size == updatedWords.size -> CodeDifference.None
+            currentWords.size == updatedWords.size -> {
+                if (currentWords == updatedWords) {
+                    CodeDifference.None
+                } else {
+                    val different = updatedWords.filterIndexed { index, updated ->
+                        updated != currentWords[index]
+                    }
+
+                    CodeDifference.Swap(
+                        old = currentWords.joinToString(WORDS_DELIMITER),
+                        new = different.joinToString(WORDS_DELIMITER)
+                    )
+                }
+            }
 
             currentWords.size < updatedWords.size -> CodeDifference.Increase(
                 findDifference(
