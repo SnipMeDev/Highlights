@@ -5,14 +5,14 @@ private const val WORDS_DELIMITER = " "
 internal sealed class CodeDifference {
     data class Increase(val change: String) : CodeDifference()
     data class Decrease(val change: String) : CodeDifference()
-    object Full : CodeDifference()
-    object None : CodeDifference()
+    data object Full : CodeDifference()
+    data object None : CodeDifference()
 }
 
 internal object CodeComparator {
     fun difference(current: String, updated: String): CodeDifference {
-        val currentWords = current.tokenize()
-        val updatedWords = updated.tokenize()
+        val currentWords = current.tokenize().map { it.trim() }
+        val updatedWords = updated.tokenize().map { it.trim() }
 
         return when {
             currentWords.size == updatedWords.size ->

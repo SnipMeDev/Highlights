@@ -84,6 +84,8 @@ internal object CodeAnalyzer {
                 codeSnapshot.structure - newStructure.move(lengthDifference)
             }
 
+            is CodeDifference.Full -> analyzeForLanguage(code, codeSnapshot.language)
+
             CodeDifference.None -> return codeSnapshot.structure
         }
 
