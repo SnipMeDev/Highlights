@@ -66,13 +66,46 @@ internal class CodeComparatorTest {
     }
 
     @Test
-    fun `Returns none difference for the mixed new phrase`() {
+    fun `Returns full difference for the mixed new phrase`() {
         val currentCode = "@ABCD abcd dd ee"
         val newCode = "@ABCD abcd ee dd"
 
         val result = CodeComparator.difference(currentCode, newCode)
 
-        assertEquals(CodeDifference.None, result)
+        assertEquals(CodeDifference.Full, result)
+    }
+
+    @Test
+    fun `Returns full difference for the char change in token`() {
+        val currentCode = "const foo = 'bar';"
+
+        val newCode = "const foo = 'baz';"
+
+        val result = CodeComparator.difference(currentCode, newCode)
+
+        assertEquals(CodeDifference.Full, result)
+    }
+
+    @Test
+    fun `Returns difference for the char addition in single token`() {
+        val currentCode = "const foo = 'bar';"
+
+        val newCode = "const foo = 'barrr';"
+
+        val result = CodeComparator.difference(currentCode, newCode)
+
+        assertEquals(CodeDifference.Full, result)
+    }
+
+    @Test
+    fun `Returns difference for the char subtraction in single token`() {
+        val currentCode = "const foo = 'barrr';"
+
+        val newCode = "const foo = 'bar';"
+
+        val result = CodeComparator.difference(currentCode, newCode)
+
+        assertEquals(CodeDifference.Full, result)
     }
 
     @Test

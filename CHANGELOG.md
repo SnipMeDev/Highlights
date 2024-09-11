@@ -1,3 +1,8 @@
+## [0.9.2]
+
+### Fixed
+- partial analysis for same length strings
+
 ## [0.9.1]
 
 ### Fixed
