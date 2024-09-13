@@ -1,7 +1,7 @@
 ![highlights_banner_opaque](https://github.com/SnipMeDev/Highlights/assets/8405055/e123ce0f-6f58-451a-9e0a-893c0809b909)
 
 [![Maven Central](https://img.shields.io/maven-central/v/dev.snipme/highlights)](https://mvnrepository.com/artifact/dev.snipme)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.9.23-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.0.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 
 # Highlights
@@ -15,7 +15,7 @@ repositories {
 ```
 
 ```shell
-implementation("dev.snipme:highlights:0.9.3")
+implementation("dev.snipme:highlights:1.0.0")
 ```
 
 ## Features ✨
