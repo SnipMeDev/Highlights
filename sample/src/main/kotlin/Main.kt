@@ -55,7 +55,7 @@ fun main() {
     val structure = highlights.getCodeStructure()
 
     println("After analysis there has been found:")
-    println("${structure.printPhrases(sampleClass)}")
+    println("${structure.printStructure(sampleClass)}")
     println()
 
     val newInstance = highlights.getBuilder()
