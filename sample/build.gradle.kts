@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.9.23"
+    kotlin("jvm") version "2.0.0"
     application
 }
 
@@ -15,6 +15,7 @@ repositories {
 }
 
 dependencies {
+    implementation("dev.snipme:highlights:1.0.0")
     testImplementation(kotlin("test"))
 }
 
@@ -28,8 +29,4 @@ tasks.withType<KotlinCompile> {
 
 application {
     mainClass.set("MainKt")
-}
-
-dependencies {
-    implementation(":highlights")
 }
