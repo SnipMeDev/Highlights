@@ -1,9 +1,8 @@
 apply(from = "publish-root.gradle")
 
 plugins {
-    kotlin("multiplatform") version "2.0.0"
+    kotlin("multiplatform") version "2.0.20"
     id("maven-publish")
-    // TODO Update to 2.0.0
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("signing")
 }
