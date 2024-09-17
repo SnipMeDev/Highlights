@@ -51,12 +51,15 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
             }
         }
 
         val commonTest by getting {
             dependencies {
+                // Coroutines test
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
                 implementation(kotlin("test"))
             }
         }

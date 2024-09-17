@@ -10,6 +10,18 @@ import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.model.SyntaxLanguage
 import dev.snipme.highlights.model.SyntaxTheme
 import dev.snipme.highlights.model.SyntaxThemes
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+interface HighlightsResultListener {
+    fun onStart()
+    fun onCompleted(highlights: List<CodeHighlight>)
+    fun onError(exception: Throwable)
+}
 
 class Highlights private constructor(
     private var code: String,
@@ -18,6 +30,9 @@ class Highlights private constructor(
     private var emphasisLocations: List<PhraseLocation>
 ) {
     var snapshot: CodeSnapshot? = null
+        private set
+
+    var analysisJob: Job? = null
         private set
 
     companion object {
@@ -60,22 +75,26 @@ class Highlights private constructor(
     }
 
     fun getHighlights(): List<CodeHighlight> {
-        val highlights = mutableListOf<CodeHighlight>()
         val structure = getCodeStructure()
-        with(structure) {
-            marks.forEach { highlights.add(ColorHighlight(it, theme.mark)) }
-            punctuations.forEach { highlights.add(ColorHighlight(it, theme.punctuation)) }
-            keywords.forEach { highlights.add(ColorHighlight(it, theme.keyword)) }
-            strings.forEach { highlights.add(ColorHighlight(it, theme.string)) }
-            literals.forEach { highlights.add(ColorHighlight(it, theme.literal)) }
-            annotations.forEach { highlights.add(ColorHighlight(it, theme.metadata)) }
-            comments.forEach { highlights.add(ColorHighlight(it, theme.comment)) }
-            multilineComments.forEach { highlights.add(ColorHighlight(it, theme.multilineComment)) }
+        return constructHighlights(structure)
+    }
+
+    fun getHighlightsAsync(listener: HighlightsResultListener) {
+        analysisJob?.cancel()
+
+        val errorHandler = CoroutineExceptionHandler { _, exception ->
+            listener.onError(exception)
         }
 
-        emphasisLocations.forEach { highlights.add(BoldHighlight(it)) }
+        analysisJob = CoroutineScope(Dispatchers.Default + errorHandler).launch {
+            val structure = getCodeStructure()
+            val highlights = constructHighlights(structure)
+            withContext(Dispatchers.Main) {
+                listener.onCompleted(highlights)
+            }
+        }
 
-        return highlights
+        listener.onStart()
     }
 
     fun getBuilder() = Builder(code, language, theme, emphasisLocations)
@@ -87,4 +106,17 @@ class Highlights private constructor(
     fun getTheme() = theme
 
     fun getEmphasis() = emphasisLocations
+
+    private fun constructHighlights(structure: CodeStructure): List<CodeHighlight> =
+        mutableListOf<CodeHighlight>().apply {
+            structure.marks.forEach { add(ColorHighlight(it, theme.mark)) }
+            structure.punctuations.forEach { add(ColorHighlight(it, theme.punctuation)) }
+            structure.keywords.forEach { add(ColorHighlight(it, theme.keyword)) }
+            structure.strings.forEach { add(ColorHighlight(it, theme.string)) }
+            structure.literals.forEach { add(ColorHighlight(it, theme.literal)) }
+            structure.annotations.forEach { add(ColorHighlight(it, theme.metadata)) }
+            structure.comments.forEach { add(ColorHighlight(it, theme.comment)) }
+            structure.multilineComments.forEach { add(ColorHighlight(it, theme.multilineComment)) }
+            emphasisLocations.forEach { add(BoldHighlight(it)) }
+        }
 }
