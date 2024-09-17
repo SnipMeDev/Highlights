@@ -3,6 +3,7 @@ import dev.snipme.highlights.model.BoldHighlight
 import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.model.SyntaxLanguage
 import dev.snipme.highlights.model.SyntaxThemes
+import kotlin.concurrent.timer
 
 val sampleClass = """
     @Serializable
