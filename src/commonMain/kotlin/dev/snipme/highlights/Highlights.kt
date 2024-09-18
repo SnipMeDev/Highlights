@@ -16,11 +16,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.cancellation.CancellationException
 
 interface HighlightsResultListener {
     fun onStart()
-    fun onCompleted(highlights: List<CodeHighlight>)
+    fun onComplete(highlights: List<CodeHighlight>)
     fun onError(exception: Throwable)
+    fun onCancel()
 }
 
 class Highlights private constructor(
@@ -80,21 +82,39 @@ class Highlights private constructor(
     }
 
     fun getHighlightsAsync(listener: HighlightsResultListener) {
-        analysisJob?.cancel()
+        var thisJob: Job? = null
 
-        val errorHandler = CoroutineExceptionHandler { _, exception ->
+        try {
+            analysisJob?.cancel()
+
+            val errorHandler = CoroutineExceptionHandler { _, exception ->
+                listener.onError(exception)
+            }
+
+            analysisJob = CoroutineScope(Dispatchers.Default + errorHandler).launch {
+                println("---START---")
+                val structure = getCodeStructure()
+                val highlights = constructHighlights(structure)
+                println("---END---")
+                withContext(Dispatchers.Main) {
+                    listener.onComplete(highlights)
+                }
+            }
+
+            thisJob = analysisJob
+            thisJob?.invokeOnCompletion {
+                if (it is CancellationException) {
+                    listener.onCancel()
+                }
+            }
+            listener.onStart()
+        } catch (exception: Exception) {
             listener.onError(exception)
-        }
-
-        analysisJob = CoroutineScope(Dispatchers.Default + errorHandler).launch {
-            val structure = getCodeStructure()
-            val highlights = constructHighlights(structure)
-            withContext(Dispatchers.Main) {
-                listener.onCompleted(highlights)
+        } finally {
+            if (thisJob?.isActive == false) {
+                listener.onCancel()
             }
         }
-
-        listener.onStart()
     }
 
     fun getBuilder() = Builder(code, language, theme, emphasisLocations)
