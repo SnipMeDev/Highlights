@@ -3,23 +3,24 @@ package dev.snipme.highlights.internal
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.HighlightsResultListener
 import dev.snipme.highlights.model.CodeHighlight
+import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlin.coroutines.resumeWithException
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlin.time.Duration
-import kotlin.time.MonotonicTimeSource.markNow
-import kotlin.time.TimeMark
-import kotlin.time.TimeSource
 import kotlin.time.TimeSource.Monotonic.markNow
 import kotlin.time.measureTime
 
@@ -142,41 +143,73 @@ class HighlightsTest {
             setCode(longTestCode())
         }
 
-        // Set timestamp mark
-        val now = markNow()
+        val scope = this
 
-        var result: List<CodeHighlight>? = null
+        val now = markNow()
+        var time1: Duration = Duration.ZERO
         var time2: Duration = Duration.ZERO
-        val time1 = measureTime {
-            suspendCancellableCoroutine {
+
+        suspendCancellableCoroutine { continuation ->
             invokeHighlightsRequest(
                 default,
                 onStart = {
-                    launch {
-                        suspendCancellableCoroutine { continuation ->
-                            time2 = measureTime {
-                                invokeHighlightsRequest(default) { result -> assertTrue { result.isNotEmpty() } }
+                    println("First start")
+                    scope.launch {
+                        suspendCancellableCoroutine<List<CodeHighlight>> { continuation2 ->
+                            invokeHighlightsRequest(default) { result ->
+                                time2 = now.elapsedNow()
+                                assertTrue { result.isNotEmpty() }
+                                continuation2.resume(result) {}
                             }
                         }
                     }
-                })
-            }
+                },
+                onCancel = {
+                    time1 = now.elapsedNow()
+                    println("First cancelled")
+                    continuation.resume(Unit) {}
+                },
+            )
         }
 
+        println("Time1: ${time1.inWholeMilliseconds} ms")
+        println("Time2: ${time2.inWholeMilliseconds} ms")
 
         assertTrue { time2.inWholeMilliseconds > time1.inWholeMilliseconds }
+    }
+
+    @Test
+    fun `returns cancellation result`() = runTest {
+        val default = Highlights.default().apply {
+            setCode(longTestCode())
+        }
+
+        var cancelled = false
+        suspendCancellableCoroutine { continuation ->
+            invokeHighlightsRequest(default,
+                onStart = { default.analysisJob?.cancel() },
+                onCancel = {
+                    cancelled = true
+                    continuation.resume(Unit) {}
+                }
+            )
+        }
+
+        assertTrue { cancelled }
     }
 
     private fun invokeHighlightsRequest(
         highlights: Highlights,
         onStart: () -> Unit = {},
+        onCancel: () -> Unit = {},
         onError: (Throwable) -> Unit = {},
         onCompleted: (List<CodeHighlight>) -> Unit = {},
     ) {
         highlights.getHighlightsAsync(object : HighlightsResultListener {
             override fun onStart() = onStart()
-            override fun onCompleted(highlights: List<CodeHighlight>) = onCompleted(highlights)
+            override fun onComplete(highlights: List<CodeHighlight>) = onCompleted(highlights)
             override fun onError(exception: Throwable) = onError(exception)
+            override fun onCancel() = onCancel()
         })
     }
 
