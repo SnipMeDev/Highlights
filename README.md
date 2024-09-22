@@ -52,16 +52,16 @@ Highlights.default().apply {
 There is also a possibility to handle result asynchronously
 
 ```kotlin
-    highlights.getHighlightsAsync(
-        object : DefaultHighlightsResultListener() {
-            // onStart
-            // onError
-            // onCancel
-            override fun onComplete(highlights: List<CodeHighlight>) {
-                emitResult(highlights)
-            }
+highlights.getHighlightsAsync(
+    object : DefaultHighlightsResultListener() {
+        // onStart
+        // onError
+        // onCancel
+        override fun onComplete(highlights: List<CodeHighlight>) {
+            emitResult(highlights)
         }
-    )
+    }
+)
 ```
 
 You can also set language, theme and phrase emphasis. 
@@ -319,7 +319,7 @@ If your project uses this code, please write me or add your info
 
 ## TODO 🚧
 - [X] Migrate some lists to sets
-- [ ] Optimize code analysis
+- [X] Optimize code analysis
 - [ ] Add more themes and languages
 - [ ] Support italic and underline text style
 
