@@ -4,6 +4,8 @@ import dev.snipme.highlights.model.CodeHighlight
 import dev.snipme.highlights.model.PhraseLocation
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.coroutines.Job
+import kotlin.coroutines.cancellation.CancellationException
 
 fun List<CodeHighlight>.toJson(): String {
     return Json.encodeToString<List<CodeHighlight>>(this)
@@ -88,4 +90,12 @@ fun Set<PhraseLocation>.toRangeSet(): Set<IntRange> =
 
 operator fun IntRange.contains(range: IntRange): Boolean {
     return range.first >= this.first && range.last <= this.last
+}
+
+fun Job.onCancel(block: () -> Unit) {
+    invokeOnCompletion {
+        if (it is CancellationException) {
+            block()
+        }
+    }
 }

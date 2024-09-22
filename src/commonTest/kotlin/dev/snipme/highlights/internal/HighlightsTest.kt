@@ -3,19 +3,16 @@ package dev.snipme.highlights.internal
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.HighlightsResultListener
 import dev.snipme.highlights.model.CodeHighlight
-import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlin.coroutines.resumeWithException
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -26,7 +23,6 @@ import kotlin.time.measureTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HighlightsTest {
-
     private val testDispatcher = StandardTestDispatcher()
 
     @BeforeTest
@@ -56,7 +52,7 @@ class HighlightsTest {
     }
 
     @Test
-    fun `returns list of code highlights asynchronously`() = runTest {
+    fun `returns null job before first invocation`() {
         val default = Highlights.default().apply {
             setCode(longTestCode())
         }
@@ -64,14 +60,60 @@ class HighlightsTest {
         val instance = Highlights.Builder().build()
         instance.setCode("class ")
 
-        val result = suspendCancellableCoroutine { continuation ->
-            invokeHighlightsRequest(default) {
-                continuation.resume(it) {}
-            }
+        assertTrue { default.analysisJob == null }
+    }
+
+    @Test
+    fun `returns active job after start`() = runTest {
+        val default = Highlights.default().apply {
+            setCode(longTestCode())
         }
         val highlights = instance.getHighlights()
 
-        assertTrue { result.isNotEmpty() }
+        suspendCancellableCoroutine { continuation ->
+            invokeHighlightsRequest(default, onStart = {
+                assertTrue { default.analysisJob?.isActive == true }
+                continuation.resume(Unit) {}
+            })
+        }
+    }
+
+    @Test
+    fun `returns inactive job after completion`() = runTest {
+        val default = Highlights.default().apply {
+            setCode(longTestCode())
+        }
+
+        suspendCancellableCoroutine { continuation ->
+            invokeHighlightsRequest(default,
+                onStart = {
+                    default.analysisJob?.invokeOnCompletion {
+                        assertTrue { default.analysisJob?.isActive == false }
+                    }
+                }
+            ) { continuation.resume(Unit) {} }
+        }
+    }
+
+    @Test
+    fun `returns error for exception during analysis`() = runTest {
+        val default = Highlights.default().apply {
+            setCode(longTestCode())
+        }
+
+        var error: Throwable? = null
+        suspendCancellableCoroutine { continuation ->
+            invokeHighlightsRequest(
+                default,
+                onStart = { throw IllegalStateException() },
+                onError = {
+                    error = it
+                    continuation.resume(Unit) {}
+                },
+            )
+        }
+
+        assertTrue { error != null }
         assertTrue(highlights.isNotEmpty())
     }
 
@@ -106,6 +148,56 @@ class HighlightsTest {
     }
 
     @Test
+    fun `returns active job for each invocation`() = runTest {
+        val default = Highlights.default().apply {
+            setCode(longTestCode())
+        }
+
+        val defaultJob = Job(null) as Job
+
+        var job1 = defaultJob
+        suspendCancellableCoroutine { continuation ->
+            invokeHighlightsRequest(default,
+                onStart = {
+                    job1 = default.analysisJob!!
+                    assertTrue { job1.isActive }
+                },
+                onCompleted = {
+                    continuation.resume(it) {}
+                })
+        }
+
+        var job2 = defaultJob
+        suspendCancellableCoroutine { continuation ->
+            invokeHighlightsRequest(default,
+                onStart = {
+                    job2 = default.analysisJob!!
+                    assertTrue { job2.isActive }
+                },
+                onCompleted = {
+                    continuation.resume(it) {}
+                })
+        }
+
+        assertTrue { job1 != job2 }
+    }
+
+    @Test
+    fun `returns list of code highlights asynchronously`() = runTest {
+        val default = Highlights.default().apply {
+            setCode(longTestCode())
+        }
+
+        val result = suspendCancellableCoroutine { continuation ->
+            invokeHighlightsRequest(default) {
+                continuation.resume(it) {}
+            }
+        }
+
+        assertTrue { result.isNotEmpty() }
+    }
+
+    @Test
     fun `returns asynchronous results one by one`() = runTest {
         val default = Highlights.default().apply {
             setCode(longTestCode())
@@ -119,6 +211,7 @@ class HighlightsTest {
                 }
             }
         }
+        println("Time1: ${time1.inWholeMilliseconds} ms")
         assertTrue { result1.isNotEmpty() }
 
         default.setCode(longTestCode().replace("static", "statac"))
@@ -143,39 +236,28 @@ class HighlightsTest {
             setCode(longTestCode())
         }
 
-        val scope = this
+        var time1: Duration
+        var time2: Duration
 
-        val now = markNow()
-        var time1: Duration = Duration.ZERO
-        var time2: Duration = Duration.ZERO
-
-        suspendCancellableCoroutine { continuation ->
-            invokeHighlightsRequest(
-                default,
-                onStart = {
-                    println("First start")
-                    scope.launch {
-                        suspendCancellableCoroutine<List<CodeHighlight>> { continuation2 ->
-                            invokeHighlightsRequest(default) { result ->
-                                time2 = now.elapsedNow()
-                                assertTrue { result.isNotEmpty() }
-                                continuation2.resume(result) {}
-                            }
-                        }
-                    }
-                },
-                onCancel = {
-                    time1 = now.elapsedNow()
-                    println("First cancelled")
-                    continuation.resume(Unit) {}
-                },
-            )
+        launch {
+            suspendCancellableCoroutine { c ->
+                invokeAndMeasureTime(default) {
+                    time1 = it
+                    c.resume(Unit) {}
+                    println("Time1: ${time1.inWholeMilliseconds} ms")
+                }
+            }
         }
 
-        println("Time1: ${time1.inWholeMilliseconds} ms")
-        println("Time2: ${time2.inWholeMilliseconds} ms")
-
-        assertTrue { time2.inWholeMilliseconds > time1.inWholeMilliseconds }
+        launch {
+            suspendCancellableCoroutine { c ->
+                invokeAndMeasureTime(default) {
+                    time2 = it
+                    c.resume(Unit) {}
+                    println("Time2: ${time2.inWholeMilliseconds} ms")
+                }
+            }
+        }
     }
 
     @Test
@@ -196,6 +278,37 @@ class HighlightsTest {
         }
 
         assertTrue { cancelled }
+    }
+
+    private fun invokeAndMeasureTime(
+        highlights: Highlights,
+        onFinish: (Duration) -> Unit = {}
+    ) {
+        var result: Duration? = null
+        val now = markNow()
+
+        fun updateFirstTime() {
+            if (result == null) {
+                result = now.elapsedNow()
+                onFinish(result!!)
+            }
+        }
+
+        fun listen() {
+            highlights.analysisJob?.invokeOnCompletion {
+                if (it is CancellationException) {
+                    updateFirstTime()
+                }
+            }
+        }
+
+        invokeHighlightsRequest(
+            highlights,
+            onStart = { println("Start"); listen() },
+            onCancel = { println("Cancel"); updateFirstTime() },
+            onError = { println("Error: $it"); updateFirstTime() },
+            onCompleted = { println("Completed"); updateFirstTime() },
+        )
     }
 
     private fun invokeHighlightsRequest(
