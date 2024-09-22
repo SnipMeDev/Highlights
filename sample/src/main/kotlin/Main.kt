@@ -5,6 +5,9 @@ import dev.snipme.highlights.model.CodeHighlight
 import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.model.SyntaxLanguage
 import dev.snipme.highlights.model.SyntaxThemes
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 val sampleClass = """
     @Serializable
@@ -34,22 +37,29 @@ val sampleClass = """
 """.trimIndent()
 
 fun main() {
-    val syncResult = runSync()
-    testAsync { asyncResult ->
+    runBlocking {
+        val highlights = Highlights.Builder()
+            .code(sampleClass)
+            .theme(SyntaxThemes.monokai())
+            .language(SyntaxLanguage.JAVA)
+            .build()
 
-        println()
+        val syncResult = runSync(highlights)
+        println("Sync count with emphasis: ${syncResult.size}")
 
-        println("Sync result:")
-        println(syncResult)
-        println()
-
-        println("Async result:")
-        println(asyncResult)
-
+        launch {
+            suspendCancellableCoroutine { continuation ->
+                runAsync(highlights) { asyncResult ->
+                    assert(syncResult == asyncResult)
+                    println("Async count: ${asyncResult.size}")
+                    continuation.resumeWith(Result.success(Unit))
+                }
+            }
+        }
     }
 }
 
-fun runSync(): List<CodeHighlight> {
+fun runSync(highlights: Highlights): List<CodeHighlight> {
     println("### HIGHLIGHTS ###")
     println()
 
@@ -64,12 +74,6 @@ fun runSync(): List<CodeHighlight> {
     println("This is a sample class:")
     println(sampleClass)
     println()
-
-    val highlights = Highlights.Builder()
-        .code(sampleClass)
-        .theme(SyntaxThemes.monokai())
-        .language(SyntaxLanguage.JAVA)
-        .build()
 
     val structure = highlights.getCodeStructure()
 
@@ -93,14 +97,12 @@ fun runSync(): List<CodeHighlight> {
     return result
 }
 
-fun testAsync(emitResult: (List<CodeHighlight>) -> Unit) {
+fun runAsync(
+    highlights: Highlights,
+    emitResult: (List<CodeHighlight>) -> Unit,
+) {
+    println()
     println("### ASYNC HIGHLIGHTS ###")
-
-    val highlights = Highlights.Builder()
-        .code(sampleClass)
-        .theme(SyntaxThemes.monokai())
-        .language(SyntaxLanguage.JAVA)
-        .build()
 
     highlights.getHighlightsAsync(
         object : DefaultHighlightsResultListener() {

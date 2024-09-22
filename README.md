@@ -25,6 +25,7 @@ implementation("dev.snipme:highlights:1.0.0")
 - Text bolding (emphasis)
 - Result caching and support for incremental changes
 - Written in pure Kotlin, so available for many platforms 📱 💻 🖥️
+- Sync or async mode
 
 ## Support ☕
 Kotlin Multiplatform is a fresh environment and developing for it is neither fast nor easy 🥲
@@ -46,6 +47,21 @@ Highlights.default().apply {
     // BoldHighlight, ColorHighlight
     getHighlights()
 }
+```
+
+There is also a possibility to handle result asynchronously
+
+```kotlin
+    highlights.getHighlightsAsync(
+        object : DefaultHighlightsResultListener() {
+            // onStart
+            // onError
+            // onCancel
+            override fun onComplete(highlights: List<CodeHighlight>) {
+                emitResult(highlights)
+            }
+        }
+    )
 ```
 
 You can also set language, theme and phrase emphasis. 
