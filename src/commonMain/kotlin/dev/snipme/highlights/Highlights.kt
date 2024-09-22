@@ -16,7 +16,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class Highlights private constructor(
     private var code: String,
@@ -84,9 +83,7 @@ class Highlights private constructor(
                 CoroutineScope(Dispatchers.Default + errorHandler).launch {
                     val structure = getCodeStructure()
                     val highlights = constructHighlights(structure)
-                    withContext(Dispatchers.Main) {
-                        listener.onComplete(highlights)
-                    }
+                    listener.onComplete(highlights)
                 }.also {
                     analysisJob = it
                     analysisJob!!.onCancel { listener.onCancel() }
