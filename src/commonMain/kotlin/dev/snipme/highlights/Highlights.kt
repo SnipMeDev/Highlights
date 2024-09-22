@@ -2,6 +2,7 @@ package dev.snipme.highlights
 
 import dev.snipme.highlights.internal.CodeAnalyzer
 import dev.snipme.highlights.internal.CodeSnapshot
+import dev.snipme.highlights.internal.onCancel
 import dev.snipme.highlights.model.BoldHighlight
 import dev.snipme.highlights.model.CodeHighlight
 import dev.snipme.highlights.model.CodeStructure
@@ -16,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.cancellation.CancellationException
 
 interface HighlightsResultListener {
     fun onStart()
@@ -82,38 +82,33 @@ class Highlights private constructor(
     }
 
     fun getHighlightsAsync(listener: HighlightsResultListener) {
-        var thisJob: Job? = null
-
         try {
-            analysisJob?.cancel()
-
             val errorHandler = CoroutineExceptionHandler { _, exception ->
                 listener.onError(exception)
             }
 
-            analysisJob = CoroutineScope(Dispatchers.Default + errorHandler).launch {
-                println("---START---")
-                val structure = getCodeStructure()
-                val highlights = constructHighlights(structure)
-                println("---END---")
-                withContext(Dispatchers.Main) {
-                    listener.onComplete(highlights)
+            fun runJob() {
+                CoroutineScope(Dispatchers.Default + errorHandler).launch {
+                    val structure = getCodeStructure()
+                    val highlights = constructHighlights(structure)
+                    withContext(Dispatchers.Main) {
+                        listener.onComplete(highlights)
+                    }
+                }.also {
+                    analysisJob = it
+                    analysisJob!!.onCancel { listener.onCancel() }
+                    listener.onStart()
                 }
             }
 
-            thisJob = analysisJob
-            thisJob?.invokeOnCompletion {
-                if (it is CancellationException) {
-                    listener.onCancel()
-                }
+            if (analysisJob == null || analysisJob?.isCompleted == true) {
+                runJob()
+            } else {
+                analysisJob!!.onCancel { runJob() }
+                analysisJob?.cancel()
             }
-            listener.onStart()
         } catch (exception: Exception) {
             listener.onError(exception)
-        } finally {
-            if (thisJob?.isActive == false) {
-                listener.onCancel()
-            }
         }
     }
 
