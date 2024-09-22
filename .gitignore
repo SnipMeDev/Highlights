@@ -30,4 +30,3 @@ gradle-app.setting
 .classpath
 # MacOS files
 *.DS_Store
-/sample/*.DS_Store
