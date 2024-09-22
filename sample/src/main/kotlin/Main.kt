@@ -1,9 +1,10 @@
+import dev.snipme.highlights.DefaultHighlightsResultListener
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.BoldHighlight
+import dev.snipme.highlights.model.CodeHighlight
 import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.model.SyntaxLanguage
 import dev.snipme.highlights.model.SyntaxThemes
-import kotlin.concurrent.timer
 
 val sampleClass = """
     @Serializable
@@ -31,7 +32,24 @@ val sampleClass = """
         }
     }
 """.trimIndent()
+
 fun main() {
+    val syncResult = runSync()
+    testAsync { asyncResult ->
+
+        println()
+
+        println("Sync result:")
+        println(syncResult)
+        println()
+
+        println("Async result:")
+        println(asyncResult)
+
+    }
+}
+
+fun runSync(): List<CodeHighlight> {
     println("### HIGHLIGHTS ###")
     println()
 
@@ -64,11 +82,34 @@ fun main() {
         .build()
 
     println("The emphasis was put on the word:")
-    val emphasisLocation = newInstance
-        .getHighlights()
+    val result = newInstance.getHighlights()
+    val emphasisLocation = result
         .filterIsInstance<BoldHighlight>()
         .first()
         .location
 
     println(sampleClass.substring(emphasisLocation.start, emphasisLocation.end))
+
+    return result
+}
+
+fun testAsync(emitResult: (List<CodeHighlight>) -> Unit) {
+    println("### ASYNC HIGHLIGHTS ###")
+
+    val highlights = Highlights.Builder()
+        .code(sampleClass)
+        .theme(SyntaxThemes.monokai())
+        .language(SyntaxLanguage.JAVA)
+        .build()
+
+    highlights.getHighlightsAsync(
+        object : DefaultHighlightsResultListener() {
+            // onStart
+            // onError
+            // onCancel
+            override fun onComplete(highlights: List<CodeHighlight>) {
+                emitResult(highlights)
+            }
+        }
+    )
 }

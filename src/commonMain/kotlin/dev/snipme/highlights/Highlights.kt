@@ -18,13 +18,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-interface HighlightsResultListener {
-    fun onStart()
-    fun onComplete(highlights: List<CodeHighlight>)
-    fun onError(exception: Throwable)
-    fun onCancel()
-}
-
 class Highlights private constructor(
     private var code: String,
     private val language: SyntaxLanguage,
