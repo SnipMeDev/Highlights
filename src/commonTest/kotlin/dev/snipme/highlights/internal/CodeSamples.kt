@@ -1,332 +1,6 @@
 package dev.snipme.highlights.internal
 
-import dev.snipme.highlights.Highlights
-import dev.snipme.highlights.HighlightsResultListener
-import dev.snipme.highlights.model.CodeHighlight
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertTrue
-import kotlin.time.Duration
-import kotlin.time.TimeSource.Monotonic.markNow
-import kotlin.time.measureTime
-
-@OptIn(ExperimentalCoroutinesApi::class)
-class HighlightsTest {
-    private val testDispatcher = StandardTestDispatcher()
-
-    @BeforeTest
-    fun setup() {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @AfterTest
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
-
-    @Test
-    fun `returns list of code highlights`() {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-    fun `returns different keywords for default builder`() {
-        val instance = Highlights.default()
-        instance.setCode("class ")
-
-        val highlights = default.getHighlights()
-        assertTrue { highlights.isNotEmpty() }
-        val highlights = instance.getHighlights()
-
-        assertTrue(highlights.isNotEmpty())
-    }
-
-    @Test
-    fun `returns null job before first invocation`() {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-    fun `returns different keywords for default manual builder`() {
-        val instance = Highlights.Builder().build()
-        instance.setCode("class ")
-
-        assertTrue { default.analysisJob == null }
-    }
-
-    @Test
-    fun `returns active job after start`() = runTest {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-        val highlights = instance.getHighlights()
-
-        suspendCancellableCoroutine { continuation ->
-            invokeHighlightsRequest(default, onStart = {
-                assertTrue { default.analysisJob?.isActive == true }
-                continuation.resume(Unit) {}
-            })
-        }
-    }
-
-    @Test
-    fun `returns inactive job after completion`() = runTest {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-
-        suspendCancellableCoroutine { continuation ->
-            invokeHighlightsRequest(default,
-                onStart = {
-                    default.analysisJob?.invokeOnCompletion {
-                        assertTrue { default.analysisJob?.isActive == false }
-                    }
-                }
-            ) { continuation.resume(Unit) {} }
-        }
-    }
-
-    @Test
-    fun `returns error for exception during analysis`() = runTest {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-
-        var error: Throwable? = null
-        suspendCancellableCoroutine { continuation ->
-            invokeHighlightsRequest(
-                default,
-                onStart = { throw IllegalStateException() },
-                onError = {
-                    error = it
-                    continuation.resume(Unit) {}
-                },
-            )
-        }
-
-        assertTrue { error != null }
-        assertTrue(highlights.isNotEmpty())
-    }
-
-    @Test
-    fun `cancels first analysis when second is invoked`() {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-    fun `returns highlights after code change`() {
-        val instance = Highlights.default()
-
-        val highlights = instance.getHighlights()
-
-        assertTrue(highlights.isEmpty())
-
-        instance.setCode("class ")
-
-        var job1: Job?
-        invokeHighlightsRequest(
-            default,
-            onStart = {
-                job1 = default.analysisJob
-                invokeHighlightsRequest(default, onStart = {
-                    assertTrue { job1?.isActive == false }
-                    assertTrue { default.analysisJob?.isActive == true }
-                })
-            },
-        )
-        val newHighlights = instance.getHighlights()
-
-        assertTrue(newHighlights.isNotEmpty())
-    }
-
-    @Test
-    fun `returns active job for each invocation`() = runTest {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-
-        val defaultJob = Job(null) as Job
-
-        var job1 = defaultJob
-        suspendCancellableCoroutine { continuation ->
-            invokeHighlightsRequest(default,
-                onStart = {
-                    job1 = default.analysisJob!!
-                    assertTrue { job1.isActive }
-                },
-                onCompleted = {
-                    continuation.resume(it) {}
-                })
-        }
-
-        var job2 = defaultJob
-        suspendCancellableCoroutine { continuation ->
-            invokeHighlightsRequest(default,
-                onStart = {
-                    job2 = default.analysisJob!!
-                    assertTrue { job2.isActive }
-                },
-                onCompleted = {
-                    continuation.resume(it) {}
-                })
-        }
-
-        assertTrue { job1 != job2 }
-    }
-
-    @Test
-    fun `returns list of code highlights asynchronously`() = runTest {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-
-        val result = suspendCancellableCoroutine { continuation ->
-            invokeHighlightsRequest(default) {
-                continuation.resume(it) {}
-            }
-        }
-
-        assertTrue { result.isNotEmpty() }
-    }
-
-    @Test
-    fun `returns asynchronous results one by one`() = runTest {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-
-        var result1: List<CodeHighlight>
-        val time1 = measureTime {
-            result1 = suspendCancellableCoroutine { continuation ->
-                invokeHighlightsRequest(default) {
-                    continuation.resume(it) {}
-                }
-            }
-        }
-        println("Time1: ${time1.inWholeMilliseconds} ms")
-        assertTrue { result1.isNotEmpty() }
-
-        default.setCode(longJavaCode.replace("static", "statac"))
-
-        var result2: List<CodeHighlight>
-        val time2 = measureTime {
-            result2 = suspendCancellableCoroutine { continuation ->
-                invokeHighlightsRequest(default) {
-                    continuation.resume(it) {}
-                }
-            }
-        }
-        println("Time2: ${time2.inWholeMilliseconds} ms")
-        assertTrue { result2.isNotEmpty() }
-
-        assertTrue { time2.inWholeMilliseconds < time1.inWholeMilliseconds }
-    }
-
-    @Test
-    fun `returns immediately result from second invocation`() = runTest {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-
-        var time1: Duration
-        var time2: Duration
-
-        launch {
-            suspendCancellableCoroutine { c ->
-                invokeAndMeasureTime(default) {
-                    time1 = it
-                    c.resume(Unit) {}
-                    println("Time1: ${time1.inWholeMilliseconds} ms")
-                }
-            }
-        }
-
-        launch {
-            suspendCancellableCoroutine { c ->
-                invokeAndMeasureTime(default) {
-                    time2 = it
-                    c.resume(Unit) {}
-                    println("Time2: ${time2.inWholeMilliseconds} ms")
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `returns cancellation result`() = runTest {
-        val default = Highlights.default().apply {
-            setCode(longJavaCode)
-        }
-
-        var cancelled = false
-        suspendCancellableCoroutine { continuation ->
-            invokeHighlightsRequest(default,
-                onStart = { default.analysisJob?.cancel() },
-                onCancel = {
-                    cancelled = true
-                    continuation.resume(Unit) {}
-                }
-            )
-        }
-
-        assertTrue { cancelled }
-    }
-
-    private fun invokeAndMeasureTime(
-        highlights: Highlights,
-        onFinish: (Duration) -> Unit = {}
-    ) {
-        var result: Duration? = null
-        val now = markNow()
-
-        fun updateFirstTime() {
-            if (result == null) {
-                result = now.elapsedNow()
-                onFinish(result!!)
-            }
-        }
-
-        fun listen() {
-            highlights.analysisJob?.invokeOnCompletion {
-                if (it is CancellationException) {
-                    updateFirstTime()
-                }
-            }
-        }
-
-        invokeHighlightsRequest(
-            highlights,
-            onStart = { println("Start"); listen() },
-            onCancel = { println("Cancel"); updateFirstTime() },
-            onError = { println("Error: $it"); updateFirstTime() },
-            onCompleted = { println("Completed"); updateFirstTime() },
-        )
-    }
-
-    private fun invokeHighlightsRequest(
-        highlights: Highlights,
-        onStart: () -> Unit = {},
-        onCancel: () -> Unit = {},
-        onError: (Throwable) -> Unit = {},
-        onCompleted: (List<CodeHighlight>) -> Unit = {},
-    ) {
-        highlights.getHighlightsAsync(object : HighlightsResultListener {
-            override fun onStart() = onStart()
-            override fun onComplete(highlights: List<CodeHighlight>) = onCompleted(highlights)
-            override fun onError(exception: Throwable) = onError(exception)
-            override fun onCancel() = onCancel()
-        })
-    }
-
-    private fun longTestCode() = """
+val longJavaCode = """
          //
          // Source code recreated from a .class file by IntelliJ IDEA
          // (powered by FernFlower decompiler)
@@ -1447,10 +1121,7 @@ class HighlightsTest {
                      } while(var2 != null);
 
                  }
-    fun `returns no highlights after cleared code`() {
-        val instance = Highlights.default()
 
-        val highlights = instance.getHighlights()
                  public Spliterator<E> spliterator() {
                      this.checkForComodification();
                      return new Spliterator<E>() {
@@ -1458,13 +1129,11 @@ class HighlightsTest {
                          private int fence;
                          private int expectedModCount;
 
-        assertTrue(highlights.isEmpty())
                          {
                              this.index = SubList.this.offset;
                              this.fence = -1;
                          }
 
-        instance.setCode("class ")
                          private int getFence() {
                              int var1;
                              if ((var1 = this.fence) < 0) {
@@ -1472,11 +1141,9 @@ class HighlightsTest {
                                  var1 = this.fence = SubList.this.offset + SubList.this.size;
                              }
 
-        val newHighlights = instance.getHighlights()
                              return var1;
                          }
 
-        assertTrue(newHighlights.isNotEmpty())
                          public ArrayList<E>.ArrayListSpliterator trySplit() {
                              int var1 = this.getFence();
                              int var2 = this.index;
@@ -1490,11 +1157,9 @@ class HighlightsTest {
                                  var10000 = var10002.new ArrayListSpliterator(var2, this.index = var3, this.expectedModCount);
                              }
 
-        instance.setCode("")
                              return var10000;
                          }
 
-        val emptyHighlights = instance.getHighlights()
                          public boolean tryAdvance(Consumer<? super E> var1) {
                              Objects.requireNonNull(var1);
                              int var2 = this.getFence();
@@ -1513,8 +1178,6 @@ class HighlightsTest {
                              }
                          }
 
-        assertTrue(emptyHighlights.isEmpty())
-    }
                          public void forEachRemaining(Consumer<? super E> var1) {
                              Objects.requireNonNull(var1);
                              ArrayList var5 = SubList.this.root;
@@ -1649,4 +1312,3 @@ class HighlightsTest {
              }
          }
     """.trimIndent()
-}
