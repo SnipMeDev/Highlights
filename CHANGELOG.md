@@ -1,3 +1,9 @@
+## [1.0.0]
+
+### Added
+- serialization for public models
+- XCFramework output
+
 ## [0.9.3]
 
 ### Fixed
