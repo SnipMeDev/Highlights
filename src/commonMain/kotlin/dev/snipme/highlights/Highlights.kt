@@ -54,13 +54,8 @@ class Highlights private constructor(
     }
 
     fun getCodeStructure(): CodeStructure {
-        println("Structure for code $code")
-
         val structure = CodeAnalyzer.analyze(code, language, snapshot)
         snapshot = CodeSnapshot(code, structure, language)
-
-        println("Code structure for language $language")
-
         return structure
     }
 
