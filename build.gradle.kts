@@ -1,7 +1,10 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+
 apply(from = "publish-root.gradle")
 
 plugins {
     kotlin("multiplatform") version "2.0.20"
+    kotlin("plugin.serialization") version "2.0.20"
     id("maven-publish")
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("signing")
@@ -22,9 +25,16 @@ kotlin {
         }
     }
     // iOS
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+
+    val xcf = XCFramework()
+    val iosTargets = listOf(iosX64(), iosArm64(), iosSimulatorArm64())
+
+    iosTargets.forEach {
+        it.binaries.framework {
+            baseName = "highlights"
+            xcf.add(this)
+        }
+    }
     // Desktop
     mingwX64()
     linuxX64()
@@ -39,6 +49,12 @@ kotlin {
     wasmJs()
     // Dependencies
     sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+            }
+        }
+
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
