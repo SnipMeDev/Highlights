@@ -177,6 +177,7 @@ class HighlightsTest {
             }
         }
 
+        highlights.clearSnapshot()
         invokeHighlightsRequest(
             highlights,
             onStart = { println("Start"); },
@@ -195,7 +196,7 @@ class HighlightsTest {
     ) {
         highlights.getHighlightsAsync(object : HighlightsResultListener {
             override fun onStart() = onStart()
-            override fun onComplete(highlights: List<CodeHighlight>) = onCompleted(highlights)
+            override fun onComplete(result: List<CodeHighlight>) = onCompleted(result)
             override fun onError(exception: Throwable) = onError(exception)
             override fun onCancel() = onCancel()
         })

@@ -15,7 +15,9 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class Highlights private constructor(
     private var code: String,
@@ -81,7 +83,9 @@ class Highlights private constructor(
             fun runJob() {
                 CoroutineScope(Dispatchers.Default + errorHandler).launch {
                     val structure = getCodeStructure()
+                    analysisJob?.ensureActive()
                     val highlights = constructHighlights(structure)
+                    analysisJob?.ensureActive()
                     listener.onComplete(highlights)
                 }.also {
                     analysisJob = it
@@ -97,6 +101,9 @@ class Highlights private constructor(
                 analysisJob?.cancel()
             }
         } catch (exception: Exception) {
+            if (exception is CancellationException) {
+                listener.onCancel()
+            }
             listener.onError(exception)
         }
     }
@@ -110,6 +117,10 @@ class Highlights private constructor(
     fun getTheme() = theme
 
     fun getEmphasis() = emphasisLocations
+
+    fun clearSnapshot() {
+        snapshot = null
+    }
 
     private fun constructHighlights(structure: CodeStructure): List<CodeHighlight> =
         mutableListOf<CodeHighlight>().apply {
