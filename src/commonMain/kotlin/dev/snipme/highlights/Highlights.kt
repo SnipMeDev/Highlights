@@ -23,10 +23,9 @@ class Highlights private constructor(
     private val theme: SyntaxTheme,
     private var emphasisLocations: List<PhraseLocation>
 ) {
-    var snapshot: CodeSnapshot? = null
-        private set
+    private var analysisJob: Job? = null
 
-    var analysisJob: Job? = null
+    var snapshot: CodeSnapshot? = null
         private set
 
     companion object {
