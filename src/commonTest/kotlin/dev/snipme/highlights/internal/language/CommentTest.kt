@@ -72,7 +72,6 @@ class CommentTest {
             code = code
         ).build().getCodeStructure()
 
-        result.printStructure(code)
         assertEquals(2, result.strings.size)
     }
 }
