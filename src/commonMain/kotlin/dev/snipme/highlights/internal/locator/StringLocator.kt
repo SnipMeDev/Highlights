@@ -24,8 +24,14 @@ internal object StringLocator {
 
         // Find index of each string delimiter like " or ' or """
         STRING_DELIMITERS.forEach {
-            val textIndices = mutableListOf<Int>()
+            var textIndices = mutableListOf<Int>()
             textIndices += code.indicesOf(it)
+
+            // Exclude positions basing on ignoreRanges
+            textIndices = textIndices.filter { index ->
+                val textRange = IntRange(index, index + QUOTE_ENDING_POSITION)
+                ignoreRanges.none { ignored -> textRange in ignored }
+            }.toMutableList()
 
             // For given indices find words between
             for (i in START_INDEX..textIndices.lastIndex step TWO_ELEMENTS) {

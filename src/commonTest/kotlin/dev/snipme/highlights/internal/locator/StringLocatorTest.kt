@@ -94,4 +94,18 @@ internal class StringLocatorTest {
         assertEquals(1, result.size)
         assertEquals(PhraseLocation(19, 22), result[0])
     }
+
+    @Test
+    fun `NOT returns location of escaped string phrase`() {
+        val testCode = """
+            val b = "a\""
+            val a = 'a\''
+        """.trimIndent()
+
+        val result = StringLocator.locate(testCode)
+
+        assertEquals(2, result.size)
+        assertEquals(PhraseLocation(8, 12), result[1])
+        assertEquals(PhraseLocation(22, 26), result[0])
+    }
 }
