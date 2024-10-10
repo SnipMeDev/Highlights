@@ -31,4 +31,24 @@ internal class CommentLocatorTest {
         assertEquals(1, result.size)
         assertEquals(PhraseLocation(6, 21), result.first())
     }
+
+    @Test
+    fun `Returns location of whole comment with single apostrophe`() {
+        val testCode = "// the component's lifecycle"
+
+        val result = CommentLocator.locate(testCode)
+
+        assertEquals(1, result.size)
+        assertEquals(PhraseLocation(0, 28), result.first())
+    }
+
+    @Test
+    fun `Returns location of whole comment with multiple quotations`() {
+        val testCode = """// "This" 'is a' comment`s quote"""
+
+        val result = CommentLocator.locate(testCode)
+
+        assertEquals(1, result.size)
+        assertEquals(PhraseLocation(0, 32), result.first())
+    }
 }
