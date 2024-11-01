@@ -14,10 +14,9 @@ import dev.snipme.highlights.model.SyntaxThemes
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import kotlin.coroutines.cancellation.CancellationException
 
 class Highlights private constructor(
     private var code: String,
@@ -25,10 +24,9 @@ class Highlights private constructor(
     private val theme: SyntaxTheme,
     private var emphasisLocations: List<PhraseLocation>
 ) {
-    private var analysisJob: Job? = null
+    private var coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    var snapshot: CodeSnapshot? = null
-        private set
+    private var snapshot: CodeSnapshot? = null
 
     companion object {
         fun default() = fromBuilder(Builder())
@@ -74,36 +72,22 @@ class Highlights private constructor(
         return constructHighlights(structure)
     }
 
-    fun getHighlightsAsync(listener: HighlightsResultListener) {
+    fun getHighlightsAsync(listener: HighlightsResultListener) = with(coroutineScope) {
         try {
             val errorHandler = CoroutineExceptionHandler { _, exception ->
                 listener.onError(exception)
             }
 
-            fun runJob() {
-                CoroutineScope(Dispatchers.Default + errorHandler).launch {
-                    val structure = getCodeStructure()
-                    analysisJob?.ensureActive()
-                    val highlights = constructHighlights(structure)
-                    analysisJob?.ensureActive()
-                    listener.onComplete(highlights)
-                }.also {
-                    analysisJob = it
-                    analysisJob!!.onCancel { listener.onCancel() }
-                    listener.onStart()
-                }
-            }
-
-            if (analysisJob == null || analysisJob?.isCompleted == true) {
-                runJob()
-            } else {
-                analysisJob!!.onCancel { runJob() }
-                analysisJob?.cancel()
-            }
+            coroutineContext.cancelChildren()
+            launch(errorHandler) {
+                listener.onStart()
+                ensureActive()
+                val structure = getCodeStructure()
+                ensureActive()
+                val highlights = constructHighlights(structure)
+                listener.onSuccess(highlights)
+            }.also { it.onCancel { listener.onCancel() } }
         } catch (exception: Exception) {
-            if (exception is CancellationException) {
-                listener.onCancel()
-            }
             listener.onError(exception)
         }
     }
@@ -117,6 +101,8 @@ class Highlights private constructor(
     fun getTheme() = theme
 
     fun getEmphasis() = emphasisLocations
+
+    fun getSnapshot() = snapshot
 
     fun clearSnapshot() {
         snapshot = null

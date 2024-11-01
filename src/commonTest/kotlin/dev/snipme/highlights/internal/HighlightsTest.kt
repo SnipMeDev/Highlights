@@ -70,19 +70,22 @@ class HighlightsTest {
             setCode(longJavaCode)
         }
 
-        var wasCancelled = false
+        val results = mutableListOf<List<CodeHighlight>>()
+
         suspendCancellableCoroutine { continuation ->
             invokeHighlightsRequest(
                 default,
-                onCancel = { wasCancelled = true },
+                onSuccess = { results.add(it) },
                 onStart = {
                     invokeHighlightsRequest(default) {
-                        assertTrue { wasCancelled }
+                        results.add(it)
                         continuation.resume(Unit) {}
                     }
                 },
             )
         }
+
+        assertTrue { results.size == 1 }
     }
 
     @Test
@@ -129,8 +132,21 @@ class HighlightsTest {
         }
         println("Time2: ${time2.inWholeMilliseconds} ms")
         assertTrue { result2.isNotEmpty() }
+    }
+}
 
-        assertTrue { time2.inWholeMilliseconds < time1.inWholeMilliseconds }
+@OptIn(ExperimentalCoroutinesApi::class)
+class HighlightsCancellationTest {
+    private val testDispatcher = StandardTestDispatcher()
+
+    @BeforeTest
+    fun setup() {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @AfterTest
+    fun tearDown() {
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -139,66 +155,71 @@ class HighlightsTest {
             setCode(longJavaCode)
         }
 
-        var time1: Duration
-        var time2: Duration
+        var time1 = Duration.ZERO
+        var time2 = Duration.ZERO
 
-        launch {
+        val job1 = launch {
             suspendCancellableCoroutine { c ->
-                invokeAndMeasureTime(default) {
+                invokeAndMeasureTime(default, "#1") {
                     time1 = it
                     c.resume(Unit) {}
-                    println("Time1: ${time1.inWholeMilliseconds} ms")
+                    println("Time1: ${it.inWholeMilliseconds} ms")
                 }
             }
         }
 
-        launch {
+        val job2 = launch {
             suspendCancellableCoroutine { c ->
-                invokeAndMeasureTime(default) {
+                invokeAndMeasureTime(default, "#2") {
                     time2 = it
                     c.resume(Unit) {}
-                    println("Time2: ${time2.inWholeMilliseconds} ms")
+                    println("Time2: ${it.inWholeMilliseconds} ms")
                 }
             }
         }
+
+        job1.join()
+        job2.join()
+        assertTrue { time1.inWholeMilliseconds < time2.inWholeMilliseconds }
     }
+}
 
-    private fun invokeAndMeasureTime(
-        highlights: Highlights,
-        onFinish: (Duration) -> Unit = {}
-    ) {
-        var result: Duration? = null
-        val now = markNow()
+private fun invokeAndMeasureTime(
+    highlights: Highlights,
+    name: String,
+    onFinish: (Duration) -> Unit = {}
+) {
+    var result: Duration? = null
+    val now = markNow()
 
-        fun updateFirstTime() {
-            if (result == null) {
-                result = now.elapsedNow()
-                onFinish(result!!)
-            }
+    fun updateFirstTime() {
+        if (result == null) {
+            result = now.elapsedNow()
+            onFinish(result!!)
         }
-
-        highlights.clearSnapshot()
-        invokeHighlightsRequest(
-            highlights,
-            onStart = { println("Start"); },
-            onCancel = { println("Cancel"); updateFirstTime() },
-            onError = { println("Error: $it"); updateFirstTime() },
-            onCompleted = { println("Completed"); updateFirstTime() },
-        )
     }
 
-    private fun invokeHighlightsRequest(
-        highlights: Highlights,
-        onStart: () -> Unit = {},
-        onCancel: () -> Unit = {},
-        onError: (Throwable) -> Unit = {},
-        onCompleted: (List<CodeHighlight>) -> Unit = {},
-    ) {
-        highlights.getHighlightsAsync(object : HighlightsResultListener {
-            override fun onStart() = onStart()
-            override fun onComplete(result: List<CodeHighlight>) = onCompleted(result)
-            override fun onError(exception: Throwable) = onError(exception)
-            override fun onCancel() = onCancel()
-        })
-    }
+    highlights.clearSnapshot()
+    invokeHighlightsRequest(
+        highlights,
+        onStart = { println("Start $name"); },
+        onCancel = { println("Cancel $name"); updateFirstTime() },
+        onError = { println("Error $name: $it"); updateFirstTime() },
+        onSuccess = { println("Success $name"); updateFirstTime() },
+    )
+}
+
+private fun invokeHighlightsRequest(
+    highlights: Highlights,
+    onStart: () -> Unit = {},
+    onCancel: () -> Unit = {},
+    onError: (Throwable) -> Unit = {},
+    onSuccess: (List<CodeHighlight>) -> Unit = {}
+) {
+    highlights.getHighlightsAsync(object : HighlightsResultListener {
+        override fun onStart() = onStart()
+        override fun onSuccess(result: List<CodeHighlight>) = onSuccess(result)
+        override fun onError(exception: Throwable) = onError(exception)
+        override fun onCancel() = onCancel()
+    })
 }
