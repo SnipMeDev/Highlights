@@ -3,6 +3,12 @@
 ### Added
 - serialization for public models
 - XCFramework output
+- `getHighlightsAsync()` with handy `DefaultHighlightsResultListener` adapter
+- `getByName()` function for `SyntaxThemes`
+
+### Changed
+- Kotlin version to 2.0.20
+- direct snapshot field access to `getSnapshot()` function
 
 ## [0.9.3]
 

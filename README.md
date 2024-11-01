@@ -57,7 +57,7 @@ highlights.getHighlightsAsync(
         // onStart
         // onError
         // onCancel
-        override fun onComplete(highlights: List<CodeHighlight>) {
+        override fun onSuccess(result: List<CodeHighlight>) {
             emitResult(highlights)
         }
     }

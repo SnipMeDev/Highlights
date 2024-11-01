@@ -109,8 +109,8 @@ fun runAsync(
             // onStart
             // onError
             // onCancel
-            override fun onComplete(highlights: List<CodeHighlight>) {
-                emitResult(highlights)
+            override fun onSuccess(result: List<CodeHighlight>) {
+                emitResult(result)
             }
         }
     )
