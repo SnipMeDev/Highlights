@@ -1,6 +1,7 @@
 .gradle
 **/build/
 !src/**/build/
+/.kotlin/
 
 # IDE files
 .idea
@@ -29,4 +30,3 @@ gradle-app.setting
 .classpath
 # MacOS files
 *.DS_Store
-/.kotlin/

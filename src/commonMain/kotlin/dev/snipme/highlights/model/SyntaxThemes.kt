@@ -171,10 +171,19 @@ object SyntaxThemes {
     fun pastel(darkMode: Boolean = false) = themes(darkMode)[PASTEL_KEY]!!
     fun atom(darkMode: Boolean = false) = themes(darkMode)[ATOM_ONE_KEY]!!
 
-    fun getNames(): List<String> = SyntaxThemes.light.map {
-        it.key
-            .lowercase()
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+    fun getNames(darkMode: Boolean = false): List<String> {
+        val source = if (darkMode) dark else light
+
+        return source.map {
+            it.key
+                .lowercase()
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+        }
+    }
+
+    fun getByName(name: String, darkMode: Boolean = false): SyntaxTheme? {
+        val source = if (darkMode) dark else light
+        return source[name.lowercase()]
     }
 
     fun SyntaxTheme.useDark(darkMode: Boolean) = if (darkMode) dark[key] else light[key]

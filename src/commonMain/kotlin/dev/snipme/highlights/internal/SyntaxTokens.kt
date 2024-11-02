@@ -177,4 +177,3 @@ internal object SyntaxTokens {
     val PUNCTUATION_CHARACTERS = listOf(",", ".", ":", ";")
     val MARK_CHARACTERS = listOf("(", ")", "=", "{", "}", "<", ">", "-", "+", "[", "]", "|", "&")
 }
-

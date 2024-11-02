@@ -2,6 +2,7 @@ package dev.snipme.highlights
 
 import dev.snipme.highlights.internal.CodeAnalyzer
 import dev.snipme.highlights.internal.CodeSnapshot
+import dev.snipme.highlights.internal.onCancel
 import dev.snipme.highlights.model.BoldHighlight
 import dev.snipme.highlights.model.CodeHighlight
 import dev.snipme.highlights.model.CodeStructure
@@ -10,6 +11,12 @@ import dev.snipme.highlights.model.PhraseLocation
 import dev.snipme.highlights.model.SyntaxLanguage
 import dev.snipme.highlights.model.SyntaxTheme
 import dev.snipme.highlights.model.SyntaxThemes
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.launch
 
 class Highlights private constructor(
     private var code: String,
@@ -17,8 +24,9 @@ class Highlights private constructor(
     private val theme: SyntaxTheme,
     private var emphasisLocations: List<PhraseLocation>
 ) {
-    var snapshot: CodeSnapshot? = null
-        private set
+    private var coroutineScope = CoroutineScope(Dispatchers.Default)
+
+    private var snapshot: CodeSnapshot? = null
 
     companion object {
         fun default() = fromBuilder(Builder())
@@ -60,22 +68,28 @@ class Highlights private constructor(
     }
 
     fun getHighlights(): List<CodeHighlight> {
-        val highlights = mutableListOf<CodeHighlight>()
         val structure = getCodeStructure()
-        with(structure) {
-            marks.forEach { highlights.add(ColorHighlight(it, theme.mark)) }
-            punctuations.forEach { highlights.add(ColorHighlight(it, theme.punctuation)) }
-            keywords.forEach { highlights.add(ColorHighlight(it, theme.keyword)) }
-            strings.forEach { highlights.add(ColorHighlight(it, theme.string)) }
-            literals.forEach { highlights.add(ColorHighlight(it, theme.literal)) }
-            annotations.forEach { highlights.add(ColorHighlight(it, theme.metadata)) }
-            comments.forEach { highlights.add(ColorHighlight(it, theme.comment)) }
-            multilineComments.forEach { highlights.add(ColorHighlight(it, theme.multilineComment)) }
+        return constructHighlights(structure)
+    }
+
+    fun getHighlightsAsync(listener: HighlightsResultListener) = with(coroutineScope) {
+        try {
+            val errorHandler = CoroutineExceptionHandler { _, exception ->
+                listener.onError(exception)
+            }
+
+            coroutineContext.cancelChildren()
+            launch(errorHandler) {
+                listener.onStart()
+                ensureActive()
+                val structure = getCodeStructure()
+                ensureActive()
+                val highlights = constructHighlights(structure)
+                listener.onSuccess(highlights)
+            }.also { it.onCancel { listener.onCancel() } }
+        } catch (exception: Exception) {
+            listener.onError(exception)
         }
-
-        emphasisLocations.forEach { highlights.add(BoldHighlight(it)) }
-
-        return highlights
     }
 
     fun getBuilder() = Builder(code, language, theme, emphasisLocations)
@@ -87,4 +101,23 @@ class Highlights private constructor(
     fun getTheme() = theme
 
     fun getEmphasis() = emphasisLocations
+
+    fun getSnapshot() = snapshot
+
+    fun clearSnapshot() {
+        snapshot = null
+    }
+
+    private fun constructHighlights(structure: CodeStructure): List<CodeHighlight> =
+        mutableListOf<CodeHighlight>().apply {
+            structure.marks.forEach { add(ColorHighlight(it, theme.mark)) }
+            structure.punctuations.forEach { add(ColorHighlight(it, theme.punctuation)) }
+            structure.keywords.forEach { add(ColorHighlight(it, theme.keyword)) }
+            structure.strings.forEach { add(ColorHighlight(it, theme.string)) }
+            structure.literals.forEach { add(ColorHighlight(it, theme.literal)) }
+            structure.annotations.forEach { add(ColorHighlight(it, theme.metadata)) }
+            structure.comments.forEach { add(ColorHighlight(it, theme.comment)) }
+            structure.multilineComments.forEach { add(ColorHighlight(it, theme.multilineComment)) }
+            emphasisLocations.forEach { add(BoldHighlight(it)) }
+        }
 }
