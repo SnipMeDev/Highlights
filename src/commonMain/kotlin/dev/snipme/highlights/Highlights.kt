@@ -17,6 +17,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import kotlin.js.JsExport
+
+@JsExport
+fun greet(name: String): String {
+    return "Hello, $name!"
+}
 
 class Highlights private constructor(
     private var code: String,
