@@ -43,8 +43,12 @@ kotlin {
     macosArm64()
     // Web
     js {
-        browser()
-        nodejs()
+        browser {
+            binaries.executable()
+        }
+        nodejs {
+            binaries.executable()
+        }
     }
     wasmJs()
     // Dependencies
@@ -53,6 +57,12 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+            }
+        }
+
+        val jsMain by getting {
+            dependencies {
+                // Add your dependencies here
             }
         }
 
