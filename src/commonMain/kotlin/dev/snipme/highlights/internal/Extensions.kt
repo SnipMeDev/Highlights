@@ -2,9 +2,9 @@ package dev.snipme.highlights.internal
 
 import dev.snipme.highlights.model.CodeHighlight
 import dev.snipme.highlights.model.PhraseLocation
+import kotlinx.coroutines.Job
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.coroutines.Job
 import kotlin.coroutines.cancellation.CancellationException
 
 fun List<CodeHighlight>.toJson(): String {
@@ -77,12 +77,19 @@ fun String.isIndependentPhrase(
     val charBefore = code[maxOf(index - 1, 0)]
     val charAfter = code[minOf(index + this.length, code.lastIndex)]
 
+    // Token is at start of the code
     if (index == 0) {
         return charAfter.isDigit().not() && charAfter.isLetter().not()
     }
 
+    // Token is at end of the code
+    if (index + this.length == code.length) {
+        return charBefore.isDigit().not() && charBefore.isLetter().not()
+    }
+
+    // Token is in the middle of the code
     return charBefore.isLetter().not() &&
-            charAfter.isDigit().not() && (charAfter == code.last() || charAfter.isLetter().not())
+            charAfter.isDigit().not() && charAfter.isLetter().not()
 }
 
 fun Set<PhraseLocation>.toRangeSet(): Set<IntRange> =
