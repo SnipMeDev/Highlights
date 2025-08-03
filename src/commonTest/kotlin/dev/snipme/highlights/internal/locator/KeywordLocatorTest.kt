@@ -44,7 +44,7 @@ internal class KeywordLocatorTest {
     @Test
     fun `Returns location of all keyword next to each other`() {
         val testCode = "this.class.abcd ) new"
-        val keywords = setOf("this", "new", "class")
+        val keywords = setOf("this", "class", "new")
 
         val result = KeywordLocator.locate(testCode, keywords)
 
@@ -75,15 +75,15 @@ internal class KeywordLocatorTest {
                 static class Example2 {}
             }
         """.trimIndent()
-        val keywords = setOf("static", "class", "extends")
+        val keywords = setOf("class", "static", "extends")
 
         val result = KeywordLocator.locate(testCode, keywords)
 
         assertEquals(4, result.size)
         assertEquals(PhraseLocation(0, 5), result[0])
         assertEquals(PhraseLocation(42, 47), result[1])
-        assertEquals(PhraseLocation(14, 21), result[2])
-        assertEquals(PhraseLocation(35, 41), result[3])
+        assertEquals(PhraseLocation(35, 41), result[2])
+        assertEquals(PhraseLocation(14, 21), result[3])
     }
 
     @Test
@@ -146,5 +146,15 @@ internal class KeywordLocatorTest {
         val result = KeywordLocator.locate(testCode, keywords, setOf(IntRange(0, 54)))
 
         assertEquals(0, result.size)
+    }
+
+    @Test
+    fun `Finds keywords after numeric literals`() {
+        val testCode = "9class"
+        val keywords = setOf("class")
+        val result = KeywordLocator.locate(testCode, keywords)
+
+        assertEquals(1, result.size)
+        assertEquals(PhraseLocation(1, 6), result.first())
     }
 }
