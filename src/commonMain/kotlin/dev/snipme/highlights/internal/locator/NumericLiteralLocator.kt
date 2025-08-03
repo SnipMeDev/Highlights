@@ -5,9 +5,9 @@ import dev.snipme.highlights.internal.indicesOf
 import dev.snipme.highlights.model.PhraseLocation
 
 private val NUMBER_START_CHARACTERS = listOf('-', '.')
-private val NUMBER_TYPE_CHARACTERS = listOf('e', 'u', 'f', 'l')
 private val HEX_NUMBER_CHARACTERS = listOf('a', 'b', 'c', 'd', 'e', 'f')
 private val NUMBER_SPECIAL_CHARACTERS = listOf('_')
+public val NUMBER_TYPE_CHARACTERS = listOf('e', 'u', 'f', 'l')
 
 internal object NumericLiteralLocator {
 
@@ -67,8 +67,6 @@ internal object NumericLiteralLocator {
     }
 
     private fun calculateNumberLength(number: String): Int {
-        val letters = number.filter { it.isLetter() }
-
         if (number.startsWith("0x")) {
             return getLengthOfSubstringFor(number) {
                 it.isDigit() || HEX_NUMBER_CHARACTERS.contains(it)
@@ -81,23 +79,47 @@ internal object NumericLiteralLocator {
             }
         }
 
-        // Highlight only 4f when e.g. number is like 4fff
-        if (NUMBER_TYPE_CHARACTERS.any { letters.contains(it) }) {
-            var length = 1 // Single letter
-            length += number.count { it.isDigit() }
-            length += number.count { NUMBER_START_CHARACTERS.contains(it) }
-            length += number.count { NUMBER_SPECIAL_CHARACTERS.contains(it) }
-            if ("e+" in number) length++
-            return length
+        var length = 0
+        var foundE = false
+        var foundSignAfterE = false
+        var foundDot = false
+        var suffixCount = 0
+        val maxSuffixes = 1
+
+        for (i in number.indices) {
+            val char = number[i]
+            when {
+                char.isDigit() -> {
+                    length++
+                }
+                ((char == '-' && i == 0) || char == '_') -> {
+                    length++
+                }
+                char == '.' && !foundDot -> {
+                    foundDot = true
+                    length++
+                }
+                (char.lowercaseChar() == 'e' && !foundE) -> {
+                    foundE = true
+                    length++
+                }
+                ((char == '+' || char == '-') && foundE && !foundSignAfterE) -> {
+                    foundSignAfterE = true
+                    length++
+                }
+                NUMBER_TYPE_CHARACTERS.contains(char) -> {
+                    if (suffixCount < maxSuffixes) {
+                        length++
+                        suffixCount++
+                    } else {
+                        break
+                    }
+                }
+                else -> break
+            }
         }
 
-        return number.filter {
-            it.isDigit() ||
-                    NUMBER_START_CHARACTERS.contains(it) ||
-                    NUMBER_TYPE_CHARACTERS.contains(it) ||
-                    NUMBER_SPECIAL_CHARACTERS.contains(it)
-
-        }.length
+        return length
     }
 
     private fun getLengthOfSubstringFor(number: String, condition: (Char) -> Boolean): Int {
