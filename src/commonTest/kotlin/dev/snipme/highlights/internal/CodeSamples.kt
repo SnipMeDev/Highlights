@@ -1312,3 +1312,26 @@ val longJavaCode = """
              }
          }
     """.trimIndent()
+
+val longPythonCode = """
+        import polars as pl
+        
+        def transform_dataframe(df: pl.DataFrame, max_seq_len: int, end_action_value: int) -> pl.DataFrame:
+            end_val = pl.lit(end_action_value)
+            max_len = pl.lit(max_seq_len)
+            df_with_ends = df.with_columns(
+                end_indices=pl.col("actionType").list.eval(
+                    pl.int_range(0, pl.len()).filter(pl.element() == end_val)
+                )
+            )
+            df_exploded = df_with_ends.explode("end_indices")
+            start_offset = (pl.col("end_indices") + 1 - max_len).clip(lower_bound=0)
+            slice_len = pl.col("end_indices") - start_offset + 1
+            list_cols = ["actionType", "engagementTimeMs", "actionTweetIds"]
+            for col in list_cols:
+                df_exploded = df_exploded.with_columns(
+                    pl.col(col).list.slice(start_offset, slice_len).alias(col)
+                )
+            result = df_exploded.select(["userId", "actionType", "engagementTimeMs", "actionTweetIds"])
+            return result
+""".trimIndent()
