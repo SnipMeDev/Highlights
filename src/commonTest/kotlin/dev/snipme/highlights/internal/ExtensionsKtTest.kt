@@ -238,8 +238,32 @@ internal class ExtensionsKtTest {
             val index = 1
 
             val result = "class".isIndependentPhrase(code, index)
-
             assertEquals(true, result)
+        }
+
+        @Test
+        fun `Returns false for phrase after underscore`() {
+            val code = "int_class"
+            val index = 4
+
+            val result = "class".isIndependentPhrase(code, index)
+
+            assertEquals(false, result)
+        }
+
+        @Test
+        fun `Returns true for phrase after number with suffix`() {
+            val testCases = listOf(
+                Triple("9eclass", 2, "class"),
+                Triple("9uclass", 2, "class"),
+                Triple("9fclass", 2, "class"),
+                Triple("9lclass", 2, "class")
+            )
+
+            testCases.forEach { (code, keywordIndex, keyword) ->
+                val result = keyword.isIndependentPhrase(code, keywordIndex)
+                assertEquals(true, result, "Failed for: '$code' at index $keywordIndex for keyword '$keyword'")
+            }
         }
     }
 }
