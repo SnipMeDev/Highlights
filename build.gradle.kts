@@ -1,10 +1,11 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 apply(from = "publish-root.gradle")
 
 plugins {
-    kotlin("multiplatform") version "2.0.20"
-    kotlin("plugin.serialization") version "2.0.20"
+    kotlin("multiplatform") version "2.2.0"
+    kotlin("plugin.serialization") version "2.2.0"
     id("maven-publish")
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("signing")
@@ -16,18 +17,11 @@ version = "1.0.0"
 kotlin {
     // Android
     jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
-            java.sourceCompatibility = JavaVersion.VERSION_1_8
-            java.targetCompatibility = JavaVersion.VERSION_1_8
-        }
-        withJava()
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
         }
     }
     // iOS
-
     val xcf = XCFramework()
     val iosTargets = listOf(iosX64(), iosArm64(), iosSimulatorArm64())
 
@@ -48,6 +42,7 @@ kotlin {
         browser()
         nodejs()
     }
+    @OptIn(ExperimentalWasmDsl::class)
     wasmJs()
     // Dependencies
     sourceSets {
