@@ -122,3 +122,33 @@ signing {
     )
     sign(publishing.publications)
 }
+
+tasks.withType<PublishToMavenLocal> {
+    dependsOn(":signIosSimulatorArm64Publication")
+    dependsOn(":signIosArm64Publication")
+    dependsOn(":signIosX64Publication")
+    dependsOn(":signMacosArm64Publication")
+    dependsOn(":signMacosX64Publication")
+    dependsOn(":signJvmPublication")
+    dependsOn(":signJsPublication")
+    dependsOn(":signLinuxArm64Publication")
+    dependsOn(":signLinuxX64Publication")
+    dependsOn(":signMingwX64Publication")
+    dependsOn(":signWasmJsPublication")
+    dependsOn(":signKotlinMultiplatformPublication")
+}
+
+tasks.withType<PublishToMavenRepository> {
+    dependsOn(":signIosSimulatorArm64Publication")
+    dependsOn(":signIosArm64Publication")
+    dependsOn(":signIosX64Publication")
+    dependsOn(":signMacosArm64Publication")
+    dependsOn(":signMacosX64Publication")
+    dependsOn(":signJvmPublication")
+    dependsOn(":signJsPublication")
+    dependsOn(":signLinuxArm64Publication")
+    dependsOn(":signLinuxX64Publication")
+    dependsOn(":signMingwX64Publication")
+    dependsOn(":signWasmJsPublication")
+    dependsOn(":signKotlinMultiplatformPublication")
+}
