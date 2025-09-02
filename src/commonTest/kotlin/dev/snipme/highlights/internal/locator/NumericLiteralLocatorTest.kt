@@ -189,4 +189,13 @@ internal class NumericLiteralLocatorTest {
         assertEquals(PhraseLocation(31, 38), result[5])
         assertEquals(PhraseLocation(39, 45), result[6])
     }
+
+    @Test
+    fun `Returns location of the number with keyword after`() {
+        val testCode = "9class"
+
+        val result = NumericLiteralLocator.locate(testCode)
+
+        assertEquals(PhraseLocation(0, 1), result[0])
+    }
 }

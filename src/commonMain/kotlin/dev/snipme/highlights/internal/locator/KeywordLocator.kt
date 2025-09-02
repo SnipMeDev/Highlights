@@ -13,9 +13,8 @@ internal object KeywordLocator {
         ignoreRanges: Set<IntRange> = emptySet(),
     ): Set<PhraseLocation> {
         val locations = mutableSetOf<PhraseLocation>()
-        val foundKeywords = findKeywords(code, keywords)
 
-        foundKeywords.forEach { keyword ->
+        keywords.forEach { keyword ->
             val indices = code
                 .indicesOf(keyword)
                 .filterNot { index -> ignoreRanges.any { index in it } }
@@ -28,15 +27,4 @@ internal object KeywordLocator {
 
         return locations
     }
-
-    private fun findKeywords(code: String, keywords: Set<String>): Set<String> =
-        TOKEN_DELIMITERS.toTypedArray().let { delimiters ->
-            code.split(*delimiters, ignoreCase = true) // Split into words
-                .asSequence() // Reduce amount of operations
-                .filter { it.isNotBlank() } // Remove empty
-                .map { it.trim() } // Remove whitespaces from phrase
-                .map { it.lowercase() } // Standardize
-                .filter { it in keywords } // Get supported
-                .toSet() // Filter duplicates
-        }
 }
