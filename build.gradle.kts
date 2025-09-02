@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "dev.snipme"
-version = "1.0.0"
+version = "1.1.0"
 
 kotlin {
     // Android
@@ -121,4 +121,34 @@ signing {
         rootProject.ext["signing.password"] as String
     )
     sign(publishing.publications)
+}
+
+tasks.withType<PublishToMavenLocal> {
+    dependsOn(":signIosSimulatorArm64Publication")
+    dependsOn(":signIosArm64Publication")
+    dependsOn(":signIosX64Publication")
+    dependsOn(":signMacosArm64Publication")
+    dependsOn(":signMacosX64Publication")
+    dependsOn(":signJvmPublication")
+    dependsOn(":signJsPublication")
+    dependsOn(":signLinuxArm64Publication")
+    dependsOn(":signLinuxX64Publication")
+    dependsOn(":signMingwX64Publication")
+    dependsOn(":signWasmJsPublication")
+    dependsOn(":signKotlinMultiplatformPublication")
+}
+
+tasks.withType<PublishToMavenRepository> {
+    dependsOn(":signIosSimulatorArm64Publication")
+    dependsOn(":signIosArm64Publication")
+    dependsOn(":signIosX64Publication")
+    dependsOn(":signMacosArm64Publication")
+    dependsOn(":signMacosX64Publication")
+    dependsOn(":signJvmPublication")
+    dependsOn(":signJsPublication")
+    dependsOn(":signLinuxArm64Publication")
+    dependsOn(":signLinuxX64Publication")
+    dependsOn(":signMingwX64Publication")
+    dependsOn(":signWasmJsPublication")
+    dependsOn(":signKotlinMultiplatformPublication")
 }

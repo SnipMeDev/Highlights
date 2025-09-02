@@ -1,3 +1,11 @@
+## [1.1.0]
+
+### Changed
+- Kotlin version to 2.2.0
+
+### Fixed
+- keywords found at start and end of the input
+
 ## [1.0.0]
 
 ### Added
