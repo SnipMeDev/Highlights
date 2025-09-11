@@ -315,6 +315,10 @@ If your project uses this code, please write me or add your info
         <td>Application</td>
         <td> <a href="https://opensource.respawn.pro/FlowMVI/sample/">FlowMVI Sample</a> </td>
     </tr>
+    <tr>
+        <td>Application</td>
+        <td> <a href="https://compose-fluent.github.io/compose-fluent-ui/">Compose Fluent Design Gallery</a> </td>
+    </tr>
 </table>
 
 ## TODO 🚧
