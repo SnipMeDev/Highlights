@@ -27,7 +27,8 @@ internal object MultilineCommentLocator {
 
         comments.forEach {
             val (start, end) = it
-            locations.add(PhraseLocation(start, end))
+            // Only include valid ranges where start precedes end
+            if (start < end) locations.add(PhraseLocation(start, end))
         }
 
         return locations.toSet()

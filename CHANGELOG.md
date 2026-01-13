@@ -1,3 +1,8 @@
+## [Unreleased]
+
+### Fixed
+- invalid range in multiline comment locating
+
 ## [1.1.0]
 
 ### Changed

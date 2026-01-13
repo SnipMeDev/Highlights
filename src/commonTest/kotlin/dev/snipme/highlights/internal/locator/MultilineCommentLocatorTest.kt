@@ -48,6 +48,28 @@ internal class MultilineCommentLocatorTest {
         assertEquals(1, result.size)
         assertEquals(PhraseLocation(0, 8747), result[0])
     }
+
+    @Test
+    fun `Returns empty when end delimiter precedes start`() {
+        val testCode = "*/resolvers/*"
+
+        val result = MultilineCommentLocator.locate(testCode)
+
+        assertEquals(0, result.size)
+    }
+
+    @Test
+    fun `Returns only valid comment ignoring misordered delimiters`() {
+        val testCode = """
+            /* valid comment */
+            searchCode("query", pathFilter: "*/resolvers/*")
+        """.trimIndent()
+
+        val result = MultilineCommentLocator.locate(testCode)
+
+        assertEquals(1, result.size)
+        assertEquals(PhraseLocation(0, 19), result[0])
+    }
 }
 
 private val complexComment =
