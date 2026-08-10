@@ -10,80 +10,96 @@ internal class CodeAnalyzerTest {
     @Test
     fun `Returns structure of code analyzed first time`() {
         val testCode = """
-            /** a */
-            // b
+            /** a.b */
+            // a, b and c
             class C extends {}
-            "d";
+            ;"d";
             @E
             ...
             123.00f
         """.trimIndent()
 
-        val result = CodeAnalyzer.analyze(testCode)
+        val result = CodeAnalyzer.analyze(testCode).also { it.printStructure(testCode) }
 
         assertEquals(
             setOf(
-                PhraseLocation(30, 31),
-                PhraseLocation(31, 32)
+                PhraseLocation(41, 42),
+                PhraseLocation(42, 43)
             ),
             result.marks
         )
 
         assertEquals(
             setOf(
-                PhraseLocation(36, 37),
-                PhraseLocation(41, 42),
-                PhraseLocation(42, 43),
-                PhraseLocation(43, 44),
+                PhraseLocation(44, 45),
                 PhraseLocation(48, 49),
+                PhraseLocation(53, 54),
+                PhraseLocation(54, 55),
+                PhraseLocation(55, 56),
+                PhraseLocation(60, 61),
             ),
             result.punctuations
         )
 
         assertEquals(
             setOf(
-                PhraseLocation(14, 19),
-                PhraseLocation(22, 29)
+                PhraseLocation(25, 30),
+                PhraseLocation(33, 40)
             ),
             result.keywords
         )
 
         assertEquals(
             setOf(
-                PhraseLocation(33, 36),
+                PhraseLocation(45, 48),
             ),
             result.strings
         )
 
         assertEquals(
             setOf(
-                PhraseLocation(45, 52),
+                PhraseLocation(57, 64),
             ),
             result.literals
         )
 
         assertEquals(
             setOf(
-                PhraseLocation(9, 13),
+                PhraseLocation(11, 24),
             ),
             result.comments
         )
 
         assertEquals(
             setOf(
-                PhraseLocation(0, 8),
+                PhraseLocation(0, 10),
             ),
             result.multilineComments
         )
 
         assertEquals(
             setOf(
-                PhraseLocation(38, 40),
+                PhraseLocation(50, 52),
             ),
             result.annotations
         )
 
         assertEquals(false, result.incremental)
+    }
+
+    @Test
+    fun `Returns punctuation adjacent to ignored ranges only`() {
+        val testCode = "\"a,b\"; // c,d\n\"e:f\";"
+
+        val result = CodeAnalyzer.analyze(testCode)
+
+        assertEquals(
+            setOf(
+                PhraseLocation(5, 6),
+                PhraseLocation(19, 20),
+            ),
+            result.punctuations
+        )
     }
 
     @Test
