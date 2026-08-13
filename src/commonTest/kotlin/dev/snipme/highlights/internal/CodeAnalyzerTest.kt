@@ -87,8 +87,9 @@ internal class CodeAnalyzerTest {
         assertEquals(false, result.incremental)
     }
 
+
     @Test
-    fun `Returns punctuation adjacent to ignored ranges only`() {
+    fun `Ignores punctuation in comments and strings`() {
         val testCode = "\"a,b\"; // c,d\n\"e:f\";"
 
         val result = CodeAnalyzer.analyze(testCode)
@@ -97,6 +98,21 @@ internal class CodeAnalyzerTest {
             setOf(
                 PhraseLocation(5, 6),
                 PhraseLocation(19, 20),
+            ),
+            result.punctuations
+        )
+    }
+
+    @Test
+    fun `Ignores punctuation inside multiline comments and string literals`() {
+        val testCode = "\"a,b\"; /* c,d */ \"e;f\";"
+
+        val result = CodeAnalyzer.analyze(testCode)
+
+        assertEquals(
+            setOf(
+                PhraseLocation(5, 6),
+                PhraseLocation(22, 23),
             ),
             result.punctuations
         )
