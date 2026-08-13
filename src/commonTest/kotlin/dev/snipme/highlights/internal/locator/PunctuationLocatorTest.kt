@@ -91,4 +91,53 @@ internal class PunctuationLocatorTest {
         assertEquals(1, result.size)
         assertEquals(PhraseLocation(12, 13), result[0])
     }
+
+    @Test
+    fun `Ignores punctuation inside an ignored range`() {
+        val testCode = "a,b;"
+        val ignoreRanges = setOf(IntRange(1, 3))
+
+        val result = PunctuationLocator.locate(testCode, ignoreRanges)
+
+        assertEquals(1, result.size)
+        assertEquals(PhraseLocation(3, 4), result.first())
+    }
+
+    @Test
+    fun `Returns punctuation outside an ignored range`() {
+        val testCode = "a,b;"
+        val ignoreRanges = setOf(IntRange(0, 1))
+
+        val result = PunctuationLocator.locate(testCode, ignoreRanges)
+
+        assertEquals(2, result.size)
+        assertEquals(PhraseLocation(1, 2), result.first())
+        assertEquals(PhraseLocation(3, 4), result.last())
+    }
+
+    @Test
+    fun `Handles multiple ignored ranges`() {
+        val testCode = "a,b;c,d;"
+        val ignoreRanges = setOf(
+            IntRange(1, 2),
+            IntRange(5, 6),
+        )
+
+        val result = PunctuationLocator.locate(testCode, ignoreRanges)
+
+        assertEquals(2, result.size)
+        assertEquals(PhraseLocation(3, 4), result[0])
+        assertEquals(PhraseLocation(7, 8), result[1])
+    }
+
+    @Test
+    fun `Handles range boundaries correctly`() {
+        val testCode = ";\"d\";"
+        val ignoreRanges = setOf(IntRange(0, 3))
+
+        val result = PunctuationLocator.locate(testCode, ignoreRanges)
+
+        assertEquals(1, result.size)
+        assertEquals(PhraseLocation(4, 5), result.first())
+    }
 }
