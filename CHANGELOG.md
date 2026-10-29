@@ -2,6 +2,8 @@
 
 ### Fixed
 - invalid range in multiline comment locating
+- comment delimiters inside string and char literals starting a comment (#78)
+- marks, punctuation, numbers and annotations reported inside comments and strings
 
 ## [1.1.0]
 
