@@ -285,4 +285,16 @@ internal class CodeAnalyzerTest {
             result.annotations
         )
     }
+
+    @Test
+    fun `Returns no tokens inside comments or strings`() {
+        val testCode = "// a.b; 1\nx = \"c, 2\";"
+
+        val result = CodeAnalyzer.analyze(testCode)
+
+        // Only the code's own "=" and ";" remain; nothing from inside the comment or the string
+        assertEquals(setOf(PhraseLocation(12, 13)), result.marks)
+        assertEquals(setOf(PhraseLocation(20, 21)), result.punctuations)
+        assertEquals(emptySet(), result.literals)
+    }
 }
