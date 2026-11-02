@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [1.2.0]
+
 ### Fixed
 - invalid range in multiline comment locating
 - comment delimiters inside string and char literals starting a comment (#78)

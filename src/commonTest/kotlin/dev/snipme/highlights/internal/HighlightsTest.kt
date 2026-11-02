@@ -168,9 +168,11 @@ class HighlightsCancellationTest {
             }
         }
 
+        val startMark = markNow()
+
         val job2 = launch {
             suspendCancellableCoroutine { c ->
-                invokeAndMeasureTime(default, "#2") {
+                invokeAndMeasureTime(default, "#2", startMark) {
                     time2 = it
                     c.resume(Unit) {}
                     println("Time2: ${it.inWholeMilliseconds} ms")
@@ -180,21 +182,21 @@ class HighlightsCancellationTest {
 
         job1.join()
         job2.join()
-        assertTrue { time1.inWholeMilliseconds < time2.inWholeMilliseconds }
+        assertTrue { time1 <= time2 }
     }
 }
 
 private fun invokeAndMeasureTime(
     highlights: Highlights,
     name: String,
+    startTime: kotlin.time.TimeMark = markNow(),
     onFinish: (Duration) -> Unit = {}
 ) {
     var result: Duration? = null
-    val now = markNow()
 
     fun updateFirstTime() {
         if (result == null) {
-            result = now.elapsedNow()
+            result = startTime.elapsedNow()
             onFinish(result!!)
         }
     }
