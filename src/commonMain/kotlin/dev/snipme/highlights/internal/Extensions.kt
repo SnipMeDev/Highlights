@@ -1,8 +1,6 @@
 package dev.snipme.highlights.internal
 
 import dev.snipme.highlights.internal.locator.NUMBER_TYPE_CHARACTERS
-import dev.snipme.highlights.internal.SyntaxTokens.MARK_CHARACTERS
-import dev.snipme.highlights.internal.SyntaxTokens.PUNCTUATION_CHARACTERS
 import dev.snipme.highlights.model.CodeHighlight
 import dev.snipme.highlights.model.PhraseLocation
 import kotlinx.coroutines.Job

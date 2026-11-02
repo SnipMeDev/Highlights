@@ -125,7 +125,7 @@ internal object CodeAnalyzer {
         // TODO Apply ignored ranges to other locators
         return CodeStructure(
             marks = MarkLocator.locate(code),
-            punctuations = PunctuationLocator.locate(code),
+            punctuations = PunctuationLocator.locate(code, plainTextRanges),
             keywords = KeywordLocator.locate(code, keywords, plainTextRanges),
             strings = strings,
             literals = NumericLiteralLocator.locate(code),
