@@ -2,6 +2,7 @@
 **/build/
 !src/**/build/
 /.kotlin/
+kotlin-js-store/
 
 # IDE files
 .idea
